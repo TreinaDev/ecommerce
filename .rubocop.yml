@@ -7,6 +7,7 @@ inherit_mode:
 
 AllCops:
   TargetRubyVersion: 2.6
+  UseCache: false
   Exclude:
     - 'bin/**/*'
     - 'vendor/**/*'
