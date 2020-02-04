@@ -16,11 +16,10 @@ feature 'Admin register carrier' do
 
 
     expect(page).to have_content('Transportadora cadastrada com sucesso')
-    expect(page).to have_content('Nome: Zona oeste courier')
+    expect(page).to have_content('Transportadora: Zona oeste courier')
     expect(page).to have_content('CNPJ: 82.676.748/0001-73')
     expect(page).to have_content('Razão Social: Carlos Silva Transportes LTDA')
-    expect(page).to have_content('Endereço: Av. Raimundo Pereira de Magalhaes, 
-                                    132, São Paulo, SP')
+    expect(page).to have_content('Endereço: Av. Raimundo Pereira de Magalhaes, 132, São Paulo, SP')
     expect(page).to have_link('Voltar')
   end
 end

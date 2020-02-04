@@ -1,0 +1,13 @@
+<h1>Cadastro de Transportadoras<h1>
+
+<%= form_for @carrier do |f| %>
+  <%= f.label :name, 'Nome fantasia'%>
+  <%= f.text_field :name %>
+  <%= f.label :cnpj, 'CNPJ'%>
+  <%= f.text_field :cnpj %>
+  <%= f.label :corporate_name, 'Razão social'%>
+  <%= f.text_field :corporate_name %>
+  <%= f.label :address, 'Endereço'%>
+  <%= f.text_field :address %>
+  <%= f.submit 'Confirmar registro'%>
+<% end %>
