@@ -1,0 +1,2 @@
+class SolarPlate < Product
+end

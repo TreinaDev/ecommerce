@@ -1,0 +1,31 @@
+<h1>Admin - Cadastro de uma nova placa solar</h1>
+<%= form_for [:admin, @solar_plate] do |f| %>
+  <%= f.label :name, 'Nome'%>
+  <%= f.text_field :name %>
+
+  <%= f.label :width, 'Largura (mm)' %>
+  <%= f.number_field :width %>
+
+  <%= f.label :height, 'Altura (mm)' %>
+  <%= f.number_field :height %>
+
+  <%= f.label :thickness, 'Espessura (mm)' %>
+  <%= f.number_field :thickness %>
+
+  <%= f.label :weight, 'Peso (kg)' %>
+  <%= f.number_field :weight %>
+
+  <%= f.label :purchase_price, 'Preço de compra' %>
+  <%= f.number_field :purchase_price, step: 0.01 %>
+
+  <%= f.label :sku, 'SKU' %>
+  <%= f.text_field :sku %>
+
+  <%= f.label :efficiency, 'Eficiência (%)' %>
+  <%= f.number_field :efficiency, step: 0.01 %>
+
+  <%= f.label :rated_power, 'Potência Nominal (Wp)' %>
+  <%= f.number_field :rated_power %>
+
+  <%= f.submit 'Enviar' %>
+<% end %>
