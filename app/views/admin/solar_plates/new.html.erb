@@ -1,31 +1,34 @@
 <h1>Admin - Cadastro de uma nova placa solar</h1>
+
+<%= render 'shared/errors', object: @solar_plate %>
+
 <%= form_for [:admin, @solar_plate] do |f| %>
-  <%= f.label :name, 'Nome'%>
+  <%= f.label :name %>
   <%= f.text_field :name %>
 
-  <%= f.label :width, 'Largura (mm)' %>
-  <%= f.number_field :width %>
+  <%= f.label :width %>
+  <%= f.number_field :width, placeholder: ' mm' %>
 
-  <%= f.label :height, 'Altura (mm)' %>
-  <%= f.number_field :height %>
+  <%= f.label :height %>
+  <%= f.number_field :height, placeholder: ' mm' %>
 
-  <%= f.label :thickness, 'Espessura (mm)' %>
-  <%= f.number_field :thickness %>
+  <%= f.label :thickness %>
+  <%= f.number_field :thickness, placeholder: ' mm' %>
 
-  <%= f.label :weight, 'Peso (kg)' %>
-  <%= f.number_field :weight %>
+  <%= f.label :weight %>
+  <%= f.number_field :weight, placeholder: ' kg' %>
 
-  <%= f.label :purchase_price, 'Preço de compra' %>
+  <%= f.label :purchase_price %>
   <%= f.number_field :purchase_price, step: 0.01 %>
 
-  <%= f.label :sku, 'SKU' %>
+  <%= f.label :sku %>
   <%= f.text_field :sku %>
 
-  <%= f.label :efficiency, 'Eficiência (%)' %>
-  <%= f.number_field :efficiency, step: 0.01 %>
+  <%= f.label :efficiency %>
+  <%= f.number_field :efficiency, step: 0.01, placeholder: ' %' %>
 
-  <%= f.label :rated_power, 'Potência Nominal (Wp)' %>
-  <%= f.number_field :rated_power %>
-
+  <%= f.label :rated_power %>
+  <%= f.number_field :rated_power, placeholder: ' Wp' %>
+  
   <%= f.submit 'Enviar' %>
 <% end %>

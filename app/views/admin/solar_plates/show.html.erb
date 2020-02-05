@@ -6,15 +6,25 @@
 
   <dt>Dimensão:</dt>
   <dd>
-    <%= "#{@solar_plate.width}mm (L) x"  %>
-    <%= "#{@solar_plate.height}mm (A) x"  %>
-    <%= "#{@solar_plate.thickness}mm (E)"  %>
+    <%= "#{@solar_plate.width}mm (L)"  %>
+    <%= "x #{@solar_plate.height}mm (A)" %>
+    <%= "x #{@solar_plate.thickness}mm (E)" %>
   </dd>
 
   <dt>Peso:</dt>
-  <dd><%= "#{@solar_plate.weight} kg" %></dd>
+  <dd>
+    <%= "#{number_with_precision @solar_plate.weight, precision: 2} kg" %>
+  </dd>
 
   <dt>Preço de compra:</dt>
-  <dd></dd>
+  <dd><%= number_to_currency @solar_plate.purchase_price %></dd>
+
+  <dt>SKU:</dt>
+  <dd><%= @solar_plate.sku %></dd>
+
+  <dt>Eficiência:</dt>
+  <dd><%= "#{@solar_plate.efficiency}%" %></dd>
   
+  <dt>Potência Nominal:</dt>
+  <dd><%= "#{@solar_plate.rated_power}Wp" %></dd>
 </dl>

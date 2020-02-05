@@ -1,5 +1,0 @@
-pt-BR:
-  activerecord:
-    attributes:
-      products:
-        name: Nome

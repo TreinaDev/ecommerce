@@ -1,4 +1,6 @@
 class Admin::SolarPlatesController < ApplicationController
+  before_action :authenticate_admin!
+  
   def index; end
 
   def new
@@ -7,9 +9,12 @@ class Admin::SolarPlatesController < ApplicationController
 
   def create
     @solar_plate = SolarPlate.new(solar_plate_params)
-    @solar_plate.save
-    flash[:notice] = 'Placa solar cadastrada com sucesso'
-    redirect_to admin_solar_plate_path(@solar_plate) 
+    if @solar_plate.save
+      redirect_to admin_solar_plate_path(@solar_plate), notice: t('.success')
+    else
+      flash[:alert] = 'Não foi possivel cadastrar a placa solar'
+      render :new
+    end
   end
 
   def show
