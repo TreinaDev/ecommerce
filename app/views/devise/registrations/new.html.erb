@@ -19,8 +19,9 @@
   </div>
 
   <div class="field">
-    <%= f.label :client_type, 'Tipo de Cliente' %><br />   
-    <%= f.select(:client_type, Client.client_types.map { |type| [Client.human_attribute_name(:type), type] })%>
+    <%= f.label :client_type, 'Tipo de Cliente' %><br />
+    <%= f.select(:client_type, Client.client_types.keys.map {|type| [type.titleize,type]})%>  
+    <!-- <%= f.select(:client_type, Client.client_types.map { |type| [Client.human_attribute_name(:type), type] })%> -->
   </div>
 
   <div class="field">

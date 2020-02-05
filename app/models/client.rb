@@ -4,7 +4,5 @@ class Client < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  enum client_type: { personal: 0, company: 15}
-
-  
+  enum client_type: { personal: 0, company: 15 }
 end
