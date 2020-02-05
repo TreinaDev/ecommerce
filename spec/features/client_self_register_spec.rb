@@ -3,17 +3,19 @@ require 'rails_helper'
 feature 'Client self register' do
   scenario 'successfully' do
     visit root_path
-    click_on 'Log in'
-    click_on 'Sign up'
+    click_on 'Entrar'
+    click_on 'Criar conta'
     fill_in 'Nome', with: 'João'
-    fill_in 'Email', with: 'joao@email.com'
     fill_in 'Endereço', with: 'Rua Alameda Santos, 1234'
     fill_in 'CEP', with: '12345-678'
-    select 'Pessoa Fisica', from: 'Tipo de Cliente'
+    select 'personal', from: 'Tipo de Cliente'
     fill_in 'Documento', with: '12345678900'
-    click_on 'Enviar'
+    fill_in 'Email', with: 'joao@email.com'
+    fill_in 'Password', with: '123456'
+    fill_in 'Password confirmation', with: '123456'
+    click_button 'Criar Conta'
 
-    expect(page).to have_content('Cadastro realizado com sucesso!')
+    expect(page).to have_content('A autenticação foi efetuada com sucesso.')
     expect(page).to have_content('Dados do Cliente:')
     expect(page).to have_content('Nome: João')
     expect(page).to have_content('Email: joao@email.com') 

@@ -1,0 +1,54 @@
+<h2><%= t('.sign_up') %></h2>
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+  
+  <div class="field">
+    <%= f.label :name, 'Nome' %><br />
+    <%= f.text_field :name, autofocus: true, autocomplete: "Nome" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :address, 'Endereço' %><br />
+    <%= f.text_field :address, autofocus: true, autocomplete: "Endereço" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :zip_code, 'CEP' %><br />
+    <%= f.text_field :zip_code, autofocus: true, autocomplete: "CEP" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :client_type, 'Tipo de Cliente' %><br />   
+    <%= f.select(:client_type, Client.client_types.map { |type| [Client.human_attribute_name(:type), type] })%>
+  </div>
+
+  <div class="field">
+    <%= f.label :document, 'Documento' %><br />
+    <%= f.text_field :document, autofocus: true, autocomplete: "Documento" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password %>
+    <% if @minimum_password_length %>
+    <em><%= t('devise.shared.minimum_password_length', count: @minimum_password_length) %></em>
+    <% end %><br />
+    <%= f.password_field :password, autocomplete: "new-password" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password_confirmation %><br />
+    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit t('.sign_up') %>
+  </div>
+<% end %>
+
+<%= render "devise/shared/links" %>
