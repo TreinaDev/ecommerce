@@ -10,7 +10,8 @@ class Admin::SolarPlatesController < ApplicationController
   def create
     @solar_plate = SolarPlate.new(solar_plate_params)
     if @solar_plate.save
-      redirect_to admin_solar_plate_path(@solar_plate), notice: t('.success')
+      flash[:notice] = t('flash.success', model: 'Placa solar')
+      redirect_to admin_solar_plate_path(@solar_plate)
     else
       flash[:alert] = 'Não foi possivel cadastrar a placa solar'
       render :new

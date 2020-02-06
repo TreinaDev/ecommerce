@@ -1,4 +1,5 @@
 require 'rails_helper'
+
 feature 'Admin register solar plate' do 
   scenario 'successfully' do
     admin = create(:admin)
@@ -19,7 +20,7 @@ feature 'Admin register solar plate' do
     fill_in 'Potência Nominal', with: 360
     click_on 'Enviar'
 
-    expect(page).to have_content('Placa solar cadastrada com sucesso')
+    expect(page).to have_content('Placa solar cadastrado(a) com sucesso')
     expect(page).to have_content('Nome: Placa solar A')
     expect(page).to have_content('Dimensão: 2024mm (L) x 1004mm (A) x 35mm (E)')
     expect(page).to have_content('Peso: 24,90 kg')
@@ -38,7 +39,7 @@ feature 'Admin register solar plate' do
     click_on 'Enviar'
 
     expect(page).to have_content('Não foi possivel cadastrar a placa solar')
-    expect(page).to_not have_content('Placa solar cadastrada com sucesso')
+    expect(page).to_not have_content('Placa solar cadastrado(a) com sucesso')
     expect(page).to have_content('Nome não pode ficar em branco')
     expect(page).to have_content('Largura não pode ficar em branco')
     expect(page).to have_content('Altura não pode ficar em branco')

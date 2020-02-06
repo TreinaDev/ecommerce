@@ -11,6 +11,9 @@ pt-BR:
         sku: SKU
         efficiency: Eficiência
         rated_power: Potência Nominal
+        max_wattage: Potência Máxima
+        max_voltage: Tensão Máxima
+        max_current: Corrente Máxima
   admin:
     solar_plates:
       create:

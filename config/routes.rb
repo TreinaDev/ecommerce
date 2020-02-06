@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     get '/dashboard', to: 'home#dashboard'
     resources :products, only: %i[index]
     resources :solar_plates, only: %i[new create show]
+    resources :inversors, only: %i[new create show]
   end
 
 end
