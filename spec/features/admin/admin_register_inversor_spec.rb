@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Admin register inversor' do 
+feature 'Admin register inversor' do
   scenario 'successfully' do
     admin = create(:admin)
     login_as(admin, scope: :admin)
@@ -55,7 +55,7 @@ feature 'Admin register inversor' do
 
   scenario 'isnt logged in as admin' do
     client = create(:client)
-    
+
     login_as(client, scope: :client)
     visit new_admin_inversor_path
 

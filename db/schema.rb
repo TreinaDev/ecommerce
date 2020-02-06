@@ -28,6 +28,9 @@ ActiveRecord::Schema.define(version: 2020_02_06_001601) do
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "cnpj"
+    t.string "corporate_name"
+    t.string "address"
   end
 
   create_table "clients", force: :cascade do |t|

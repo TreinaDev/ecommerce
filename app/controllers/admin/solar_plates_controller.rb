@@ -1,6 +1,6 @@
 class Admin::SolarPlatesController < ApplicationController
   before_action :authenticate_admin!
-  
+
   def index; end
 
   def new
@@ -25,8 +25,8 @@ class Admin::SolarPlatesController < ApplicationController
   private
 
   def solar_plate_params
-    params.require(:solar_plate).permit(:name, :width, :height, :thickness, 
-                                        :weight, :purchase_price, :sku, 
+    params.require(:solar_plate).permit(:name, :width, :height, :thickness,
+                                        :weight, :purchase_price, :sku,
                                         :efficiency, :rated_power)
   end
 end

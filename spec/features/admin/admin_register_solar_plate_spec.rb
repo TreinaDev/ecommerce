@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Admin register solar plate' do 
+feature 'Admin register solar plate' do
   scenario 'successfully' do
     admin = create(:admin)
     login_as(admin, scope: :admin)
@@ -52,7 +52,7 @@ feature 'Admin register solar plate' do
 
   scenario 'isnt logged in as admin' do
     client = create(:client)
-    
+
     login_as(client, scope: :client)
     visit new_admin_solar_plate_path
 
