@@ -1,0 +1,8 @@
+pt-BR:
+  activerecord:
+    models:
+      client: "Cliente"
+    attributes:
+      client:
+        password: "Senha"
+        password_confirmation: "Confirmação de Senha"

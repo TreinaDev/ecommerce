@@ -4,18 +4,18 @@ feature 'Client self register' do
   scenario 'successfully' do
     visit root_path
     click_on 'Entrar'
-    click_on 'Criar conta'
+    click_on 'Inscrever-se'
     fill_in 'Nome', with: 'João'
     fill_in 'Endereço', with: 'Rua Alameda Santos, 1234'
     fill_in 'CEP', with: '12345-678'
     select 'Personal', from: 'Tipo de Cliente'
     fill_in 'Documento', with: '12345678900'
     fill_in 'Email', with: 'joao@email.com'
-    fill_in 'Password', with: '123456'
-    fill_in 'Password confirmation', with: '123456'
-    click_button 'Criar Conta'
+    fill_in 'Senha', with: '123456'
+    fill_in 'Confirmação de Senha', with: '123456'
+    click_button 'Inscrever-se'
 
-    expect(page).to have_content('A autenticação foi efetuada com sucesso.')
+    expect(page).to have_content('Você realizou seu registro com sucesso.')
     expect(page).to have_link('Sair')
     expect(page).not_to have_link('Entrar') 
   end
@@ -23,9 +23,14 @@ feature 'Client self register' do
   scenario 'And fields are empty' do
     visit root_path
     click_on 'Entrar'
-    click_on 'Criar conta'
-    click_button 'Criar Conta'
+    click_on 'Inscrever-se'
+    click_button 'Inscrever-se'
 
+    expect(page).to have_content('Email não pode ficar em branco')
+    expect(page).to have_content('Senha não pode ficar em branco')
     expect(page).to have_content('Name deve ser informado')
+    expect(page).to have_content('Address deve ser informado')
+    expect(page).to have_content('Zip code deve ser informado')
+    expect(page).to have_content('Document deve ser informado')
   end
 end
