@@ -5,8 +5,23 @@
   <dd><%= @carrier.cnpj %></dd>
   <dt>Razão Social:</dt>
   <dd><%= @carrier.corporate_name %></dd>
-  <dt>Endereço:</dt>
-  <dd><%= @carrier.address %></dd>
+  <h4>Endereço:</h4><br>
+  <dt>Logradouro:</dt>
+  <dd><%= @carrier.address.street %></dd>
+  <dt>Número:</dt>
+  <dd><%= @carrier.address.number %></dd>
+  <% if @carrier.address.complement%>
+    <dt>Complemento:</dt>
+    <dd><%= @carrier.address.complement %></dd>
+  <% end %>
+  <dt>CEP:</dt>
+  <dd><%= @carrier.address.zip_code %></dd>
+  <dt>Bairro:</dt>
+  <dd><%= @carrier.address.neighborhood %></dd>
+  <dt>Cidade:</dt>
+  <dd><%= @carrier.address.city %></dd>
+  <dt>Estado:</dt>
+  <dd><%= @carrier.address.state %></dd>
 </dl>
 
 <%= link_to 'Voltar', root_path %>
