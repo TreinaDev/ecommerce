@@ -16,5 +16,16 @@ feature 'Client self register' do
     click_button 'Criar Conta'
 
     expect(page).to have_content('A autenticação foi efetuada com sucesso.')
+    expect(page).to have_link('Sair')
+    expect(page).not_to have_link('Entrar') 
+  end
+
+  scenario 'And fields are empty' do
+    visit root_path
+    click_on 'Entrar'
+    click_on 'Criar conta'
+    click_button 'Criar Conta'
+
+    expect(page).to have_content('Name deve ser informado')
   end
 end

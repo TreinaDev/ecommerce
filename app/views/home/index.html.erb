@@ -1,3 +1,7 @@
 <h1>Bem vindos</h1>
 
-<%= link_to 'Entrar', new_client_session_path %>
+<% if client_signed_in? %>
+  <%= link_to 'Sair', destroy_client_session_path, method: :delete, class: 'nav-link' %>
+<% else %>
+  <%= link_to 'Entrar', new_client_session_path %>
+<% end %>
