@@ -1,8 +1,6 @@
 class Carrier < ApplicationRecord
   validates :cnpj, :corporate_name, :address, presence: true
 
- 
-
   def calculate_shipping_cost(weight, height, depth, width)
     vol = (height * depth * width)
     case 
