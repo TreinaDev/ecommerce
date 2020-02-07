@@ -5,5 +5,6 @@ class Client < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   enum client_type: { personal: 0, company: 15 }
-  validates :name, :address, :zip_code, :client_type, :document, presence: { message: 'deve ser informado' }
+  validates :name, :address, :zip_code, :client_type, :document, presence:
+                                          { message: 'deve ser informado' }
 end

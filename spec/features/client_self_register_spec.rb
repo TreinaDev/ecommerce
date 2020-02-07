@@ -17,7 +17,7 @@ feature 'Client self register' do
 
     expect(page).to have_content('Você realizou seu registro com sucesso.')
     expect(page).to have_link('Sair')
-    expect(page).not_to have_link('Entrar') 
+    expect(page).not_to have_link('Entrar')
   end
 
   scenario 'And fields are empty' do
