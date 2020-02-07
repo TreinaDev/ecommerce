@@ -1,5 +1,4 @@
 class CarriersController < ApplicationController
-
   def new
     @carrier = Carrier.new
     @carrier.build_address
@@ -19,10 +18,11 @@ class CarriersController < ApplicationController
   end
 
   private
-    def carrier_params
-      params.require(:carrier)
-            .permit(:name, :cnpj, :corporate_name, address_attributes: %i[id street
-                                                                          number complement zip_code
-                                                                          neighborhood city state])
-    end
+
+  def carrier_params
+    params.require(:carrier)
+          .permit(:name, :cnpj, :corporate_name,
+                  address_attributes: %i[id street number complement zip_code
+                                         neighborhood city state])
+  end
 end
