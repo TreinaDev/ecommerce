@@ -1,0 +1,3 @@
+pt-BR:
+  flash:
+    success: "%{model} cadastrado(a) com sucesso."

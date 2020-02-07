@@ -1,0 +1,9 @@
+pt-BR:
+  activerecord:
+    attributes:
+      carrier:
+        name: Nome Fantasia
+        cnpj: CNPJ
+        corporate_name: Razão Social
+        address: Endereço
+        

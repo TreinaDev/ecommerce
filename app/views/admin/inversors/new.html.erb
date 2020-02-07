@@ -1,0 +1,37 @@
+<h1>Admin - Cadastro de um novo Inversor</h1>
+
+<%= render 'shared/errors', object: @inversor %>
+
+<%= form_for [:admin, @inversor] do |f| %>
+  <%= f.label :name %>
+  <%= f.text_field :name %>
+
+  <%= f.label :width %>
+  <%= f.number_field :width, placeholder: ' mm' %>
+
+  <%= f.label :height %>
+  <%= f.number_field :height, placeholder: ' mm' %>
+
+  <%= f.label :thickness %>
+  <%= f.number_field :thickness, placeholder: ' mm' %>
+
+  <%= f.label :weight %>
+  <%= f.number_field :weight, placeholder: ' kg' %>
+
+  <%= f.label :purchase_price %>
+  <%= f.number_field :purchase_price, step: 0.01 %>
+
+  <%= f.label :sku %>
+  <%= f.text_field :sku %>
+
+  <%= f.label :max_wattage %>
+  <%= f.number_field :max_wattage, placeholder: ' W' %>
+
+  <%= f.label :max_voltage %>
+  <%= f.number_field :max_voltage, placeholder: ' V' %>
+
+  <%= f.label :max_current %>
+  <%= f.number_field :max_current, step: 0.1, placeholder: ' A' %>
+  
+  <%= f.submit 'Enviar' %>
+<% end %>
