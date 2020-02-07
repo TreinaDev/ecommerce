@@ -1,3 +1,5 @@
 class HomeController < ApplicationController
-  def index; end
+  def index
+    @payment_options = PaymentOption.all()
+  end
 end

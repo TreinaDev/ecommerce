@@ -1,1 +1,11 @@
 <h1>Bem vindo ao Ecommerce</h1>
+
+<h2>Pedido</h2>
+
+
+<h3>Formas de Pagamento</h3>
+
+<% @payment_options.each do |po| %>
+  <%= po.name %>
+  <%= po.installments %> vezes de <%= po.installment_value %>
+<% end %>

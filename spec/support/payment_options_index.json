@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "name": "Cartao de Credito",
+    "installments": "12",
+    "installment_value": "1000",
+    "one_shot_value": "11000"
+  },
+  {
+    "id": 2,
+    "name": "Boleto",
+    "installments": "1",
+    "installment_value": "10900",
+    "one_shot_value": "10900"
+  }
+]
