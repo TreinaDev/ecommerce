@@ -1,3 +1,4 @@
 pt-BR:
   flash:
     success: "%{model} cadastrado(a) com sucesso."
+    error: "Não foi possível cadastrar o(a) %{model}."
