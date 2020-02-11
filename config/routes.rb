@@ -9,7 +9,9 @@ Rails.application.routes.draw do
     resources :products, only: %i[index]
     resources :solar_plates, only: %i[new create show]
     resources :inversors, only: %i[new create show]
-    resources :product_kits, only: %i[index new create show]
+    resources :product_kits, only: %i[index new create show] do
+      resources :kit_items, only: %i[new create]
+    end
   end
   resources :carriers, only: %i[index show new create]
 end

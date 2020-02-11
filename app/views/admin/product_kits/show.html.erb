@@ -1,5 +1,11 @@
 <h1><%= @product_kit.name %></h1>
 
+<%= link_to 'Adicionar produto', new_admin_product_kit_kit_item_path(@product_kit) %>
+
+<% @kit_items&.each do |kit| %>
+  <%= "#{kit.quantity} x #{kit.product.name}" %>
+<% end %>
+
 <%= image_tag @product_kit.picture if @product_kit.picture.present? %>
 
 <dl>

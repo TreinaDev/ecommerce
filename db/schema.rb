@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_10_222317) do
+ActiveRecord::Schema.define(version: 2020_02_11_000155) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -66,6 +66,16 @@ ActiveRecord::Schema.define(version: 2020_02_10_222317) do
     t.index ["reset_password_token"], name: "index_clients_on_reset_password_token", unique: true
   end
 
+  create_table "kit_items", force: :cascade do |t|
+    t.integer "product_id", null: false
+    t.integer "product_kit_id", null: false
+    t.integer "quantity"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["product_id"], name: "index_kit_items_on_product_id"
+    t.index ["product_kit_id"], name: "index_kit_items_on_product_kit_id"
+  end
+
   create_table "product_kits", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
@@ -98,4 +108,6 @@ ActiveRecord::Schema.define(version: 2020_02_10_222317) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "kit_items", "product_kits"
+  add_foreign_key "kit_items", "products"
 end
