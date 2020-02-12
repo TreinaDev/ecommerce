@@ -1,3 +1,4 @@
+<%= render '/shared/errors', object: @kit_item %>
 <%= form_for [:admin, :product_kit, @kit_item] do |f| %>
 
   <%= f.label :product_id %>

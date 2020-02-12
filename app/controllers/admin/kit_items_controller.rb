@@ -6,11 +6,13 @@ class Admin::KitItemsController < ApplicationController
 
   def create
     @kit_item = KitItem.new(kit_item_params)
-    product = @kit_item.product
-    product_kit = @kit_item.product_kit
     if @kit_item.save
-      flash[:notice] = t('flash.add', model: product.model_name.human)
-      redirect_to admin_product_kit_path(product_kit)
+      flash[:notice] = t('flash.add', model: @kit_item.product.model_name.human)
+      redirect_to admin_product_kit_path(@kit_item.product_kit)
+    else
+      @products = Product.all.order(:type)
+      flash[:alert] = t('flash.error', model: 'produto ao kit')
+      render :new
     end
   end
 

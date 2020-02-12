@@ -42,4 +42,34 @@ feature 'Admin add products to product kit' do
     expect(page).not_to have_content('Placa Solar Daora')
     expect(page).not_to have_content('Inversor X')
   end
+
+  scenario 'tried to add a product but didnt have any' do
+    admin = create(:admin)
+    kit = create(:product_kit, name: 'Kit Logitech')
+
+    login_as(admin, scope: :admin)
+    visit new_admin_product_kit_kit_item_path(kit)
+    fill_in 'Quantidade', with: 1
+    click_on 'Enviar'
+
+    expect(page).to have_content('Não foi possível cadastrar o(a) produto ' \
+                                 'ao kit')
+    expect(page).to have_content('Produto é obrigatório(a)')
+  end
+
+  scenario 'tried to add a product without quantity' do
+    admin = create(:admin)
+    create(:product, :solar_plate, name: 'Placa Solar Daora')
+    kit = create(:product_kit, name: 'Kit Logitech')
+
+    login_as(admin, scope: :admin)
+    visit new_admin_product_kit_kit_item_path(kit)
+    select 'Placa Solar Daora', from: 'Produto (ID)'
+    fill_in 'Quantidade', with: 0
+    click_on 'Enviar'
+
+    expect(page).to have_content('Não foi possível cadastrar o(a) produto ' \
+                                 'ao kit')
+    expect(page).to have_content('Quantidade deve ser maior que 0')
+  end
 end
