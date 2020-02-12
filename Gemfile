@@ -11,8 +11,6 @@ gem 'rails-i18n', '~> 6.0.0'
 gem 'sqlite3', '~> 1.4'
 gem 'turbolinks', '~> 5'
 gem 'webpacker', '~> 4.0'
-# Use Active Storage variant
-# gem 'image_processing', '~> 1.2'
 
 gem 'bootsnap', '>= 1.4.2', require: false
 

@@ -10,5 +10,7 @@ Rails.application.routes.draw do
     resources :solar_plates, only: %i[new create show]
     resources :inversors, only: %i[new create show]
   end
+
   resources :carriers, only: %i[index show new create]
+  resource :cart, only: %i[show]
 end

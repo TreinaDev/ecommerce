@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_06_001601) do
+ActiveRecord::Schema.define(version: 2020_02_10_223328) do
 
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -41,8 +41,22 @@ ActiveRecord::Schema.define(version: 2020_02_06_001601) do
     t.datetime "remember_created_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "name"
+    t.string "address"
+    t.string "zip_code"
+    t.integer "client_type", default: 0
+    t.string "document"
     t.index ["email"], name: "index_clients_on_email", unique: true
     t.index ["reset_password_token"], name: "index_clients_on_reset_password_token", unique: true
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.integer "client_id", null: false
+    t.integer "status", default: 0
+    t.decimal "order_value"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["client_id"], name: "index_orders_on_client_id"
   end
 
   create_table "product_kits", force: :cascade do |t|
@@ -69,4 +83,5 @@ ActiveRecord::Schema.define(version: 2020_02_06_001601) do
     t.decimal "max_current", precision: 5, scale: 2
   end
 
+  add_foreign_key "orders", "clients"
 end
