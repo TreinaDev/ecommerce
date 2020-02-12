@@ -1,0 +1,9 @@
+<%= form_for @carrier_option do |f| %>
+  <%= f.label :min_vol %>
+  <%= f.text_field :min_vol %>
+  <%= f.label :max_vol%>
+  <%= f.text_field :max_vol %>
+  <%= f.label :price_kg %>
+  <%= f.text_field :price_kg %>
+  <%= f.submit 'Cadastrar opção de frete'%>
+<% end %>

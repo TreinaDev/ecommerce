@@ -5,8 +5,6 @@
   <dd><%= @carrier.cnpj %></dd>
   <dt>Razão Social:</dt>
   <dd><%= @carrier.corporate_name %></dd>
-  <dt>Taxa da transportadora:</dt>
-  <dd><%= @carrier.carrier_tax %>%</dd>
   <h4>Endereço:</h4><br>
   <dt>Logradouro:</dt>
   <dd><%= @carrier.address.street %></dd>
@@ -24,7 +22,9 @@
   <dd><%= @carrier.address.city %></dd>
   <dt>Estado:</dt>
   <dd><%= @carrier.address.state %></dd>
-  
+
 </dl>
+
+<%= link_to 'Cadastrar opção de frete', new_carrier_carrier_option_path(:carrier_id) %>
 
 <%= link_to 'Voltar', root_path %>

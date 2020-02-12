@@ -17,7 +17,6 @@ feature 'Admin register carrier' do
     fill_in 'Bairro', with: 'Pirituba'
     fill_in 'Cidade', with: 'São Paulo'
     fill_in 'Estado', with: 'SP'
-    fill_in 'Taxa (%)', with: '10'
     click_on 'Confirmar registro'
 
     expect(page).to have_content('Transportadora cadastrada com sucesso')
@@ -31,7 +30,6 @@ feature 'Admin register carrier' do
     expect(page).to have_content('Bairro: Pirituba')
     expect(page).to have_content('Cidade: São Paulo')
     expect(page).to have_content('Estado: SP')
-    expect(page).to have_content('Taxa da transportadora: 10%')
     expect(page).to have_link('Voltar')
   end
 
@@ -51,7 +49,6 @@ feature 'Admin register carrier' do
     fill_in 'Bairro', with: 'Pirituba'
     fill_in 'Cidade', with: 'São Paulo'
     fill_in 'Estado', with: 'SP'
-    fill_in 'Taxa (%)', with: ''
     click_on 'Confirmar registro'
 
     expect(page).not_to have_content('Transportadora cadastrada com sucesso')
@@ -61,18 +58,20 @@ feature 'Admin register carrier' do
 
   scenario 'and register freight by volume and price range' do
     admin = create(:admin)
+    carrier = create(:carrier)
     login_as(admin, scope: :admin)
 
     visit root_path
-    click_on 'Cadastrar transportadora'
-    click_on 'Cadastrar preço do frete'
-    fill_in 'Volume minimo:', with: '0.01'
-    fill_in 'Volume maximo:', with: '10.00'
-    fill_in 'Preço por Kilo:', with: '35.00'
-    
-    click_on 'Cadastrar frete'
+    click_on 'Transportadoras cadastradas'
+    click_on carrier.name
+    click_on 'Cadastrar opção de frete'
+    fill_in 'Volume mínimo', with: '0.01'
+    fill_in 'Volume máximo', with: '10.00'
+    fill_in 'Preço por Kilo', with: '35.00'
 
-    expect(page).to have_content('Faixa de preço cadastrada com sucesso')
+    click_on 'Cadastrar opção de frete'
+
+    expect(page).to have_content('Opção de frete cadastrada com sucesso')
     expect(page).to have_link('ID')
     expect(page).to have_content('Volume minimo: 0.01')
     expect(page).to have_content('Volume maximo: 10.00')
@@ -81,16 +80,17 @@ feature 'Admin register carrier' do
 
   scenario 'and edit freight by volume and price range' do
     admin = create(:admin)
+    carrier = create(:carrier, name: 'Teste Transportes')
     login_as(admin, scope: :admin)
 
     visit root_path
-    click_on 'Cadastrar transportadora'
-    click_on 'Cadastrar preço do frete'
-    click_on 'ID'
+    click_on 'Transportadoras cadastradas'
+    click_on carrier.name
+    click_on 'Editar opção de frete'
     fill_in 'Volume minimo:', with: '0.01'
     fill_in 'Volume maximo:', with: '10.00'
     fill_in 'Preço por Kilo:', with: '38.00'
-    
+
     click_on 'Cadastrar frete'
 
     expect(page).not_to have_content('Faixa de preço editada com sucesso')

@@ -6,6 +6,6 @@ FactoryBot.define do
     complement { 'A' }
     city { 'São Paulo' }
     state { 'SP' }
-    carrier { nil }
+    neighborhood { 'Groove Street' }
   end
 end

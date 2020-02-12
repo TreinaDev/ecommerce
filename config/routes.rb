@@ -11,6 +11,9 @@ Rails.application.routes.draw do
     resources :inversors, only: %i[new create show]
   end
 
-  resources :carriers, only: %i[index show new create]
+  resources :carriers, only: %i[index show new create] do
+    resources :carrier_options, only: %i[index show new create]
+  end
+
   resource :cart, only: %i[show]
 end
