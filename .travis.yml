@@ -1,0 +1,25 @@
+language: ruby
+
+rvm:
+  - 2.6.3
+
+env:
+  global:
+    - RAILS_ENV=test
+
+cache:
+  yarn: true
+
+before_install:
+  - nvm install 11
+  - gem install bundler
+
+before_script:
+  - yarn install
+  - gem install bundle-audit
+
+script:
+  - RAILS_ENV=test bundle exec rake db:test:prepare
+  - bundle exec rspec
+  - bundle exec rubocop --config .rubocop.yml
+  - bundle-audit check --update

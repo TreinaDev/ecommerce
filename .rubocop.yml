@@ -26,6 +26,9 @@ Style/Documentation:
 Style/FrozenStringLiteralComment:
  Enabled: false
 
+Style/ClassAndModuleChildren:
+  Enabled: false
+
 Metrics/BlockLength:
  ExcludedMethods: ['describe', 'context', 'feature', 'scenario', 'let']
 

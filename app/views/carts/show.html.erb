@@ -1,0 +1,14 @@
+<h1>Carrinho</h1>
+
+<% if @payments_options.any? %>
+  <h1>Formas de Pagamento Disponiveis</h1>
+  <li>
+    <% @payments_options.each do |po| %>
+      <ul><%= po.name %> - <%= t(:installments, count: po.installments) %> de <%= number_to_currency(po.installments_value) %></ul>
+    <% end %>
+  </li>
+  
+<% else %>
+  <h3>Nenhuma Forma de Pagamento Disponivel no momento</h3>
+  <p>Tente novamente mais tarde</p>
+<% end %>

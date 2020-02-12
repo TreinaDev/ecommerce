@@ -1,4 +1,4 @@
 require 'rails_helper'
 
-RSpec.describe Carrier, type: :model do
+describe Carrier do
 end
