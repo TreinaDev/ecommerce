@@ -58,4 +58,45 @@ feature 'Admin register carrier' do
     expect(page).to have_content('CNPJ não pode ficar em branco')
     expect(page).to have_content('Razão Social não pode ficar em branco')
   end
+
+  scenario 'and register freight by volume and price range' do
+    admin = create(:admin)
+    login_as(admin, scope: :admin)
+
+    visit root_path
+    click_on 'Cadastrar transportadora'
+    click_on 'Cadastrar preço do frete'
+    fill_in 'Volume minimo:', with: '0.01'
+    fill_in 'Volume maximo:', with: '10.00'
+    fill_in 'Preço por Kilo:', with: '35.00'
+    
+    click_on 'Cadastrar frete'
+
+    expect(page).to have_content('Faixa de preço cadastrada com sucesso')
+    expect(page).to have_link('ID')
+    expect(page).to have_content('Volume minimo: 0.01')
+    expect(page).to have_content('Volume maximo: 10.00')
+    expect(page).to have_content('Preço por kilo: 35.00')
+  end
+
+  scenario 'and edit freight by volume and price range' do
+    admin = create(:admin)
+    login_as(admin, scope: :admin)
+
+    visit root_path
+    click_on 'Cadastrar transportadora'
+    click_on 'Cadastrar preço do frete'
+    click_on 'ID'
+    fill_in 'Volume minimo:', with: '0.01'
+    fill_in 'Volume maximo:', with: '10.00'
+    fill_in 'Preço por Kilo:', with: '38.00'
+    
+    click_on 'Cadastrar frete'
+
+    expect(page).not_to have_content('Faixa de preço editada com sucesso')
+    expect(page).to have_link('ID')
+    expect(page).to have_content('Volume minimo: 0.01')
+    expect(page).to have_content('Volume maximo: 10.00')
+    expect(page).to have_content('Preço por kilo: 38.00')
+  end
 end
