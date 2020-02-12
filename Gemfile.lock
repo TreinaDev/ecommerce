@@ -275,7 +275,7 @@ DEPENDENCIES
   rspec-rails
   rubocop (~> 0.79.0)
   rubocop-rails
-  sass-rails
+  sass-rails (>= 6)
   selenium-webdriver
   simplecov
   spring
