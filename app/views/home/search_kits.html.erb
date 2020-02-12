@@ -1,0 +1,5 @@
+<h3><%= "Resultado da busca #{params[:q]}:" %></h3>
+
+<% @product_kits&.each do |kit| %>
+  <%= link_to kit.name, product_kit_path(kit) %>
+<% end %>

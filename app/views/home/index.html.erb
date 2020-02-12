@@ -1,1 +1,10 @@
 <h1>Bem vindo ao Ecommerce</h1>
+
+
+<div>
+  <%= form_with(url: search_path, local: true, method: :get) do %>
+    <%= label_tag(:q, "Fazer busca") %>
+    <%= text_field_tag(:q) %>
+    <%= submit_tag("Buscar") %>
+  <% end %>
+</div>
