@@ -21,7 +21,7 @@ class CarriersController < ApplicationController
 
   def carrier_params
     params.require(:carrier)
-          .permit(:name, :cnpj, :corporate_name,
+          .permit(:name, :cnpj, :corporate_name, :carrier_tax,
                   address_attributes: %i[id street number complement zip_code
                                          neighborhood city state])
   end

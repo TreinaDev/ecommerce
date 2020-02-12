@@ -17,7 +17,7 @@ feature 'Admin register carrier' do
     fill_in 'Bairro', with: 'Pirituba'
     fill_in 'Cidade', with: 'São Paulo'
     fill_in 'Estado', with: 'SP'
-
+    fill_in 'Taxa (%)', with: '10'
     click_on 'Confirmar registro'
 
     expect(page).to have_content('Transportadora cadastrada com sucesso')
@@ -31,6 +31,7 @@ feature 'Admin register carrier' do
     expect(page).to have_content('Bairro: Pirituba')
     expect(page).to have_content('Cidade: São Paulo')
     expect(page).to have_content('Estado: SP')
+    expect(page).to have_content('Taxa da transportadora: 10%')
     expect(page).to have_link('Voltar')
   end
 
@@ -50,7 +51,7 @@ feature 'Admin register carrier' do
     fill_in 'Bairro', with: 'Pirituba'
     fill_in 'Cidade', with: 'São Paulo'
     fill_in 'Estado', with: 'SP'
-
+    fill_in 'Taxa (%)', with: ''
     click_on 'Confirmar registro'
 
     expect(page).not_to have_content('Transportadora cadastrada com sucesso')
