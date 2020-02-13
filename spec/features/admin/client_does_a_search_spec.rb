@@ -50,7 +50,14 @@ feature 'Clients can search' do
   end
 
   scenario 'not found' do
+    customer = create(:client)
+    
+    login_as(customer, scope: :client)
+    visit root_path
+    fill_in 'Fazer busca', with: 'Kit A'
+    click_on 'Buscar'
 
+    expect(page).to have_content('Não')
   end
 
   scenario 'guests can search too' do
