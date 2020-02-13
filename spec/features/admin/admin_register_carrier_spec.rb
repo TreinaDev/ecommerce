@@ -77,6 +77,27 @@ feature 'Admin register carrier' do
     expect(page).to have_content('Preço por kilo: 35.0')
   end
 
+  scenario 'and must register all freight options fields' do
+    admin = create(:admin)
+    carrier = create(:carrier)
+    login_as(admin, scope: :admin)
+
+    visit root_path
+    click_on 'Transportadoras cadastradas'
+    click_on carrier.name
+    click_on 'Cadastrar opção de frete'
+    fill_in 'Volume mínimo', with: ''
+    fill_in 'Volume máximo', with: ''
+    fill_in 'Preço por Kilo', with: ''
+
+    click_on 'Cadastrar opção de frete'
+
+    expect(page).not_to have_content('Opção de frete cadastrada com sucesso')
+    expect(page).to have_content('Volume mínimo não pode ficar em branco')
+    expect(page).to have_content('Volume máximo não pode ficar em branco')
+    expect(page).to have_content('Preço por Kilo não pode ficar em branco')
+  end
+
   scenario 'and max_vol must be higher than min_vol' do
     admin = create(:admin)
     carrier = create(:carrier, name: 'Teste Transportes')
@@ -95,5 +116,26 @@ feature 'Admin register carrier' do
     expect(page).not_to have_content('Opção de frete cadastrada com sucesso')
     expect(page).to have_content("O valor de volume máximo deve ser\
  maior que o volume mínimo")
+  end
+
+  scenario 'new carrier_option must not match number range registered' do
+    admin = create(:admin)
+    carrier = create(:carrier, name: 'Teste Transportes')
+    create(:carrier_option, min_vol: 5.0, max_vol: 10.0, carrier: carrier)
+    login_as(admin, scope: :admin)
+
+    visit root_path
+    click_on 'Transportadoras cadastradas'
+    click_on carrier.name
+    click_on 'Cadastrar opção de frete'
+    fill_in 'Volume mínimo', with: '7.0'
+    fill_in 'Volume máximo', with: '12.0'
+    fill_in 'Preço por Kilo', with: '35.0'
+
+    click_on 'Cadastrar opção de frete'
+
+    expect(page).not_to have_content('Opção de frete cadastrada com sucesso')
+    expect(page).to have_content("O valor inserido já está incluído em outra\
+ opção de frete")
   end
 end

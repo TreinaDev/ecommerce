@@ -3,6 +3,6 @@ FactoryBot.define do
     min_vol { 1.5 }
     max_vol { 1.5 }
     price_kg { 1.5 }
-    carrier { ' ' }
+    carrier
   end
 end
