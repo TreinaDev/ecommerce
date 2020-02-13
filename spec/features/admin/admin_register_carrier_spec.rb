@@ -65,16 +65,16 @@ feature 'Admin register carrier' do
     click_on 'Transportadoras cadastradas'
     click_on carrier.name
     click_on 'Cadastrar opção de frete'
-    fill_in 'Volume mínimo', with: '0.01'
-    fill_in 'Volume máximo', with: '10.0'
-    fill_in 'Preço por Kilo', with: '35.0'
+    fill_in 'Volume mínimo', with: '1'
+    fill_in 'Volume máximo', with: '10'
+    fill_in 'Preço por Kilo', with: '35'
 
     click_on 'Cadastrar opção de frete'
 
     expect(page).to have_content('Opção de frete cadastrada com sucesso')
-    expect(page).to have_content('Volume mínimo: 0.01')
-    expect(page).to have_content('Volume máximo: 10.0')
-    expect(page).to have_content('Preço por kilo: 35.0')
+    expect(page).to have_content('Volume mínimo: 1')
+    expect(page).to have_content('Volume máximo: 10')
+    expect(page).to have_content('Preço por kilo: 35')
   end
 
   scenario 'and must register all freight options fields' do
@@ -107,9 +107,9 @@ feature 'Admin register carrier' do
     click_on 'Transportadoras cadastradas'
     click_on carrier.name
     click_on 'Cadastrar opção de frete'
-    fill_in 'Volume mínimo', with: '10.0'
-    fill_in 'Volume máximo', with: '10.0'
-    fill_in 'Preço por Kilo', with: '35.0'
+    fill_in 'Volume mínimo', with: '10'
+    fill_in 'Volume máximo', with: '10'
+    fill_in 'Preço por Kilo', with: '35'
 
     click_on 'Cadastrar opção de frete'
 
@@ -121,16 +121,16 @@ feature 'Admin register carrier' do
   scenario 'new carrier_option must not match number range registered' do
     admin = create(:admin)
     carrier = create(:carrier, name: 'Teste Transportes')
-    create(:carrier_option, min_vol: 5.0, max_vol: 10.0, carrier: carrier)
+    create(:carrier_option, min_vol: 5, max_vol: 10, carrier: carrier)
     login_as(admin, scope: :admin)
 
     visit root_path
     click_on 'Transportadoras cadastradas'
     click_on carrier.name
     click_on 'Cadastrar opção de frete'
-    fill_in 'Volume mínimo', with: '7.0'
-    fill_in 'Volume máximo', with: '12.0'
-    fill_in 'Preço por Kilo', with: '35.0'
+    fill_in 'Volume mínimo', with: '7'
+    fill_in 'Volume máximo', with: '12'
+    fill_in 'Preço por Kilo', with: '35'
 
     click_on 'Cadastrar opção de frete'
 
@@ -142,27 +142,27 @@ feature 'Admin register carrier' do
   scenario 'admin edit carrier_option' do
     admin = create(:admin)
     carrier = create(:carrier, name: 'Teste Transportes')
-    create(:carrier_option, min_vol: 5.0, max_vol: 10.0, price_kg: 2.0, carrier: carrier)
+    create(:carrier_option, min_vol: 5, max_vol: 10, price_kg: 2.0, carrier: carrier)
     login_as(admin, scope: :admin)
 
     visit root_path
     click_on 'Transportadoras cadastradas'
     click_on carrier.name
     click_on 'Editar'
-    fill_in 'Volume mínimo', with: '4.0'
+    fill_in 'Volume mínimo', with: '4'
 
     click_on 'Cadastrar opção de frete'
 
     expect(page).to have_content('Opção de frete atualizada com sucesso')
-    expect(page).to have_content('Volume mínimo: 4.0')
-    expect(page).to have_content('Volume máximo: 10.0')
-    expect(page).to have_content('Preço por kilo: 2.0')
+    expect(page).to have_content('Volume mínimo: 4')
+    expect(page).to have_content('Volume máximo: 10')
+    expect(page).to have_content('Preço por kilo: 2')
   end
 
   scenario 'admin delete carrier_option' do
     admin = create(:admin)
     carrier = create(:carrier, name: 'Teste Transportes')
-    create(:carrier_option, min_vol: 5.0, max_vol: 10.0, price_kg: 2.0, carrier: carrier)
+    create(:carrier_option, min_vol: 5, max_vol: 10, price_kg: 2.0, carrier: carrier)
     login_as(admin, scope: :admin)
 
     visit root_path
@@ -171,8 +171,8 @@ feature 'Admin register carrier' do
     click_on 'Deletar'
 
     expect(page).to have_content('Opção de frete excluída com sucesso')
-    expect(page).not_to have_content('Volume mínimo: 5.0')
-    expect(page).not_to have_content('Volume máximo: 10.0')
-    expect(page).not_to have_content('Preço por kilo: 2.0')
+    expect(page).not_to have_content('Volume mínimo: 5')
+    expect(page).not_to have_content('Volume máximo: 10')
+    expect(page).not_to have_content('Preço por kilo: 2')
   end
 end

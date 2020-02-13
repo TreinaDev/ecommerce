@@ -39,8 +39,8 @@ ActiveRecord::Schema.define(version: 2020_02_12_170629) do
   end
 
   create_table "carrier_options", force: :cascade do |t|
-    t.float "min_vol"
-    t.float "max_vol"
+    t.integer "min_vol"
+    t.integer "max_vol"
     t.float "price_kg"
     t.integer "carrier_id", null: false
     t.datetime "created_at", precision: 6, null: false
