@@ -20,8 +20,8 @@ class CarrierOption < ApplicationRecord
     new_range = min_vol..max_vol
     if ranges.each do |range|
       range.include?(new_range)
-      errors.add(carrier_id.to_s, 'O valor inserido já está incluído em
-                                    outra opção de frete')
+      errors.add(:base, 'O valor inserido já está incluído em
+                          outra opção de frete')
     end
     end
   end
