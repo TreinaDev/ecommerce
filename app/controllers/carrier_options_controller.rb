@@ -4,6 +4,20 @@ class CarrierOptionsController < ApplicationController
     @carrier = Carrier.find(params[:carrier_id])
   end
 
+
+  def edit
+    @carrier_options = CarrierOption.all
+  end
+
+  def update
+    @carrier = Carrier.find(params[:carrier_id])
+    if  @carrier_option(carrier_option_params)
+      redirect_to @carrier, notice: 'Opção de frete atualizada com sucesso'
+    else
+      render :edit
+    end
+  end
+
   def create
     @carrier = Carrier.find(params[:carrier_id])
     @carrier_option = CarrierOption.new(carrier_option_params)
@@ -13,6 +27,11 @@ class CarrierOptionsController < ApplicationController
     else
       render :new
     end
+  end
+
+  def destroy
+    @carrier.destroy
+    redirect_to @carrier, notice: "Opção de frete excluida com sucesso"
   end
 
   private
