@@ -1,0 +1,2026 @@
+diff --git a/.rubocop.yml b/.rubocop.yml
+index 2ce9517..63d1e17 100644
+--- a/.rubocop.yml
++++ b/.rubocop.yml
+@@ -26,6 +26,9 @@ Style/Documentation:
+ Style/FrozenStringLiteralComment:
+  Enabled: false
+ 
++Style/ClassAndModuleChildren:
++  Enabled: false
++
+ Metrics/BlockLength:
+  ExcludedMethods: ['describe', 'context', 'feature', 'scenario', 'let']
+ 
+diff --git a/Gemfile b/Gemfile
+index eb94256..83836dd 100644
+--- a/Gemfile
++++ b/Gemfile
+@@ -7,6 +7,7 @@ gem 'devise'
+ gem 'jbuilder', '~> 2.7'
+ gem 'puma', '~> 4.1'
+ gem 'rails', '~> 6.0.2', '>= 6.0.2.1'
++gem 'rails-i18n', '~> 6.0.0'
+ gem 'sass-rails', '>= 6'
+ gem 'sqlite3', '~> 1.4'
+ gem 'turbolinks', '~> 5'
+diff --git a/Gemfile.lock b/Gemfile.lock
+index cb01174..4836182 100644
+--- a/Gemfile.lock
++++ b/Gemfile.lock
+@@ -151,6 +151,9 @@ GEM
+       nokogiri (>= 1.6)
+     rails-html-sanitizer (1.3.0)
+       loofah (~> 2.3)
++    rails-i18n (6.0.0)
++      i18n (>= 0.7, < 2)
++      railties (>= 6.0.0, < 7)
+     railties (6.0.2.1)
+       actionpack (= 6.0.2.1)
+       activesupport (= 6.0.2.1)
+@@ -270,6 +273,7 @@ DEPENDENCIES
+   listen (>= 3.0.5, < 3.2)
+   puma (~> 4.1)
+   rails (~> 6.0.2, >= 6.0.2.1)
++  rails-i18n (~> 6.0.0)
+   rspec-rails
+   rubocop (~> 0.79.0)
+   rubocop-rails
+diff --git a/app/controllers/admin/home_controller.rb b/app/controllers/admin/home_controller.rb
+new file mode 100644
+index 0000000..52bf3de
+--- /dev/null
++++ b/app/controllers/admin/home_controller.rb
+@@ -0,0 +1,3 @@
++class Admin::HomeController < ApplicationController
++  def dashboard; end
++end
+diff --git a/app/controllers/admin/inversors_controller.rb b/app/controllers/admin/inversors_controller.rb
+new file mode 100644
+index 0000000..aa79562
+--- /dev/null
++++ b/app/controllers/admin/inversors_controller.rb
+@@ -0,0 +1,32 @@
++class Admin::InversorsController < ApplicationController
++  before_action :authenticate_admin!
++
++  def index; end
++
++  def new
++    @inversor = Inversor.new
++  end
++
++  def create
++    @inversor = Inversor.new(inversor_params)
++    if @inversor.save
++      redirect_to admin_inversor_path(@inversor), notice: t('flash.success',
++                                                            model: 'Inversor')
++    else
++      flash[:alert] = 'Não foi possivel cadastrar a placa solar'
++      render :new
++    end
++  end
++
++  def show
++    @inversor = Inversor.find(params[:id])
++  end
++
++  private
++
++  def inversor_params
++    params.require(:inversor).permit(:name, :width, :height, :thickness,
++                                     :weight, :purchase_price, :sku,
++                                     :max_wattage, :max_voltage, :max_current)
++  end
++end
+diff --git a/app/controllers/admin/kit_items_controller.rb b/app/controllers/admin/kit_items_controller.rb
+new file mode 100644
+index 0000000..025ae43
+--- /dev/null
++++ b/app/controllers/admin/kit_items_controller.rb
+@@ -0,0 +1,25 @@
++class Admin::KitItemsController < ApplicationController
++  def new
++    @products = Product.all.order(:type)
++    @kit_item = KitItem.new
++  end
++
++  def create
++    @kit_item = KitItem.new(kit_item_params)
++    if @kit_item.save
++      flash[:notice] = t('flash.add', model: @kit_item.product.model_name.human)
++      redirect_to admin_product_kit_path(@kit_item.product_kit)
++    else
++      @products = Product.all.order(:type)
++      flash[:alert] = t('flash.error', model: 'produto ao kit')
++      render :new
++    end
++  end
++
++  private
++
++  def kit_item_params
++    params.require(:kit_item).permit(:product_id, :quantity)
++          .merge(product_kit_id: params[:product_kit_id])
++  end
++end
+diff --git a/app/controllers/admin/product_kits_controller.rb b/app/controllers/admin/product_kits_controller.rb
+new file mode 100644
+index 0000000..7214cd8
+--- /dev/null
++++ b/app/controllers/admin/product_kits_controller.rb
+@@ -0,0 +1,35 @@
++class Admin::ProductKitsController < ApplicationController
++  before_action :authenticate_admin!
++
++  def index
++    @product_kits = ProductKit.all
++  end
++
++  def new
++    @product_kit = ProductKit.new
++  end
++
++  def create
++    @product_kit = ProductKit.new(product_kit_params)
++    if @product_kit.save
++      flash[:notice] = t('flash.success', model: 'Kit de produtos')
++      redirect_to admin_product_kit_path(@product_kit)
++    else
++      flash[:alert] = t('flash.error', model: 'Kit de produtos')
++      render :new
++    end
++  end
++
++  def show
++    @product_kit = ProductKit.find(params[:id])
++    @kit_items = KitItem.where(product_kit: @product_kit)
++  end
++
++  private
++
++  def product_kit_params
++    params.require(:product_kit).permit(:name, :width, :height, :thickness,
++                                        :weight, :price, :description,
++                                        :picture, :warranty)
++  end
++end
+diff --git a/app/controllers/admin/products_controller.rb b/app/controllers/admin/products_controller.rb
+new file mode 100644
+index 0000000..183081a
+--- /dev/null
++++ b/app/controllers/admin/products_controller.rb
+@@ -0,0 +1,3 @@
++class Admin::ProductsController < ApplicationController
++  def index; end
++end
+diff --git a/app/controllers/admin/solar_plates_controller.rb b/app/controllers/admin/solar_plates_controller.rb
+new file mode 100644
+index 0000000..5b17050
+--- /dev/null
++++ b/app/controllers/admin/solar_plates_controller.rb
+@@ -0,0 +1,32 @@
++class Admin::SolarPlatesController < ApplicationController
++  before_action :authenticate_admin!
++
++  def index; end
++
++  def new
++    @solar_plate = SolarPlate.new
++  end
++
++  def create
++    @solar_plate = SolarPlate.new(solar_plate_params)
++    if @solar_plate.save
++      flash[:notice] = t('flash.success', model: 'Placa solar')
++      redirect_to admin_solar_plate_path(@solar_plate)
++    else
++      flash[:alert] = 'Não foi possivel cadastrar a placa solar'
++      render :new
++    end
++  end
++
++  def show
++    @solar_plate = SolarPlate.find(params[:id])
++  end
++
++  private
++
++  def solar_plate_params
++    params.require(:solar_plate).permit(:name, :width, :height, :thickness,
++                                        :weight, :purchase_price, :sku,
++                                        :efficiency, :rated_power)
++  end
++end
+diff --git a/app/controllers/carriers_controller.rb b/app/controllers/carriers_controller.rb
+new file mode 100644
+index 0000000..5369cd6
+--- /dev/null
++++ b/app/controllers/carriers_controller.rb
+@@ -0,0 +1,24 @@
++class CarriersController < ApplicationController
++  def new
++    @carrier = Carrier.new
++  end
++
++  def create
++    @carrier = Carrier.new(carrier_params)
++    if @carrier.save
++      redirect_to @carrier, notice: 'Transportadora cadastrada com sucesso'
++    else
++      render :new
++    end
++  end
++
++  def show
++    @carrier = Carrier.find(params[:id])
++  end
++
++  private
++
++  def carrier_params
++    params.require(:carrier).permit(:name, :cnpj, :corporate_name, :address)
++  end
++end
+diff --git a/app/controllers/home_controller.rb b/app/controllers/home_controller.rb
+new file mode 100644
+index 0000000..6d3fe90
+--- /dev/null
++++ b/app/controllers/home_controller.rb
+@@ -0,0 +1,3 @@
++class HomeController < ApplicationController
++  def index; end
++end
+diff --git a/app/models/carrier.rb b/app/models/carrier.rb
+index d974f81..de61480 100644
+--- a/app/models/carrier.rb
++++ b/app/models/carrier.rb
+@@ -1,2 +1,3 @@
+ class Carrier < ApplicationRecord
++  validates :cnpj, :corporate_name, :address, presence: true
+ end
+diff --git a/app/models/inversor.rb b/app/models/inversor.rb
+new file mode 100644
+index 0000000..4d0d969
+--- /dev/null
++++ b/app/models/inversor.rb
+@@ -0,0 +1,3 @@
++class Inversor < Product
++  validates :max_wattage, :max_voltage, :max_current, presence: true
++end
+diff --git a/app/models/kit_item.rb b/app/models/kit_item.rb
+new file mode 100644
+index 0000000..bb9eb38
+--- /dev/null
++++ b/app/models/kit_item.rb
+@@ -0,0 +1,6 @@
++class KitItem < ApplicationRecord
++  belongs_to :product
++  belongs_to :product_kit
++
++  validates :quantity, numericality: { greater_than: 0 }
++end
+diff --git a/app/models/product.rb b/app/models/product.rb
+index 35a85ac..9f37a3f 100644
+--- a/app/models/product.rb
++++ b/app/models/product.rb
+@@ -1,2 +1,5 @@
+ class Product < ApplicationRecord
++  has_many :kit_items, dependent: :destroy
++  has_many :product_kits, through: :kit_items
++  validates :name, :width, :height, :thickness, :sku, :weight, presence: true
+ end
+diff --git a/app/models/product_kit.rb b/app/models/product_kit.rb
+index 7b5fc1f..a2bf7b3 100644
+--- a/app/models/product_kit.rb
++++ b/app/models/product_kit.rb
+@@ -1,2 +1,7 @@
+ class ProductKit < ApplicationRecord
++  has_one_attached :picture
++  has_many :kit_items, dependent: :destroy
++  has_many :products, through: :kit_items
++  validates :name, :weight, :width, :height, :thickness, :price, :warranty,
++            presence: true
+ end
+diff --git a/app/models/solar_plate.rb b/app/models/solar_plate.rb
+new file mode 100644
+index 0000000..32afbb6
+--- /dev/null
++++ b/app/models/solar_plate.rb
+@@ -0,0 +1,3 @@
++class SolarPlate < Product
++  validates :rated_power, :efficiency, presence: true
++end
+diff --git a/app/views/admin/home/dashboard.html.erb b/app/views/admin/home/dashboard.html.erb
+new file mode 100644
+index 0000000..09536f2
+--- /dev/null
++++ b/app/views/admin/home/dashboard.html.erb
+@@ -0,0 +1,3 @@
++<h1>Admin Dashboard</h1>
++<%= link_to 'Produtos', admin_products_path %>
++<%= link_to 'Kit de produtos', admin_product_kits_path %>
+\ No newline at end of file
+diff --git a/app/views/admin/inversors/new.html.erb b/app/views/admin/inversors/new.html.erb
+new file mode 100644
+index 0000000..56c3254
+--- /dev/null
++++ b/app/views/admin/inversors/new.html.erb
+@@ -0,0 +1,37 @@
++<h1>Admin - Cadastro de um novo Inversor</h1>
++
++<%= render 'shared/errors', object: @inversor %>
++
++<%= form_for [:admin, @inversor] do |f| %>
++  <%= f.label :name %>
++  <%= f.text_field :name %>
++
++  <%= f.label :width %>
++  <%= f.number_field :width, placeholder: ' mm' %>
++
++  <%= f.label :height %>
++  <%= f.number_field :height, placeholder: ' mm' %>
++
++  <%= f.label :thickness %>
++  <%= f.number_field :thickness, placeholder: ' mm' %>
++
++  <%= f.label :weight %>
++  <%= f.number_field :weight, placeholder: ' kg' %>
++
++  <%= f.label :purchase_price %>
++  <%= f.number_field :purchase_price, step: 0.01 %>
++
++  <%= f.label :sku %>
++  <%= f.text_field :sku %>
++
++  <%= f.label :max_wattage %>
++  <%= f.number_field :max_wattage, placeholder: ' W' %>
++
++  <%= f.label :max_voltage %>
++  <%= f.number_field :max_voltage, placeholder: ' V' %>
++
++  <%= f.label :max_current %>
++  <%= f.number_field :max_current, step: 0.1, placeholder: ' A' %>
++  
++  <%= f.submit 'Enviar' %>
++<% end %>
+\ No newline at end of file
+diff --git a/app/views/admin/inversors/show.html.erb b/app/views/admin/inversors/show.html.erb
+new file mode 100644
+index 0000000..c5ba329
+--- /dev/null
++++ b/app/views/admin/inversors/show.html.erb
+@@ -0,0 +1,33 @@
++<h1>Inversor</h1>
++
++<dl>
++  <dt>Nome:</dt>
++  <dd><%= @inversor.name %></dd>
++
++  <dt>Dimensão:</dt>
++  <dd>
++    <%= "#{@inversor.width}mm (L)"  %>
++    <%= "x #{@inversor.height}mm (A)" %>
++    <%= "x #{@inversor.thickness}mm (E)" %>
++  </dd>
++
++  <dt>Peso:</dt>
++  <dd>
++    <%= "#{number_with_precision @inversor.weight, precision: 2} kg" %>
++  </dd>
++
++  <dt>Preço de compra:</dt>
++  <dd><%= number_to_currency @inversor.purchase_price %></dd>
++
++  <dt>SKU:</dt>
++  <dd><%= @inversor.sku %></dd>
++
++  <dt>Potência Máxima:</dt>
++  <dd><%= "#{@inversor.max_wattage} W" %></dd>
++  
++  <dt>Tensão Máxima:</dt>
++  <dd><%= "#{@inversor.max_voltage} V" %></dd>
++
++  <dt>Corrente Máxima:</dt>
++  <dd><%= "#{number_with_precision @inversor.max_current, precision: 1} A" %></dd>
++</dl>
+\ No newline at end of file
+diff --git a/app/views/admin/kit_items/new.html.erb b/app/views/admin/kit_items/new.html.erb
+new file mode 100644
+index 0000000..cde7ece
+--- /dev/null
++++ b/app/views/admin/kit_items/new.html.erb
+@@ -0,0 +1,11 @@
++<%= render '/shared/errors', object: @kit_item %>
++<%= form_for [:admin, :product_kit, @kit_item] do |f| %>
++
++  <%= f.label :product_id %>
++  <%= f.collection_select(:product_id, @products, :id, :name) %>
++
++  <%= f.label :quantity %>
++  <%= f.number_field :quantity %>
++
++  <%= f.submit 'Enviar' %>
++<% end %>
+\ No newline at end of file
+diff --git a/app/views/admin/product_kits/index.html.erb b/app/views/admin/product_kits/index.html.erb
+new file mode 100644
+index 0000000..a8e9d22
+--- /dev/null
++++ b/app/views/admin/product_kits/index.html.erb
+@@ -0,0 +1,5 @@
++<h1>Todos os Kits de Produtos</h1>
++<%= link_to 'Adicionar novo Kit de produtos', new_admin_product_kit_path %>
++<% @product_kits&.each do |kit| %>
++  <%= link_to kit.name, admin_product_kit_path(kit) %>
++<% end %>
+\ No newline at end of file
+diff --git a/app/views/admin/product_kits/new.html.erb b/app/views/admin/product_kits/new.html.erb
+new file mode 100644
+index 0000000..6771b45
+--- /dev/null
++++ b/app/views/admin/product_kits/new.html.erb
+@@ -0,0 +1,36 @@
++<h1>Registrar novo kit de produtos</h1>
++
++<%= render 'shared/errors', object: @product_kit %>
++
++<%= form_for [:admin, @product_kit] do |f| %>
++
++  <%= f.label :name %>
++  <%= f.text_field :name %>
++
++  <%= f.label :description %>
++  <%= f.text_area :description %>
++
++  <%= f.label :price %>
++  <%= f.number_field :price, step: 0.01 %>
++
++  <%= f.label :weight %>
++  <%= f.number_field :weight, placeholder: ' kg', step: 0.1 %>
++
++  <%= f.label :width %>
++  <%= f.number_field :width, placeholder: ' mm' %>
++
++  <%= f.label :height %>
++  <%= f.number_field :height, placeholder: ' mm' %>
++
++  <%= f.label :thickness %>
++  <%= f.number_field :thickness, placeholder: ' mm' %>
++
++  <%= f.label :warranty %>
++  <%= f.number_field :warranty, placeholder: ' meses' %>
++
++  <%= f.label :picture %>
++  <%= f.file_field :picture %>
++
++  <%= f.submit 'Enviar' %>
++
++<% end %>
+\ No newline at end of file
+diff --git a/app/views/admin/product_kits/show.html.erb b/app/views/admin/product_kits/show.html.erb
+new file mode 100644
+index 0000000..59f3521
+--- /dev/null
++++ b/app/views/admin/product_kits/show.html.erb
+@@ -0,0 +1,36 @@
++<h1><%= @product_kit.name %></h1>
++
++<%= link_to 'Adicionar produto', new_admin_product_kit_kit_item_path(@product_kit) %>
++
++<% @kit_items&.each do |kit| %>
++  <%= "#{kit.quantity} x #{kit.product.name}" %>
++<% end %>
++
++<%= image_tag @product_kit.picture if @product_kit.picture.present? %>
++
++<dl>
++
++  <% if @product_kit.description.present? %>
++    <dt>Descrição:</dt>
++    <dd><%= @product_kit.description %></dd>
++  <% end %>
++
++  <dt>Dimensão:</dt>
++  <dd>
++    <%= "#{@product_kit.width}mm (L)"  %>
++    <%= "x #{@product_kit.height}mm (A)" %>
++    <%= "x #{@product_kit.thickness}mm (E)" %>
++  </dd>
++
++  <dt>Peso:</dt>
++  <dd>
++    <%= "#{number_with_precision @product_kit.weight, precision: 2} kg" %>
++  </dd>
++
++  <dt>Preço:</dt>
++  <dd><%= number_to_currency @product_kit.price %></dd>
++
++  <dt>Garantia:</dt>
++  <dd><%= @product_kit.warranty %> meses</dd>
++
++</dl>
+\ No newline at end of file
+diff --git a/app/views/admin/products/index.html.erb b/app/views/admin/products/index.html.erb
+new file mode 100644
+index 0000000..64cacab
+--- /dev/null
++++ b/app/views/admin/products/index.html.erb
+@@ -0,0 +1,3 @@
++<h1>Admin - Todos os produtos</h1>
++<%= link_to 'Adicionar nova Placa Solar', new_admin_solar_plate_path %>
++<%= link_to 'Adicionar novo Inversor', new_admin_inversor_path %>
+\ No newline at end of file
+diff --git a/app/views/admin/solar_plates/new.html.erb b/app/views/admin/solar_plates/new.html.erb
+new file mode 100644
+index 0000000..f6c371a
+--- /dev/null
++++ b/app/views/admin/solar_plates/new.html.erb
+@@ -0,0 +1,34 @@
++<h1>Admin - Cadastro de uma nova placa solar</h1>
++
++<%= render 'shared/errors', object: @solar_plate %>
++
++<%= form_for [:admin, @solar_plate] do |f| %>
++  <%= f.label :name %>
++  <%= f.text_field :name %>
++
++  <%= f.label :width %>
++  <%= f.number_field :width, placeholder: ' mm' %>
++
++  <%= f.label :height %>
++  <%= f.number_field :height, placeholder: ' mm' %>
++
++  <%= f.label :thickness %>
++  <%= f.number_field :thickness, placeholder: ' mm' %>
++
++  <%= f.label :weight %>
++  <%= f.number_field :weight, placeholder: ' kg' %>
++
++  <%= f.label :purchase_price %>
++  <%= f.number_field :purchase_price, step: 0.01 %>
++
++  <%= f.label :sku %>
++  <%= f.text_field :sku %>
++
++  <%= f.label :efficiency %>
++  <%= f.number_field :efficiency, step: 0.01, placeholder: ' %' %>
++
++  <%= f.label :rated_power %>
++  <%= f.number_field :rated_power, placeholder: ' Wp' %>
++  
++  <%= f.submit 'Enviar' %>
++<% end %>
+\ No newline at end of file
+diff --git a/app/views/admin/solar_plates/show.html.erb b/app/views/admin/solar_plates/show.html.erb
+new file mode 100644
+index 0000000..8bf5dc2
+--- /dev/null
++++ b/app/views/admin/solar_plates/show.html.erb
+@@ -0,0 +1,30 @@
++<h1>Placa Solar</h1>
++
++<dl>
++  <dt>Nome:</dt>
++  <dd><%= @solar_plate.name %></dd>
++
++  <dt>Dimensão:</dt>
++  <dd>
++    <%= "#{@solar_plate.width}mm (L)"  %>
++    <%= "x #{@solar_plate.height}mm (A)" %>
++    <%= "x #{@solar_plate.thickness}mm (E)" %>
++  </dd>
++
++  <dt>Peso:</dt>
++  <dd>
++    <%= "#{number_with_precision @solar_plate.weight, precision: 2} kg" %>
++  </dd>
++
++  <dt>Preço de compra:</dt>
++  <dd><%= number_to_currency @solar_plate.purchase_price %></dd>
++
++  <dt>SKU:</dt>
++  <dd><%= @solar_plate.sku %></dd>
++
++  <dt>Eficiência:</dt>
++  <dd><%= "#{@solar_plate.efficiency}%" %></dd>
++  
++  <dt>Potência Nominal:</dt>
++  <dd><%= "#{@solar_plate.rated_power}Wp" %></dd>
++</dl>
+\ No newline at end of file
+diff --git a/app/views/carriers/new.html.erb b/app/views/carriers/new.html.erb
+new file mode 100644
+index 0000000..68a5791
+--- /dev/null
++++ b/app/views/carriers/new.html.erb
+@@ -0,0 +1,22 @@
++<h1>Cadastro de Transportadoras<h1>
++
++<% if @carrier.errors.any?%>
++  <p>Por favor, verifique os erros e tente novamente:</p>
++  <ul>
++    <% @carrier.errors.full_messages.each do |message| %>  
++      <li><%= message %></li>
++    <% end %>
++  </ul>
++<% end %>
++
++<%= form_for @carrier do |f| %>
++  <%= f.label :name %>
++  <%= f.text_field :name %>
++  <%= f.label :cnpj%>
++  <%= f.text_field :cnpj %>
++  <%= f.label :corporate_name %>
++  <%= f.text_field :corporate_name %>
++  <%= f.label :address %>
++  <%= f.text_field :address %>
++  <%= f.submit 'Confirmar registro'%>
++<% end %>
+\ No newline at end of file
+diff --git a/app/views/carriers/show.html.erb b/app/views/carriers/show.html.erb
+new file mode 100644
+index 0000000..736b3ee
+--- /dev/null
++++ b/app/views/carriers/show.html.erb
+@@ -0,0 +1,12 @@
++<h3>Transportadora: <%= @carrier.name%><h3>
++
++<dl>
++  <dt>CNPJ:</dt>
++  <dd><%= @carrier.cnpj %></dd>
++  <dt>Razão Social:</dt>
++  <dd><%= @carrier.corporate_name %></dd>
++  <dt>Endereço:</dt>
++  <dd><%= @carrier.address %></dd>
++</dl>
++
++<%= link_to 'Voltar', root_path %>
+\ No newline at end of file
+diff --git a/app/views/home/index.html.erb b/app/views/home/index.html.erb
+new file mode 100644
+index 0000000..401ca7b
+--- /dev/null
++++ b/app/views/home/index.html.erb
+@@ -0,0 +1 @@
++<h1>Bem vindo ao Ecommerce</h1>
+diff --git a/app/views/layouts/application.html.erb b/app/views/layouts/application.html.erb
+index 95c1b85..f681098 100644
+--- a/app/views/layouts/application.html.erb
++++ b/app/views/layouts/application.html.erb
+@@ -10,6 +10,14 @@
+   </head>
+ 
+   <body>
++    <%= flash[:notice] %>
++    <%= flash[:alert] %>
++    
++    <% if current_admin %>
++      <%= render '/shared/admin_menu' %>
++    <% end %>
++    
+     <%= yield %>
++    
+   </body>
+ </html>
+diff --git a/app/views/shared/_admin_menu.html.erb b/app/views/shared/_admin_menu.html.erb
+new file mode 100644
+index 0000000..dda8cb4
+--- /dev/null
++++ b/app/views/shared/_admin_menu.html.erb
+@@ -0,0 +1,7 @@
++<nav>
++  <ul id="admin">
++    <% #TODO Refatorar Dashboard/Admin - Navbar %>
++    <li> <%= link_to 'Cadastrar transportadora', new_carrier_path %> </li>
++    <li> <%= link_to 'Dashboard', admin_dashboard_path %> </li>
++  </ul>
++</nav>
+\ No newline at end of file
+diff --git a/app/views/shared/_errors.html.erb b/app/views/shared/_errors.html.erb
+new file mode 100644
+index 0000000..dcac700
+--- /dev/null
++++ b/app/views/shared/_errors.html.erb
+@@ -0,0 +1,10 @@
++<% if object && object.errors.any? %>
++  <div class="alert alert-error">
++    <a class="close" data-dismiss="alert">&#215;</a>
++    <ul>
++      <% object.errors.full_messages.each do |msg| %>
++        <%= content_tag :li, msg, class: 'error-msg' if msg.is_a?(String) %>
++      <% end %>
++    </ul>
++  </div>
++<% end %>
+\ No newline at end of file
+diff --git a/config/initializers/locale.rb b/config/initializers/locale.rb
+new file mode 100644
+index 0000000..8d34569
+--- /dev/null
++++ b/config/initializers/locale.rb
+@@ -0,0 +1,5 @@
++# Permitted locales available for the application
++I18n.available_locales = [:'pt-BR']
++ 
++# Set default locale to something other than :en
++I18n.default_locale = :'pt-BR'
+diff --git a/config/locales/carrier_model.yml b/config/locales/carrier_model.yml
+new file mode 100644
+index 0000000..18de443
+--- /dev/null
++++ b/config/locales/carrier_model.yml
+@@ -0,0 +1,9 @@
++pt-BR:
++  activerecord:
++    attributes:
++      carrier:
++        name: Nome Fantasia
++        cnpj: CNPJ
++        corporate_name: Razão Social
++        address: Endereço
++        
+\ No newline at end of file
+diff --git a/config/locales/devise.pt-br.yml b/config/locales/devise.pt-br.yml
+new file mode 100644
+index 0000000..b6cec85
+--- /dev/null
++++ b/config/locales/devise.pt-br.yml
+@@ -0,0 +1,168 @@
++pt-BR:
++  activerecord:
++    attributes:
++      candidate:
++        confirmation_sent_at: Confirmação enviada em
++        confirmation_token: Token de confirmação
++        confirmed_at: Confirmado em
++        created_at: Criado em
++        current_password: Senha atual
++        current_sign_in_at: Atualmente logado em
++        current_sign_in_ip: IP do acesso atual
++        email: Email
++        encrypted_password: Senha criptografada
++        failed_attempts: Tentativas sem sucesso
++        last_sign_in_at: Último acesso em
++        last_sign_in_ip: Último IP de acesso
++        locked_at: Bloqueado em
++        password: Senha
++        password_confirmation: Confirme sua senha
++        remember_created_at: Lembrar criado em
++        remember_me: Lembre-se de mim
++        reset_password_sent_at: Resetar senha enviado em
++        reset_password_token: Resetar token de senha
++        sign_in_count: Contagem de acessos
++        unconfirmed_email: E-mail não confirmado
++        unlock_token: Token de desbloqueio
++        updated_at: Atualizado em
++      headhunter:
++        confirmation_sent_at: Confirmação enviada em
++        confirmation_token: Token de confirmação
++        confirmed_at: Confirmado em
++        created_at: Criado em
++        current_password: Senha atual
++        current_sign_in_at: Atualmente logado em
++        current_sign_in_ip: IP do acesso atual
++        email: Email
++        encrypted_password: Senha criptografada
++        failed_attempts: Tentativas sem sucesso
++        last_sign_in_at: Último acesso em
++        last_sign_in_ip: Último IP de acesso
++        locked_at: Bloqueado em
++        password: Senha
++        password_confirmation: Confirme sua senha
++        remember_created_at: Lembrar criado em
++        remember_me: Lembre-se de mim
++        reset_password_sent_at: Resetar senha enviado em
++        reset_password_token: Resetar token de senha
++        sign_in_count: Contagem de acessos
++        unconfirmed_email: E-mail não confirmado
++        unlock_token: Token de desbloqueio
++        updated_at: Atualizado em  
++    models:
++      client: Cliente
++  devise:
++    confirmations:
++      confirmed: A sua conta foi confirmada com sucesso.
++      new:
++        resend_confirmation_instructions: Reenviar instruções de confirmação
++      send_instructions: Dentro de minutos, você receberá um email com as instruções de confirmação da sua conta.
++      send_paranoid_instructions: Se o seu e-mail existir em nosso banco de dados, você receberá um email com instruções sobre como confirmar sua conta em alguns minutos.
++    failure:
++      already_authenticated: Você já está autenticado.
++      inactive: A sua conta ainda não foi ativada.
++      invalid:  Senha ou %{authentication_keys} inválido.
++      last_attempt: Você tem mais uma única tentativa antes de sua conta ser bloqueada.
++      locked: A sua conta está bloqueada.
++      not_found_in_database: Senha ou %{authentication_keys} inválido.
++      timeout: A sua sessão expirou, por favor, faça login novamente para continuar.
++      unauthenticated: Para continuar, faça login ou registre-se.
++      unconfirmed: Antes de continuar, confirme a sua conta.
++    mailer:
++      confirmation_instructions:
++        action: Confirmar minha conta
++        greeting: Bem-vindo %{recipient}!
++        instruction: 'Você pode confirmar sua conta através do link abaixo:'
++        subject: Instruções de confirmação
++      email_changed:
++        greeting: Olá %{recipient}!
++        message: Estamos entrando em contato para notificá-lo de que seu e-mail está sendo alterado para %{email}.
++        subject: E-mail alterado
++      password_change:
++        greeting: Olá %{recipient}!
++        message: Estamos entrando em contato para notificá-lo de que sua senha foi alterada.
++        subject: Senha alterada
++      reset_password_instructions:
++        action: Redefinir minha senha
++        greeting: Olá %{recipient}!
++        instruction: Alguém fez o pedido para redefinir sua senha, e você pode fazer isso clicando no link abaixo.
++        instruction_2: Se você não fez este pedido, por favor ignore este e-mail.
++        instruction_3: Sua senha não será alterada até que você acesse o link acima e crie uma nova.
++        subject: Instruções de redefinição de senha
++      unlock_instructions:
++        action: Desbloquear minha conta
++        greeting: Olá %{recipient}!
++        instruction: 'Clique no link abaixo para desbloquear sua conta:'
++        message: Sua conta foi bloqueada devido ao excessivo número de tentativas acesso inválidas.
++        subject: Instruções de desbloqueio
++    omniauth_callbacks:
++      failure: Não foi possível autorizar de uma conta de %{kind} porque "%{reason}".
++      success: Autorizado com sucesso de uma conta de %{kind}.
++    passwords:
++      edit:
++        change_my_password: Alterar minha senha
++        change_your_password: Alterar sua senha
++        confirm_new_password: Confirme sua nova senha
++        new_password: Nova senha
++      new:
++        forgot_your_password: Esqueceu sua senha?
++        send_me_reset_password_instructions: Enviar instruções para redefinição da senha
++      no_token: Você não pode acessar esta página sem estar logado. Se você veio de um email de redefinição de senha, por favor certifique-se de ter digitado a URL corretamente.
++      send_instructions: Dentro de minutos, você receberá um e-mail com as instruções de redefinição da sua senha.
++      send_paranoid_instructions: Se o seu email existir em nosso banco de dados, você receberá um email com um link para recuperação da senha.
++      updated: A sua senha foi alterada com sucesso. Você está autenticado.
++      updated_not_active: Sua senha foi alterada com sucesso.
++    registrations:
++      destroyed: Adeus! A sua conta foi cancelada com sucesso. Esperamos vê-lo novamente em breve.
++      edit:
++        are_you_sure: Você tem certeza?
++        cancel_my_account: Cancelar minha conta
++        currently_waiting_confirmation_for_email: 'No momento esperando por: %{email}'
++        leave_blank_if_you_don_t_want_to_change_it: deixe em branco caso não queira alterá-la
++        title: Editar %{resource}
++        unhappy: Não está contente?
++        update: Atualizar
++        we_need_your_current_password_to_confirm_your_changes: precisamos da sua senha atual para confirmar suas mudanças
++      new:
++        sign_up: Criar conta
++      signed_up: Bem vindo! Você realizou seu registro com sucesso.
++      signed_up_but_inactive: Você se inscreveu com sucesso, porém nós não podemos autenticá-lo porque sua conta ainda não foi ativada.
++      signed_up_but_locked: Você se inscreveu com sucesso. Porém nós não podemos autenticá-lo porque sua conta está bloqueada.
++      signed_up_but_unconfirmed: Uma mensagem com um link de confirmação foi enviada para o seu e-mail. Por favor, acesse o link para ativar sua conta.
++      update_needs_confirmation: Sua conta foi atualizada com sucesso, mas nós precisamos verificar o novo endereço de email. Por favor, verifique seu e-mail e clique no link de confirmação para finalizar confirmando o seu novo e-mail.
++      updated: A sua conta foi atualizada com sucesso.
++      updated_but_not_signed_in: Sua conta foi atualizada com sucesso, uma vez que sua senha foi alterada será necessário realizar o login novamente.
++    sessions:
++      already_signed_out: Logout efetuado com sucesso.
++      new:
++        sign_in: Login
++      signed_in: Login efetuado com sucesso.
++      signed_out: Logout efetuado com sucesso.
++    shared:
++      links:
++        back: Voltar
++        didn_t_receive_confirmation_instructions: Não recebeu instruções de confirmação?
++        didn_t_receive_unlock_instructions: Não recebeu instruções de desbloqueio?
++        forgot_your_password: Esqueceu sua senha?
++        sign_in: Login
++        sign_in_with_provider: Entrar com %{provider}
++        sign_up: Criar conta
++      minimum_password_length:
++        one: "(Mínimo de %{count} caractere)"
++        other: "(Mínimo de %{count} caracteres)"
++    unlocks:
++      new:
++        resend_unlock_instructions: Reenviar instruções de desbloqueio
++      send_instructions: Dentro de minutos, você receberá um e-mail com instruções de desbloqueio da sua conta.
++      send_paranoid_instructions: Se sua conta existir em nosso banco de dados, você receberá em breve um e-mail com instruções para desbloquear ela.
++      unlocked: A sua conta foi desbloqueada com sucesso. Você está autenticado.
++  errors:
++    messages:
++      already_confirmed: já foi confirmado
++      confirmation_period_expired: É necessário ser confirmado dentro do período %{period}, por favor requisite um novo usuário.
++      expired: expirou, por favor solicite uma nova
++      not_found: não encontrado
++      not_locked: não foi bloqueado
++      not_saved:
++        one: 'Não foi possível salvar %{resource}: 1 erro'
++        other: 'Não foi possível salvar %{resource}: %{count} erros.'
+\ No newline at end of file
+diff --git a/config/locales/flash.pt-BR.yml b/config/locales/flash.pt-BR.yml
+new file mode 100644
+index 0000000..6eb207c
+--- /dev/null
++++ b/config/locales/flash.pt-BR.yml
+@@ -0,0 +1,5 @@
++pt-BR:
++  flash:
++    success: "%{model} cadastrado(a) com sucesso."
++    error: "Não foi possível cadastrar o(a) %{model}."
++    add: "%{model} adicionado(a) com sucesso"
+\ No newline at end of file
+diff --git a/config/locales/kit_item.pt-BR.yml b/config/locales/kit_item.pt-BR.yml
+new file mode 100644
+index 0000000..dc03580
+--- /dev/null
++++ b/config/locales/kit_item.pt-BR.yml
+@@ -0,0 +1,10 @@
++pt-BR:
++  activerecord:
++    attributes:
++      kit_item:
++        product_id: Produto (ID)
++        product: Produto
++        product_kit: Kit de produto
++        quantity: Quantidade
++    models:
++      kit_item: Item do kit
+\ No newline at end of file
+diff --git a/config/locales/product_kit.pt-BR.yml b/config/locales/product_kit.pt-BR.yml
+new file mode 100644
+index 0000000..f62fd04
+--- /dev/null
++++ b/config/locales/product_kit.pt-BR.yml
+@@ -0,0 +1,13 @@
++pt-BR:
++  activerecord:
++    attributes:
++      product_kit:
++        name: Nome
++        description: Descrição
++        price: Preço
++        weight: Peso
++        width: Largura
++        height: Altura
++        thickness: Espessura
++        warranty: Garantia
++        picture: Imagem
+\ No newline at end of file
+diff --git a/config/locales/products.pt-BR.yml b/config/locales/products.pt-BR.yml
+new file mode 100644
+index 0000000..36b84ae
+--- /dev/null
++++ b/config/locales/products.pt-BR.yml
+@@ -0,0 +1,27 @@
++pt-BR:
++  activerecord:
++    attributes:
++      product:
++        name: Nome
++        width: Largura
++        height: Altura
++        thickness: Espessura
++        weight: Peso
++        purchase_price: Preço de compra
++        sku: SKU
++        efficiency: Eficiência
++        rated_power: Potência Nominal
++        max_wattage: Potência Máxima
++        max_voltage: Tensão Máxima
++        max_current: Corrente Máxima
++    models:
++      solar_plate:
++        one: Placa Solar
++        other: Placas Solares
++      inversor:
++        one: Inversor
++        other: Inversores
++  admin:
++    solar_plates:
++      create:
++        success: 'Placa solar cadastrada com sucesso'
+\ No newline at end of file
+diff --git a/config/locales/pt-BR.yml b/config/locales/pt-BR.yml
+new file mode 100644
+index 0000000..307dc5f
+--- /dev/null
++++ b/config/locales/pt-BR.yml
+@@ -0,0 +1,222 @@
++pt-BR:
++  activerecord:
++    errors:
++      messages:
++        record_invalid: 'A validação falhou: %{errors}'
++        restrict_dependent_destroy:
++          has_one: Não é possível excluir o registro pois existe um %{record} dependente
++          has_many: Não é possível excluir o registro pois existem %{record} dependentes
++  date:
++    abbr_day_names:
++    - dom
++    - seg
++    - ter
++    - qua
++    - qui
++    - sex
++    - sáb
++    abbr_month_names:
++    - 
++    - jan
++    - fev
++    - mar
++    - abr
++    - mai
++    - jun
++    - jul
++    - ago
++    - set
++    - out
++    - nov
++    - dez
++    day_names:
++    - domingo
++    - segunda-feira
++    - terça-feira
++    - quarta-feira
++    - quinta-feira
++    - sexta-feira
++    - sábado
++    formats:
++      default: "%d/%m/%Y"
++      long: "%d de %B de %Y"
++      short: "%d de %B"
++    month_names:
++    - 
++    - janeiro
++    - fevereiro
++    - março
++    - abril
++    - maio
++    - junho
++    - julho
++    - agosto
++    - setembro
++    - outubro
++    - novembro
++    - dezembro
++    order:
++    - :day
++    - :month
++    - :year
++  datetime:
++    distance_in_words:
++      about_x_hours:
++        one: aproximadamente 1 hora
++        other: aproximadamente %{count} horas
++      about_x_months:
++        one: aproximadamente 1 mês
++        other: aproximadamente %{count} meses
++      about_x_years:
++        one: aproximadamente 1 ano
++        other: aproximadamente %{count} anos
++      almost_x_years:
++        one: quase 1 ano
++        other: quase %{count} anos
++      half_a_minute: meio minuto
++      less_than_x_seconds:
++        one: menos de 1 segundo
++        other: menos de %{count} segundos
++      less_than_x_minutes:
++        one: menos de um minuto
++        other: menos de %{count} minutos
++      over_x_years:
++        one: mais de 1 ano
++        other: mais de %{count} anos
++      x_seconds:
++        one: 1 segundo
++        other: "%{count} segundos"
++      x_minutes:
++        one: 1 minuto
++        other: "%{count} minutos"
++      x_days:
++        one: 1 dia
++        other: "%{count} dias"
++      x_months:
++        one: 1 mês
++        other: "%{count} meses"
++      x_years:
++        one: 1 ano
++        other: "%{count} anos"
++    prompts:
++      second: Segundo
++      minute: Minuto
++      hour: Hora
++      day: Dia
++      month: Mês
++      year: Ano
++  errors:
++    format: "%{attribute} %{message}"
++    messages:
++      accepted: deve ser aceito
++      blank: não pode ficar em branco
++      confirmation: não é igual a %{attribute}
++      empty: não pode ficar vazio
++      equal_to: deve ser igual a %{count}
++      even: deve ser par
++      exclusion: não está disponível
++      greater_than: deve ser maior que %{count}
++      greater_than_or_equal_to: deve ser maior ou igual a %{count}
++      inclusion: não está incluído na lista
++      invalid: não é válido
++      less_than: deve ser menor que %{count}
++      less_than_or_equal_to: deve ser menor ou igual a %{count}
++      model_invalid: 'A validação falhou: %{errors}'
++      not_a_number: não é um número
++      not_an_integer: não é um número inteiro
++      odd: deve ser ímpar
++      other_than: deve ser diferente de %{count}
++      present: deve ficar em branco
++      required: é obrigatório(a)
++      taken: já está em uso
++      too_long:
++        one: 'é muito longo (máximo: 1 caracter)'
++        other: 'é muito longo (máximo: %{count} caracteres)'
++      too_short:
++        one: 'é muito curto (mínimo: 1 caracter)'
++        other: 'é muito curto (mínimo: %{count} caracteres)'
++      wrong_length:
++        one: não possui o tamanho esperado (1 caracter)
++        other: não possui o tamanho esperado (%{count} caracteres)
++    template:
++      body: 'Por favor, verifique o(s) seguinte(s) campo(s):'
++      header:
++        one: 'Não foi possível gravar %{model}: 1 erro'
++        other: 'Não foi possível gravar %{model}: %{count} erros'
++  helpers:
++    select:
++      prompt: Por favor selecione
++    submit:
++      create: Criar %{model}
++      submit: Salvar %{model}
++      update: Atualizar %{model}
++  number:
++    currency:
++      format:
++        delimiter: "."
++        format: "%u %n"
++        precision: 2
++        separator: ","
++        significant: false
++        strip_insignificant_zeros: false
++        unit: R$
++    format:
++      delimiter: "."
++      precision: 3
++      separator: ","
++      significant: false
++      strip_insignificant_zeros: false
++    human:
++      decimal_units:
++        format: "%n %u"
++        units:
++          billion:
++            one: bilhão
++            other: bilhões
++          million:
++            one: milhão
++            other: milhões
++          quadrillion:
++            one: quatrilhão
++            other: quatrilhões
++          thousand: mil
++          trillion:
++            one: trilhão
++            other: trilhões
++          unit: ''
++      format:
++        delimiter: ''
++        precision: 3
++        significant: true
++        strip_insignificant_zeros: true
++      storage_units:
++        format: "%n %u"
++        units:
++          byte:
++            one: Byte
++            other: Bytes
++          eb: EB
++          gb: GB
++          kb: KB
++          mb: MB
++          pb: PB
++          tb: TB
++    percentage:
++      format:
++        delimiter: "."
++        format: "%n%"
++    precision:
++      format:
++        delimiter: "."
++  support:
++    array:
++      last_word_connector: " e "
++      two_words_connector: " e "
++      words_connector: ", "
++  time:
++    am: ''
++    formats:
++      default: "%a, %d de %B de %Y, %H:%M:%S %z"
++      long: "%d de %B de %Y, %H:%M"
++      short: "%d de %B, %H:%M"
++    pm: ''
+\ No newline at end of file
+diff --git a/config/routes.rb b/config/routes.rb
+index bd6ccb5..7642302 100644
+--- a/config/routes.rb
++++ b/config/routes.rb
+@@ -2,4 +2,16 @@ Rails.application.routes.draw do
+   devise_for :clients
+   devise_for :admins
+   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
++  root to: 'home#index'
++
++  namespace :admin do
++    get '/dashboard', to: 'home#dashboard'
++    resources :products, only: %i[index]
++    resources :solar_plates, only: %i[new create show]
++    resources :inversors, only: %i[new create show]
++    resources :product_kits, only: %i[index new create show] do
++      resources :kit_items, only: %i[new create]
++    end
++  end
++  resources :carriers, only: %i[index show new create]
+ end
+diff --git a/db/migrate/20200204231158_add_attributes_to_carrier.rb b/db/migrate/20200204231158_add_attributes_to_carrier.rb
+new file mode 100644
+index 0000000..028762d
+--- /dev/null
++++ b/db/migrate/20200204231158_add_attributes_to_carrier.rb
+@@ -0,0 +1,7 @@
++class AddAttributesToCarrier < ActiveRecord::Migration[6.0]
++  def change
++    add_column :carriers, :cnpj, :string
++    add_column :carriers, :corporate_name, :string
++    add_column :carriers, :address, :string
++  end
++end
+diff --git a/db/migrate/20200204234854_add_fields_to_products.rb b/db/migrate/20200204234854_add_fields_to_products.rb
+new file mode 100644
+index 0000000..4ed192d
+--- /dev/null
++++ b/db/migrate/20200204234854_add_fields_to_products.rb
+@@ -0,0 +1,13 @@
++class AddFieldsToProducts < ActiveRecord::Migration[6.0]
++  def change
++    add_column :products, :width, :integer
++    add_column :products, :height, :integer
++    add_column :products, :thickness, :integer
++    add_column :products, :type, :string
++    add_column :products, :sku, :string
++    add_column :products, :rated_power, :integer
++    add_column :products, :weight, :decimal, precision: 5, scale: 2
++    add_column :products, :purchase_price, :decimal, precision: 6, scale: 2
++    add_column :products, :efficiency, :decimal, precision: 4, scale: 2
++  end
++end
+diff --git a/db/migrate/20200206001601_add_inversor_fields_to_products.rb b/db/migrate/20200206001601_add_inversor_fields_to_products.rb
+new file mode 100644
+index 0000000..214384a
+--- /dev/null
++++ b/db/migrate/20200206001601_add_inversor_fields_to_products.rb
+@@ -0,0 +1,7 @@
++class AddInversorFieldsToProducts < ActiveRecord::Migration[6.0]
++  def change
++    add_column :products, :max_wattage, :integer
++    add_column :products, :max_voltage, :integer
++    add_column :products, :max_current, :decimal, precision: 5, scale: 2
++  end
++end
+diff --git a/db/migrate/20200210222137_add_required_fields_to_product_kits.rb b/db/migrate/20200210222137_add_required_fields_to_product_kits.rb
+new file mode 100644
+index 0000000..b386473
+--- /dev/null
++++ b/db/migrate/20200210222137_add_required_fields_to_product_kits.rb
+@@ -0,0 +1,11 @@
++class AddRequiredFieldsToProductKits < ActiveRecord::Migration[6.0]
++  def change
++    add_column :product_kits, :description, :string
++    add_column :product_kits, :price, :decimal, precision: 8, scale: 2
++    add_column :product_kits, :weight, :decimal, precision: 6, scale: 2
++    add_column :product_kits, :width, :integer
++    add_column :product_kits, :height, :integer
++    add_column :product_kits, :thickness, :integer
++    add_column :product_kits, :warranty, :integer
++  end
++end
+diff --git a/db/migrate/20200210222317_create_active_storage_tables.active_storage.rb b/db/migrate/20200210222317_create_active_storage_tables.active_storage.rb
+new file mode 100644
+index 0000000..0b2ce25
+--- /dev/null
++++ b/db/migrate/20200210222317_create_active_storage_tables.active_storage.rb
+@@ -0,0 +1,27 @@
++# This migration comes from active_storage (originally 20170806125915)
++class CreateActiveStorageTables < ActiveRecord::Migration[5.2]
++  def change
++    create_table :active_storage_blobs do |t|
++      t.string   :key,        null: false
++      t.string   :filename,   null: false
++      t.string   :content_type
++      t.text     :metadata
++      t.bigint   :byte_size,  null: false
++      t.string   :checksum,   null: false
++      t.datetime :created_at, null: false
++
++      t.index [ :key ], unique: true
++    end
++
++    create_table :active_storage_attachments do |t|
++      t.string     :name,     null: false
++      t.references :record,   null: false, polymorphic: true, index: false
++      t.references :blob,     null: false
++
++      t.datetime :created_at, null: false
++
++      t.index [ :record_type, :record_id, :name, :blob_id ], name: "index_active_storage_attachments_uniqueness", unique: true
++      t.foreign_key :active_storage_blobs, column: :blob_id
++    end
++  end
++end
+diff --git a/db/migrate/20200211000155_create_kit_items.rb b/db/migrate/20200211000155_create_kit_items.rb
+new file mode 100644
+index 0000000..b0e54f5
+--- /dev/null
++++ b/db/migrate/20200211000155_create_kit_items.rb
+@@ -0,0 +1,11 @@
++class CreateKitItems < ActiveRecord::Migration[6.0]
++  def change
++    create_table :kit_items do |t|
++      t.references :product, null: false, foreign_key: true
++      t.references :product_kit, null: false, foreign_key: true
++      t.integer :quantity
++
++      t.timestamps
++    end
++  end
++end
+diff --git a/db/schema.rb b/db/schema.rb
+index ef53f40..c17afb7 100644
+--- a/db/schema.rb
++++ b/db/schema.rb
+@@ -10,7 +10,28 @@
+ #
+ # It's strongly recommended that you check this file into your version control system.
+ 
+-ActiveRecord::Schema.define(version: 2020_02_04_000148) do
++ActiveRecord::Schema.define(version: 2020_02_11_000155) do
++
++  create_table "active_storage_attachments", force: :cascade do |t|
++    t.string "name", null: false
++    t.string "record_type", null: false
++    t.integer "record_id", null: false
++    t.integer "blob_id", null: false
++    t.datetime "created_at", null: false
++    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
++    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
++  end
++
++  create_table "active_storage_blobs", force: :cascade do |t|
++    t.string "key", null: false
++    t.string "filename", null: false
++    t.string "content_type"
++    t.text "metadata"
++    t.bigint "byte_size", null: false
++    t.string "checksum", null: false
++    t.datetime "created_at", null: false
++    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
++  end
+ 
+   create_table "admins", force: :cascade do |t|
+     t.string "email", default: "", null: false
+@@ -28,6 +49,9 @@ ActiveRecord::Schema.define(version: 2020_02_04_000148) do
+     t.string "name"
+     t.datetime "created_at", precision: 6, null: false
+     t.datetime "updated_at", precision: 6, null: false
++    t.string "cnpj"
++    t.string "corporate_name"
++    t.string "address"
+   end
+ 
+   create_table "clients", force: :cascade do |t|
+@@ -42,16 +66,48 @@ ActiveRecord::Schema.define(version: 2020_02_04_000148) do
+     t.index ["reset_password_token"], name: "index_clients_on_reset_password_token", unique: true
+   end
+ 
++  create_table "kit_items", force: :cascade do |t|
++    t.integer "product_id", null: false
++    t.integer "product_kit_id", null: false
++    t.integer "quantity"
++    t.datetime "created_at", precision: 6, null: false
++    t.datetime "updated_at", precision: 6, null: false
++    t.index ["product_id"], name: "index_kit_items_on_product_id"
++    t.index ["product_kit_id"], name: "index_kit_items_on_product_kit_id"
++  end
++
+   create_table "product_kits", force: :cascade do |t|
+     t.string "name"
+     t.datetime "created_at", precision: 6, null: false
+     t.datetime "updated_at", precision: 6, null: false
++    t.string "description"
++    t.decimal "price", precision: 8, scale: 2
++    t.decimal "weight", precision: 6, scale: 2
++    t.integer "width"
++    t.integer "height"
++    t.integer "thickness"
++    t.integer "warranty"
+   end
+ 
+   create_table "products", force: :cascade do |t|
+     t.string "name"
+     t.datetime "created_at", precision: 6, null: false
+     t.datetime "updated_at", precision: 6, null: false
++    t.integer "width"
++    t.integer "height"
++    t.integer "thickness"
++    t.string "type"
++    t.string "sku"
++    t.integer "rated_power"
++    t.decimal "weight", precision: 5, scale: 2
++    t.decimal "purchase_price", precision: 6, scale: 2
++    t.decimal "efficiency", precision: 4, scale: 2
++    t.integer "max_wattage"
++    t.integer "max_voltage"
++    t.decimal "max_current", precision: 5, scale: 2
+   end
+ 
++  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
++  add_foreign_key "kit_items", "product_kits"
++  add_foreign_key "kit_items", "products"
+ end
+diff --git a/db/seeds.rb b/db/seeds.rb
+index 1beea2a..2d92cf4 100644
+--- a/db/seeds.rb
++++ b/db/seeds.rb
+@@ -5,3 +5,4 @@
+ #
+ #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
+ #   Character.create(name: 'Luke', movie: movies.first)
++  Admin.create!(email: 'admin@test.com', password: '12345678' )
+\ No newline at end of file
+diff --git a/spec/factories/admins.rb b/spec/factories/admins.rb
+index e8a13b9..b85b847 100644
+--- a/spec/factories/admins.rb
++++ b/spec/factories/admins.rb
+@@ -1,5 +1,6 @@
+ FactoryBot.define do
+   factory :admin do
+-    
++    email { 'admin@test.com' }
++    password { '12345678' }
+   end
+ end
+diff --git a/spec/factories/carriers.rb b/spec/factories/carriers.rb
+index e4a5674..bc1e6d9 100644
+--- a/spec/factories/carriers.rb
++++ b/spec/factories/carriers.rb
+@@ -1,5 +1,5 @@
+ FactoryBot.define do
+   factory :carrier do
+-    name { "MyString" }
++    name { 'MyString' }
+   end
+ end
+diff --git a/spec/factories/clients.rb b/spec/factories/clients.rb
+index f7a3357..7c4bcc7 100644
+--- a/spec/factories/clients.rb
++++ b/spec/factories/clients.rb
+@@ -1,5 +1,6 @@
+ FactoryBot.define do
+   factory :client do
+-    
++    email { 'cliente@example.com' }
++    password { 'SenhaMuitoDificil' }
+   end
+ end
+diff --git a/spec/factories/kit_items.rb b/spec/factories/kit_items.rb
+new file mode 100644
+index 0000000..b937d25
+--- /dev/null
++++ b/spec/factories/kit_items.rb
+@@ -0,0 +1,7 @@
++FactoryBot.define do
++  factory :kit_item do
++    product
++    product_kit
++    quantity { 1 }
++  end
++end
+diff --git a/spec/factories/product_kits.rb b/spec/factories/product_kits.rb
+index 60d3683..f120dd1 100644
+--- a/spec/factories/product_kits.rb
++++ b/spec/factories/product_kits.rb
+@@ -1,5 +1,16 @@
+ FactoryBot.define do
+   factory :product_kit do
+-    name { "MyString" }
++    name { 'Kit Familiar' }
++    description { 'Cupidatat duis nulla ipsum ullamco in sunt non et sit.' }
++    price { 20_000.0 }
++    weight { 300 }
++    width { 2000 }
++    height { 1500 }
++    thickness { 1000 }
++    warranty { 3 }
++
++    trait :with_picture do
++      # TODO: futuramente para testar com fotos
++    end
+   end
+ end
+diff --git a/spec/factories/products.rb b/spec/factories/products.rb
+index eed261d..75bb1fe 100644
+--- a/spec/factories/products.rb
++++ b/spec/factories/products.rb
+@@ -1,5 +1,24 @@
+ FactoryBot.define do
+   factory :product do
+-    name { "MyString" }
++    name { 'Produto Solar' }
++    width { 100 }
++    height { 200 }
++    thickness { 300 }
++    sku { 'WGA-123-BSBK' }
++    weight { 10 }
++    purchase_price { 2000.0 }
++
++    trait :solar_plate do
++      type { 'SolarPlate' }
++      rated_power { 325 }
++      efficiency { 13 }
++    end
++
++    trait :inversor do
++      type { 'Inversor' }
++      max_wattage { 5000 }
++      max_voltage { 600 }
++      max_current { 17.0 }
++    end
+   end
+ end
+diff --git a/spec/features/admin/admin_add_products_to_product_kit_spec.rb b/spec/features/admin/admin_add_products_to_product_kit_spec.rb
+new file mode 100644
+index 0000000..b089171
+--- /dev/null
++++ b/spec/features/admin/admin_add_products_to_product_kit_spec.rb
+@@ -0,0 +1,75 @@
++require 'rails_helper'
++
++feature 'Admin add products to product kit' do
++  scenario 'successfully add solar plate' do
++    admin = create(:admin)
++    create(:product, :solar_plate, name: 'Placa Solar Daora')
++    create(:product, :solar_plate, name: 'Placa Solar Mais ou Menos')
++    create(:product_kit, name: 'Kit Razer')
++
++    login_as(admin, scope: :admin)
++    visit root_path
++    click_on 'Dashboard'
++    click_on 'Kit de produtos'
++    click_on 'Kit Razer'
++    click_on 'Adicionar produto'
++    select 'Placa Solar Daora', from: 'Produto (ID)'
++    fill_in 'Quantidade', with: 20
++    click_on 'Enviar'
++
++    expect(page).to have_content('Placa Solar adicionado(a) com sucesso')
++    expect(page).to have_css('h1', text: 'Kit Razer')
++    expect(page).to have_content('20 x Placa Solar Daora')
++    expect(page).not_to have_content('Placa Solar Mais ou Menos')
++  end
++
++  scenario 'successfully add inversor' do
++    admin = create(:admin)
++    create(:product, :solar_plate, name: 'Placa Solar Daora')
++    create(:product, :inversor, name: 'Inversor reverso')
++    create(:product, :inversor, name: 'Inversor X')
++    kit = create(:product_kit, name: 'Kit Logitech')
++
++    login_as(admin, scope: :admin)
++    visit new_admin_product_kit_kit_item_path(kit)
++    select 'Inversor reverso', from: 'Produto (ID)'
++    fill_in 'Quantidade', with: 1
++    click_on 'Enviar'
++
++    expect(page).to have_content('Inversor adicionado(a) com sucesso')
++    expect(page).to have_css('h1', text: 'Kit Logitech')
++    expect(page).to have_content('1 x Inversor reverso')
++    expect(page).not_to have_content('Placa Solar Daora')
++    expect(page).not_to have_content('Inversor X')
++  end
++
++  scenario 'tried to add a product but didnt have any' do
++    admin = create(:admin)
++    kit = create(:product_kit, name: 'Kit Logitech')
++
++    login_as(admin, scope: :admin)
++    visit new_admin_product_kit_kit_item_path(kit)
++    fill_in 'Quantidade', with: 1
++    click_on 'Enviar'
++
++    expect(page).to have_content('Não foi possível cadastrar o(a) produto ' \
++                                 'ao kit')
++    expect(page).to have_content('Produto é obrigatório(a)')
++  end
++
++  scenario 'tried to add a product without quantity' do
++    admin = create(:admin)
++    create(:product, :solar_plate, name: 'Placa Solar Daora')
++    kit = create(:product_kit, name: 'Kit Logitech')
++
++    login_as(admin, scope: :admin)
++    visit new_admin_product_kit_kit_item_path(kit)
++    select 'Placa Solar Daora', from: 'Produto (ID)'
++    fill_in 'Quantidade', with: 0
++    click_on 'Enviar'
++
++    expect(page).to have_content('Não foi possível cadastrar o(a) produto ' \
++                                 'ao kit')
++    expect(page).to have_content('Quantidade deve ser maior que 0')
++  end
++end
+diff --git a/spec/features/admin/admin_register_carrier_spec.rb b/spec/features/admin/admin_register_carrier_spec.rb
+new file mode 100644
+index 0000000..a508b4c
+--- /dev/null
++++ b/spec/features/admin/admin_register_carrier_spec.rb
+@@ -0,0 +1,43 @@
++require 'rails_helper'
++
++feature 'Admin register carrier' do
++  scenario 'success' do
++    admin = create(:admin)
++    login_as(admin, scope: :admin)
++
++    visit root_path
++    click_on 'Cadastrar transportadora'
++    fill_in 'Nome Fantasia', with: 'Zona oeste courier'
++    fill_in 'CNPJ', with: '82.676.748/0001-73'
++    fill_in 'Razão Social', with: 'Carlos Silva Transportes LTDA'
++    fill_in 'Endereço', with: 'Av. Raimundo Pereira de Magalhaes, 132,
++                                São Paulo, SP'
++    click_on 'Confirmar registro'
++
++    expect(page).to have_content('Transportadora cadastrada com sucesso')
++    expect(page).to have_content('Transportadora: Zona oeste courier')
++    expect(page).to have_content('CNPJ: 82.676.748/0001-73')
++    expect(page).to have_content('Razão Social: Carlos Silva Transportes LTDA')
++    expect(page).to have_content('Endereço: Av. Raimundo Pereira de Magalhaes' \
++                                 ', 132, São Paulo, SP')
++    expect(page).to have_link('Voltar')
++  end
++
++  scenario 'must fill in all the fields' do
++    admin = create(:admin)
++    login_as(admin, scope: :admin)
++
++    visit root_path
++    click_on 'Cadastrar transportadora'
++    fill_in 'Nome Fantasia', with: 'Zona oeste courier'
++    fill_in 'CNPJ', with: ''
++    fill_in 'Razão Social', with: ''
++    fill_in 'Endereço', with: 'Av. Raimundo Pereira de Magalhaes, 132,
++                                São Paulo, SP'
++    click_on 'Confirmar registro'
++
++    expect(page).not_to have_content('Transportadora cadastrada com sucesso')
++    expect(page).to have_content('CNPJ não pode ficar em branco')
++    expect(page).to have_content('Razão Social não pode ficar em branco')
++  end
++end
+diff --git a/spec/features/admin/admin_register_inversor_spec.rb b/spec/features/admin/admin_register_inversor_spec.rb
+new file mode 100644
+index 0000000..02ebe56
+--- /dev/null
++++ b/spec/features/admin/admin_register_inversor_spec.rb
+@@ -0,0 +1,70 @@
++require 'rails_helper'
++
++feature 'Admin register inversor' do
++  scenario 'successfully' do
++    admin = create(:admin)
++    login_as(admin, scope: :admin)
++
++    visit root_path
++    click_on 'Dashboard'
++    click_on 'Produtos'
++    click_on 'Adicionar novo Inversor'
++    fill_in 'Nome', with: 'Inversor X'
++    fill_in 'Largura', with: 375
++    fill_in 'Altura', with: 375
++    fill_in 'Espessura', with: 162
++    fill_in 'Peso', with: 10.6
++    fill_in 'Preço de compra', with: 5020.43
++    fill_in 'SKU', with: 'INV-G-00172'
++    fill_in 'Potência Máxima', with: 5000
++    fill_in 'Tensão Máxima', with: 600
++    fill_in 'Corrente Máxima', with: 15
++    click_on 'Enviar'
++
++    expect(page).to have_content('Inversor cadastrado(a) com sucesso')
++    expect(page).to have_content('Nome: Inversor X')
++    expect(page).to have_content('Dimensão: 375mm (L) x 375mm (A) x 162mm (E)')
++    expect(page).to have_content('Peso: 10,60 kg')
++    expect(page).to have_content('Preço de compra: R$ 5.020,43')
++    expect(page).to have_content('SKU: INV-G-00172')
++    expect(page).to have_content('Potência Máxima: 5000 W')
++    expect(page).to have_content('Tensão Máxima: 600 V')
++    expect(page).to have_content('Corrente Máxima: 15,0 A')
++  end
++
++  scenario 'but didnt fill in all fields' do
++    admin = create(:admin)
++    login_as(admin, scope: :admin)
++
++    visit new_admin_inversor_path
++    fill_in 'Nome', with: ''
++    click_on 'Enviar'
++
++    expect(page).to have_content('Não foi possivel cadastrar a placa solar')
++    expect(page).to_not have_content('Placa solar cadastrada com sucesso')
++    expect(page).to have_content('Nome não pode ficar em branco')
++    expect(page).to have_content('Largura não pode ficar em branco')
++    expect(page).to have_content('Altura não pode ficar em branco')
++    expect(page).to have_content('Espessura não pode ficar em branco')
++    expect(page).to have_content('Peso não pode ficar em branco')
++    expect(page).to have_content('SKU não pode ficar em branco')
++    expect(page).to have_content('Potência Máxima não pode ficar em branco')
++    expect(page).to have_content('Tensão Máxima não pode ficar em branco')
++    expect(page).to have_content('Corrente Máxima não pode ficar em branco')
++  end
++
++  scenario 'isnt logged in as admin' do
++    client = create(:client)
++
++    login_as(client, scope: :client)
++    visit new_admin_inversor_path
++
++    expect(current_path).to eq(new_admin_session_path)
++  end
++
++  scenario 'isnt logged in at all' do
++    visit new_admin_inversor_path
++
++    expect(current_path).to eq(new_admin_session_path)
++  end
++end
+diff --git a/spec/features/admin/admin_register_product_kit_spec.rb b/spec/features/admin/admin_register_product_kit_spec.rb
+new file mode 100644
+index 0000000..f24a3a9
+--- /dev/null
++++ b/spec/features/admin/admin_register_product_kit_spec.rb
+@@ -0,0 +1,91 @@
++require 'rails_helper'
++
++feature 'Admin register product kit' do
++  scenario 'successfully' do
++    admin = create(:admin)
++
++    login_as(admin, scope: :admin)
++    visit root_path
++    click_on 'Dashboard'
++    click_on 'Kit de produtos'
++    click_on 'Adicionar novo Kit de produtos'
++    fill_in 'Nome', with: 'Kit residêncial'
++    fill_in 'Descrição', with: 'Officia magna ea enim laborum.'
++    fill_in 'Preço', with: 10_000.00
++    fill_in 'Peso', with: 340
++    fill_in 'Largura', with: 2000
++    fill_in 'Altura', with: 1000
++    fill_in 'Espessura', with: 3000
++    fill_in 'Garantia', with: 24
++    attach_file('Imagem', Rails.root.join('spec/support/kit.jpg'))
++    click_on 'Enviar'
++
++    expect(page).to have_content('Kit de produtos cadastrado(a) com sucesso')
++    expect(page).to have_css('h1', text: 'Kit residêncial')
++    expect(page).to have_css("img[src*='kit.jpg']")
++    expect(page).to have_content('Descrição: Officia magna ea enim laborum.')
++    expect(page).to have_content('Preço: R$ 10.000,00')
++    expect(page).to have_content('Dimensão: 2000mm (L) x 1000mm (A) x ' \
++                                 '3000mm (E)')
++    expect(page).to have_content('Garantia: 24 meses')
++  end
++
++  scenario 'filed only required fields' do
++    admin = create(:admin)
++
++    login_as(admin, scope: :admin)
++    visit new_admin_product_kit_path
++    fill_in 'Nome', with: 'Kit residêncial'
++    fill_in 'Preço', with: 10_000.00
++    fill_in 'Peso', with: 340
++    fill_in 'Largura', with: 2000
++    fill_in 'Altura', with: 1000
++    fill_in 'Espessura', with: 3000
++    fill_in 'Garantia', with: 3
++    click_on 'Enviar'
++
++    expect(page).to have_content('Kit de produtos cadastrado(a) com sucesso')
++    expect(page).to have_css('h1', text: 'Kit residêncial')
++    expect(page).not_to have_content('Descrição:')
++    expect(page).to have_content('Preço: R$ 10.000,00')
++    expect(page).to have_content('Dimensão: 2000mm (L) x 1000mm (A) x ' \
++                                 '3000mm (E)')
++    expect(page).to have_content('Garantia: 3 meses')
++  end
++
++  scenario 'mandatory fields must be filled' do
++    admin = create(:admin)
++
++    login_as(admin, scope: :admin)
++    visit new_admin_product_kit_path
++    fill_in 'Nome', with: ''
++    click_on 'Enviar'
++
++    expect(page).to have_content('Não foi possível cadastrar o(a) Kit de ' \
++                                 'produtos.')
++    expect(page).to_not have_content('Kit de produtos cadastrado(a)' \
++                                     ' com sucesso')
++    expect(page).to have_content('Nome não pode ficar em branco')
++    expect(page).to have_content('Largura não pode ficar em branco')
++    expect(page).to have_content('Altura não pode ficar em branco')
++    expect(page).to have_content('Espessura não pode ficar em branco')
++    expect(page).to have_content('Peso não pode ficar em branco')
++    expect(page).to have_content('Preço não pode ficar em branco')
++    expect(page).to have_content('Garantia não pode ficar em branco')
++  end
++
++  scenario 'isnt logged in as admin' do
++    client = create(:client)
++
++    login_as(client, scope: :client)
++    visit new_admin_inversor_path
++
++    expect(current_path).to eq(new_admin_session_path)
++  end
++
++  scenario 'isnt logged in at all' do
++    visit new_admin_inversor_path
++
++    expect(current_path).to eq(new_admin_session_path)
++  end
++end
+diff --git a/spec/features/admin/admin_register_solar_plate_spec.rb b/spec/features/admin/admin_register_solar_plate_spec.rb
+new file mode 100644
+index 0000000..30dbd66
+--- /dev/null
++++ b/spec/features/admin/admin_register_solar_plate_spec.rb
+@@ -0,0 +1,67 @@
++require 'rails_helper'
++
++feature 'Admin register solar plate' do
++  scenario 'successfully' do
++    admin = create(:admin)
++    login_as(admin, scope: :admin)
++
++    visit root_path
++    click_on 'Dashboard'
++    click_on 'Produtos'
++    click_on 'Adicionar nova Placa Solar'
++    fill_in 'Nome', with: 'Placa solar A'
++    fill_in 'Largura', with: 2024
++    fill_in 'Altura', with: 1004
++    fill_in 'Espessura', with: 35
++    fill_in 'Peso', with: 24.90
++    fill_in 'Preço de compra', with: 2000.0
++    fill_in 'SKU', with: 'WEG-G-00172'
++    fill_in 'Eficiência', with: 18.15
++    fill_in 'Potência Nominal', with: 360
++    click_on 'Enviar'
++
++    expect(page).to have_content('Placa solar cadastrado(a) com sucesso')
++    expect(page).to have_content('Nome: Placa solar A')
++    expect(page).to have_content('Dimensão: 2024mm (L) x 1004mm (A) x 35mm (E)')
++    expect(page).to have_content('Peso: 24,90 kg')
++    expect(page).to have_content('Preço de compra: R$ 2.000,00')
++    expect(page).to have_content('SKU: WEG-G-00172')
++    expect(page).to have_content('Eficiência: 18.15%')
++    expect(page).to have_content('Potência Nominal: 360Wp')
++  end
++
++  scenario 'but didnt fill in all fields' do
++    admin = create(:admin)
++    login_as(admin, scope: :admin)
++
++    visit new_admin_solar_plate_path
++    fill_in 'Nome', with: ''
++    click_on 'Enviar'
++
++    expect(page).to have_content('Não foi possivel cadastrar a placa solar')
++    expect(page).to_not have_content('Placa solar cadastrado(a) com sucesso')
++    expect(page).to have_content('Nome não pode ficar em branco')
++    expect(page).to have_content('Largura não pode ficar em branco')
++    expect(page).to have_content('Altura não pode ficar em branco')
++    expect(page).to have_content('Espessura não pode ficar em branco')
++    expect(page).to have_content('Peso não pode ficar em branco')
++    expect(page).to have_content('SKU não pode ficar em branco')
++    expect(page).to have_content('Eficiência não pode ficar em branco')
++    expect(page).to have_content('Potência Nominal não pode ficar em branco')
++  end
++
++  scenario 'isnt logged in as admin' do
++    client = create(:client)
++
++    login_as(client, scope: :client)
++    visit new_admin_solar_plate_path
++
++    expect(current_path).to eq(new_admin_session_path)
++  end
++
++  scenario 'isnt logged in at all' do
++    visit new_admin_solar_plate_path
++
++    expect(current_path).to eq(new_admin_session_path)
++  end
++end
+diff --git a/spec/models/admin_spec.rb b/spec/models/admin_spec.rb
+index 3fd73fb..03fa34c 100644
+--- a/spec/models/admin_spec.rb
++++ b/spec/models/admin_spec.rb
+@@ -1,5 +1,4 @@
+ require 'rails_helper'
+ 
+-RSpec.describe Admin, type: :model do
+-  pending "add some examples to (or delete) #{__FILE__}"
++describe Admin do
+ end
+diff --git a/spec/models/carrier_spec.rb b/spec/models/carrier_spec.rb
+index c20dabc..3b6f6b0 100644
+--- a/spec/models/carrier_spec.rb
++++ b/spec/models/carrier_spec.rb
+@@ -1,5 +1,4 @@
+ require 'rails_helper'
+ 
+-RSpec.describe Carrier, type: :model do
+-  pending "add some examples to (or delete) #{__FILE__}"
++describe Carrier do
+ end
+diff --git a/spec/models/client_spec.rb b/spec/models/client_spec.rb
+index 2e2c38a..a80cec9 100644
+--- a/spec/models/client_spec.rb
++++ b/spec/models/client_spec.rb
+@@ -1,5 +1,4 @@
+ require 'rails_helper'
+ 
+-RSpec.describe Client, type: :model do
+-  pending "add some examples to (or delete) #{__FILE__}"
++describe Client do
+ end
+diff --git a/spec/models/kit_item_spec.rb b/spec/models/kit_item_spec.rb
+new file mode 100644
+index 0000000..dfa00b2
+--- /dev/null
++++ b/spec/models/kit_item_spec.rb
+@@ -0,0 +1,4 @@
++require 'rails_helper'
++
++describe KitItem do
++end
+diff --git a/spec/models/product_kit_spec.rb b/spec/models/product_kit_spec.rb
+index c6348b8..ccec327 100644
+--- a/spec/models/product_kit_spec.rb
++++ b/spec/models/product_kit_spec.rb
+@@ -1,5 +1,4 @@
+ require 'rails_helper'
+ 
+-RSpec.describe ProductKit, type: :model do
+-  pending "add some examples to (or delete) #{__FILE__}"
++describe ProductKit do
+ end
+diff --git a/spec/models/product_spec.rb b/spec/models/product_spec.rb
+index f22fbfd..5131aa6 100644
+--- a/spec/models/product_spec.rb
++++ b/spec/models/product_spec.rb
+@@ -1,5 +1,4 @@
+ require 'rails_helper'
+ 
+-RSpec.describe Product, type: :model do
+-  pending "add some examples to (or delete) #{__FILE__}"
++describe Product do
+ end
+diff --git a/spec/rails_helper.rb b/spec/rails_helper.rb
+index de2e952..73b6c64 100644
+--- a/spec/rails_helper.rb
++++ b/spec/rails_helper.rb
+@@ -42,6 +42,7 @@ rescue ActiveRecord::PendingMigrationError => e
+   exit 1
+ end
+ RSpec.configure do |config|
++  config.include Warden::Test::Helpers
+   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
+   config.fixture_path = "#{::Rails.root}/spec/fixtures"
+ 
+@@ -71,4 +72,5 @@ RSpec.configure do |config|
+   config.filter_rails_from_backtrace!
+   # arbitrary gems may also be filtered via:
+   # config.filter_gems_from_backtrace("gem name")
++  config.include Warden::Test::Helpers
+ end
+

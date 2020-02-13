@@ -1,0 +1,27 @@
+pt-BR:
+  activerecord:
+    attributes:
+      product:
+        name: Nome
+        width: Largura
+        height: Altura
+        thickness: Espessura
+        weight: Peso
+        purchase_price: Preço de compra
+        sku: SKU
+        efficiency: Eficiência
+        rated_power: Potência Nominal
+        max_wattage: Potência Máxima
+        max_voltage: Tensão Máxima
+        max_current: Corrente Máxima
+    models:
+      solar_plate:
+        one: Placa Solar
+        other: Placas Solares
+      inversor:
+        one: Inversor
+        other: Inversores
+  admin:
+    solar_plates:
+      create:
+        success: 'Placa solar cadastrada com sucesso'

@@ -1,0 +1,12 @@
+<h3>Transportadora: <%= @carrier.name%><h3>
+
+<dl>
+  <dt>CNPJ:</dt>
+  <dd><%= @carrier.cnpj %></dd>
+  <dt>Razão Social:</dt>
+  <dd><%= @carrier.corporate_name %></dd>
+  <dt>Endereço:</dt>
+  <dd><%= @carrier.address %></dd>
+</dl>
+
+<%= link_to 'Voltar', root_path %>
