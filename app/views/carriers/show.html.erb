@@ -32,14 +32,14 @@
       <h3>Opção de frete:</h3>
       <dt>Volume mínimo:</dt>
       <dd><%= carrier_option.min_vol %></dd>
-      <dt>Volume máximo:</dt>-
+      <dt>Volume máximo:</dt>
       <dd><%= carrier_option.max_vol %></dd>
       <dt>Preço por kilo:</dt>
       <dd><%= carrier_option.price_kg %></dd>
       <dt> Ação:<dt>
-      <dd> 
-          <%= link_to "Edit", edit_carrier_carrier_option_path(carrier_options[:id]) %> | 
-	        <%= link_to "Delete", carrier_carrier_option_path(carrier_options[:id]), :method => :delete %>
+      <dd>
+          <%= link_to "Editar", edit_carrier_carrier_option_path(carrier_option[:id]) %>
+	        <%= link_to "Deletar", carrier_carrier_option_path(carrier_option[:id]), :method => :delete %>
       </dd>
     </dl>
   <% end %>

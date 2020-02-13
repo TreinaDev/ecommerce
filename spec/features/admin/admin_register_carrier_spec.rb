@@ -138,4 +138,41 @@ feature 'Admin register carrier' do
     expect(page).to have_content("O valor inserido já está incluído em outra\
  opção de frete")
   end
+
+  scenario 'admin edit carrier_option' do
+    admin = create(:admin)
+    carrier = create(:carrier, name: 'Teste Transportes')
+    create(:carrier_option, min_vol: 5.0, max_vol: 10.0, price_kg: 2.0, carrier: carrier)
+    login_as(admin, scope: :admin)
+
+    visit root_path
+    click_on 'Transportadoras cadastradas'
+    click_on carrier.name
+    click_on 'Editar'
+    fill_in 'Volume mínimo', with: '4.0'
+
+    click_on 'Cadastrar opção de frete'
+
+    expect(page).to have_content('Opção de frete atualizada com sucesso')
+    expect(page).to have_content('Volume mínimo: 4.0')
+    expect(page).to have_content('Volume máximo: 10.0')
+    expect(page).to have_content('Preço por kilo: 2.0')
+  end
+
+  scenario 'admin delete carrier_option' do
+    admin = create(:admin)
+    carrier = create(:carrier, name: 'Teste Transportes')
+    create(:carrier_option, min_vol: 5.0, max_vol: 10.0, price_kg: 2.0, carrier: carrier)
+    login_as(admin, scope: :admin)
+
+    visit root_path
+    click_on 'Transportadoras cadastradas'
+    click_on carrier.name
+    click_on 'Deletar'
+
+    expect(page).to have_content('Opção de frete excluída com sucesso')
+    expect(page).not_to have_content('Volume mínimo: 5.0')
+    expect(page).not_to have_content('Volume máximo: 10.0')
+    expect(page).not_to have_content('Preço por kilo: 2.0')
+  end
 end
