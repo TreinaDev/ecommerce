@@ -72,10 +72,9 @@ feature 'Admin register carrier' do
     click_on 'Cadastrar opção de frete'
 
     expect(page).to have_content('Opção de frete cadastrada com sucesso')
-    expect(page).to have_link('ID')
-    expect(page).to have_content('Volume minimo: 0.01')
-    expect(page).to have_content('Volume maximo: 10.00')
-    expect(page).to have_content('Preço por kilo: 35.00')
+    expect(page).to have_content('Volume mínimo: 0.01')
+    expect(page).to have_content('Volume máximo: 10.0')
+    expect(page).to have_content('Preço por kilo: 35.0')
   end
 
   scenario 'and edit freight by volume and price range' do
