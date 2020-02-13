@@ -1,0 +1,4 @@
+pt-BR:
+  installments:
+    one: '1 vez'
+    other: '%{count} vezes'

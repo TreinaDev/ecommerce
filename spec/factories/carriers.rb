@@ -1,5 +1,5 @@
 FactoryBot.define do
   factory :carrier do
-    name { 'MyString' }
+    name { 'Correio' }
   end
 end

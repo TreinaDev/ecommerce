@@ -17,7 +17,7 @@ feature 'Admin add products to product kit' do
     fill_in 'Quantidade', with: 20
     click_on 'Enviar'
 
-    expect(page).to have_content('Placa Solar adicionado(a) com sucesso')
+    expect(page).to have_content('Produto adicionado(a) com sucesso')
     expect(page).to have_css('h1', text: 'Kit Razer')
     expect(page).to have_content('20 x Placa Solar Daora')
     expect(page).not_to have_content('Placa Solar Mais ou Menos')
@@ -36,7 +36,7 @@ feature 'Admin add products to product kit' do
     fill_in 'Quantidade', with: 1
     click_on 'Enviar'
 
-    expect(page).to have_content('Inversor adicionado(a) com sucesso')
+    expect(page).to have_content('Produto adicionado(a) com sucesso')
     expect(page).to have_css('h1', text: 'Kit Logitech')
     expect(page).to have_content('1 x Inversor reverso')
     expect(page).not_to have_content('Placa Solar Daora')

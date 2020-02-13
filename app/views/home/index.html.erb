@@ -1,1 +1,8 @@
 <h1>Bem vindo ao Ecommerce</h1>
+
+<% if client_signed_in? %>
+  <%= link_to 'Ver Carrinho', cart_path %>
+  <%= link_to 'Sair', destroy_client_session_path, method: :delete, class: 'nav-link' %>
+<% else %>
+  <%= link_to 'Entrar', new_client_session_path %>
+<% end %>
