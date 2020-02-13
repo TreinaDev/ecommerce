@@ -8,7 +8,7 @@ class CarrierOptionsController < ApplicationController
     @carrier = Carrier.find(params[:carrier_id])
     @carrier_option = CarrierOption.new(carrier_option_params)
     @carrier_option.carrier = @carrier
-    if @carrier_option.save!
+    if @carrier_option.save
       redirect_to @carrier, notice: 'Opção de frete cadastrada com sucesso'
     else
       render :new

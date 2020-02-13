@@ -66,8 +66,8 @@ feature 'Admin register carrier' do
     click_on carrier.name
     click_on 'Cadastrar opção de frete'
     fill_in 'Volume mínimo', with: '0.01'
-    fill_in 'Volume máximo', with: '10.00'
-    fill_in 'Preço por Kilo', with: '35.00'
+    fill_in 'Volume máximo', with: '10.0'
+    fill_in 'Preço por Kilo', with: '35.0'
 
     click_on 'Cadastrar opção de frete'
 
@@ -77,7 +77,7 @@ feature 'Admin register carrier' do
     expect(page).to have_content('Preço por kilo: 35.0')
   end
 
-  scenario 'and edit freight by volume and price range' do
+  scenario 'and max_vol must be higher than min_vol' do
     admin = create(:admin)
     carrier = create(:carrier, name: 'Teste Transportes')
     login_as(admin, scope: :admin)
@@ -85,17 +85,15 @@ feature 'Admin register carrier' do
     visit root_path
     click_on 'Transportadoras cadastradas'
     click_on carrier.name
-    click_on 'Editar opção de frete'
-    fill_in 'Volume minimo:', with: '0.01'
-    fill_in 'Volume maximo:', with: '10.00'
-    fill_in 'Preço por Kilo:', with: '38.00'
+    click_on 'Cadastrar opção de frete'
+    fill_in 'Volume mínimo', with: '10.0'
+    fill_in 'Volume máximo', with: '10.0'
+    fill_in 'Preço por Kilo', with: '35.0'
 
-    click_on 'Cadastrar frete'
+    click_on 'Cadastrar opção de frete'
 
-    expect(page).not_to have_content('Faixa de preço editada com sucesso')
-    expect(page).to have_link('ID')
-    expect(page).to have_content('Volume minimo: 0.01')
-    expect(page).to have_content('Volume maximo: 10.00')
-    expect(page).to have_content('Preço por kilo: 38.00')
+    expect(page).not_to have_content('Opção de frete cadastrada com sucesso')
+    expect(page).to have_content("O valor de volume máximo deve ser\
+ maior que o volume mínimo")
   end
 end
