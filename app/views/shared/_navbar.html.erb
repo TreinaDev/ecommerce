@@ -10,13 +10,13 @@
         </form>
       
       <div class="row mt-1">
-        <% if admin_signed_in? %>
-          <%= button_to 'Dashboard', dashboard_path, method: :get, class: 'btn btn-outline-blue mr-2' %>
+        <% if current_admin %>
+          <%= button_to 'Dashboard', admin_dashboard_path, method: :get, class: 'btn btn-outline-blue mr-2' %>
           <%= button_to 'Sair', destroy_admin_session_path, method: :delete, class: 'btn btn-blue text-white' %>
-        <% elsif client_signed_in? %>
+        <% elsif current_client %>
+          <%= button_to 'Minha conta', edit_client_registration_path, method: :get, class: 'btn btn-outline-blue mr-2' %>
+          <%= button_to 'Meu Carrinho', cart_path, method: :get, class: 'btn btn-outline-blue mr-2' %>
           <%= button_to 'Sair', destroy_client_session_path, method: :delete, class: 'btn btn-blue text-white' %>
-          <%= button_to 'Minha conta', '#', method: :get, class: 'btn btn-outline-blue mr-2' %>
-          <%= button_to 'Carrinho', cart_path, method: :get, class: 'btn btn-outline-blue mr-2' %>
         <% else %>
           <%= button_to 'Entrar', new_client_session_path, method: :get, class: 'btn btn-outline-blue mr-2' %>
           <%= button_to 'Inscreva-se', new_client_registration_path, method: :get, class: 'btn btn-blue text-white' %>

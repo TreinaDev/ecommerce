@@ -7,7 +7,7 @@ feature 'Admin register solar plate' do
 
     visit root_path
     click_on 'Dashboard'
-    click_on 'Produtos'
+    click_on 'Cadastrar produto'
     click_on 'Adicionar nova Placa Solar'
     fill_in 'Nome', with: 'Placa solar A'
     fill_in 'Largura', with: 2024
