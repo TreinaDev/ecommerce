@@ -11,8 +11,8 @@
       
       <div class="row mt-1">
         <% if current_admin %>
-          <%= button_to 'Dashboard', admin_dashboard_path, method: :get, class: 'btn btn-outline-blue mr-2' %>
-          <%= button_to 'Sair', destroy_admin_session_path, method: :delete, class: 'btn btn-blue text-white' %>
+          <%= button_to 'Dashboard', admin_dashboard_path, method: :get, class: 'btn btn-outline-purple mr-2' %>
+          <%= button_to 'Sair', destroy_admin_session_path, method: :delete, class: 'btn btn-purple text-white' %>
         <% elsif current_client %>
           <%= button_to 'Minha conta', edit_client_registration_path, method: :get, class: 'btn btn-outline-blue mr-2' %>
           <%= button_to 'Meu Carrinho', cart_path, method: :get, class: 'btn btn-outline-blue mr-2' %>

@@ -1,12 +1,19 @@
-<h3>Transportadora: <%= @carrier.name%><h3>
+<h1>Admin - Transportadoras</h1>
+<div class="row">
+  <div class="col-4 vrr-dark-gray">
+    <%= render 'admin/sidebar' %>
+  </div>
 
-<dl>
-  <dt>CNPJ:</dt>
-  <dd><%= @carrier.cnpj %></dd>
-  <dt>Razão Social:</dt>
-  <dd><%= @carrier.corporate_name %></dd>
-  <dt>Endereço:</dt>
-  <dd><%= @carrier.address %></dd>
-</dl>
-
-<%= link_to 'Voltar', root_path %>
+  <div class="col-8">
+  <h3>Transportadora: <%= @carrier.name%></h3>
+    <dl>
+      <dt>CNPJ:</dt>
+      <dd><%= @carrier.cnpj %></dd>
+      <dt>Razão Social:</dt>
+      <dd><%= @carrier.corporate_name %></dd>
+      <dt>Endereço:</dt>
+      <dd><%= @carrier.address %></dd>
+    </dl>
+    <%= link_to 'Voltar', root_path, class: 'btn btn-purple' %>
+  </div>
+</div>

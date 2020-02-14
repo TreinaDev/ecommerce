@@ -10,7 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_10_223328) do
+ActiveRecord::Schema.define(version: 2020_02_12_170629) do
+
+  create_table "addresses", force: :cascade do |t|
+    t.string "street"
+    t.string "number"
+    t.string "zip_code"
+    t.string "complement"
+    t.string "city"
+    t.string "state"
+    t.integer "carrier_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "neighborhood"
+    t.index ["carrier_id"], name: "index_addresses_on_carrier_id"
+  end
 
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -22,6 +36,16 @@ ActiveRecord::Schema.define(version: 2020_02_10_223328) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["email"], name: "index_admins_on_email", unique: true
     t.index ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true
+  end
+
+  create_table "carrier_options", force: :cascade do |t|
+    t.integer "min_vol"
+    t.integer "max_vol"
+    t.float "price_kg"
+    t.integer "carrier_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["carrier_id"], name: "index_carrier_options_on_carrier_id"
   end
 
   create_table "carriers", force: :cascade do |t|
@@ -83,5 +107,7 @@ ActiveRecord::Schema.define(version: 2020_02_10_223328) do
     t.decimal "max_current", precision: 5, scale: 2
   end
 
+  add_foreign_key "addresses", "carriers"
+  add_foreign_key "carrier_options", "carriers"
   add_foreign_key "orders", "clients"
 end

@@ -7,7 +7,7 @@ $colors:(
   "blue": #3080b9,
   "dark-blue": #005896,
 
-  "light-purple": #222,
+  "light-purple": #a782f5,
   "purple": #44218e,
   "dark-purple": #41038c,
 
@@ -29,12 +29,29 @@ $colors:(
   .hr-#{$name} {
     border-top: 1px solid $color;
   }
+
+  .vrl-#{$name} {
+    border-left: 1px solid $color;
+  }
+
+  .vrr-#{$name} {
+    border-right: 1px solid $color;
+  }
+}
+
+.link-purple {
+  color: map-get($colors, "purple");
+  &:hover {
+    color: map-get($colors, "light-purple");
+  }
 }
 
 .btn-purple {
+  color: white;
   background-color: map-get($colors, "purple");
   border-color: map-get($colors, "purple");
   &:hover {
+    color: white;
     background-color: map-get($colors, "dark-purple");
     border-color: map-get($colors, "dark-purple");
   }
