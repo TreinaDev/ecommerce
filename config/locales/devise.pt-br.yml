@@ -50,8 +50,7 @@ pt-BR:
         unlock_token: Token de desbloqueio
         updated_at: Atualizado em  
     models:
-      headhunter: Headhunter
-      candidate: Candidato
+      client: Cliente
   devise:
     confirmations:
       confirmed: A sua conta foi confirmada com sucesso.
