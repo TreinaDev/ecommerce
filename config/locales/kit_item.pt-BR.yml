@@ -1,0 +1,10 @@
+pt-BR:
+  activerecord:
+    attributes:
+      kit_item:
+        product_id: Produto (ID)
+        product: Produto
+        product_kit: Kit de produto
+        quantity: Quantidade
+    models:
+      kit_item: Item do kit
