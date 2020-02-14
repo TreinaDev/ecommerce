@@ -15,16 +15,19 @@ class CarrierOption < ApplicationRecord
   end
 
   def price_range_must_be_unique
-    return unless min_vol.present? && max_vol.present? && price_kg.present?
+    return if min_vol.blank? && max_vol.blank? && price_kg.blank?
 
-    carrier_options = carrier.carrier_options.all
-    carrier_options.each do |c_o|
-      ranges = CarrierOptionsToRanges.convert(c_o.min_vol, c_o.max_vol)
-      result = ranges.to_a & (min_vol..max_vol).to_a
-      if result.empty? == false
-        errors.add(:base, 'O valor inserido já está incluído em
-                              outra opção de frete')
+    carrier_ranges.each do |range|
+      if range.overlaps?(min_vol..max_vol)
+        return errors.add(:base, 'O valor inserido já está incluído em outra ' \
+                                 'opção de frete')
       end
+    end
+  end
+
+  def carrier_ranges
+    carrier.carrier_options.map do |c_o|
+      (c_o.min_vol..c_o.max_vol)
     end
   end
 end
