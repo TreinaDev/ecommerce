@@ -8,7 +8,8 @@ class PaymentOption
   end
 
   def self.all(_order_value)
-    json = call_api('localhost:4000/api/v1/payment_options?order_value=100')
+    response = call_api('localhost:4000/api/v1/payment_options?order_value=100')
+    json = catch_json(response)
     result = []
     return result if response.status == 500
 
@@ -20,8 +21,11 @@ class PaymentOption
     result
   end
 
-  def call_api(url)
-    response = Faraday.get(url)
+  def self.call_api(url)
+    Faraday.get(url)
+  end
+
+  def self.catch_json(response)
     JSON.parse(response.body, symbolize_names: true)
   end
 end
