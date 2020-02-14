@@ -1,1 +1,75 @@
 @import "~bootstrap/scss/bootstrap";
+@import "navbar";
+@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+
+$colors:(
+  "light-blue": #7cc3f5,
+  "blue": #3080b9,
+  "dark-blue": #005896,
+
+  "light-purple": #222,
+  "purple": #44218e,
+  "dark-purple": #41038c,
+
+  "white": #cee4ee,
+  "light-gray": #aaa,
+  "gray": #666,
+  "dark-gray": #191919
+);
+
+@each $name, $color in $colors {
+  .bg-#{$name} {
+    background-color: $color;
+  }
+
+  .text-#{$name} {
+    color: $color;
+  }
+
+  .hr-#{$name} {
+    border-top: 1px solid $color;
+  }
+}
+
+.btn-purple {
+  background-color: map-get($colors, "purple");
+  border-color: map-get($colors, "purple");
+  &:hover {
+    background-color: map-get($colors, "dark-purple");
+    border-color: map-get($colors, "dark-purple");
+  }
+}
+
+.btn-outline-purple {
+  color: white;
+  border-color: map-get($colors, "purple");
+  &:hover {
+    color: white;
+    border-color: map-get($colors, "dark-purple");
+    background-color: map-get($colors, "dark-purple");
+  }
+}
+
+.btn-blue {
+  background-color: map-get($colors, "blue");
+  border-color: map-get($colors, "blue");
+  &:hover {
+    background-color: map-get($colors, "dark-blue");
+    border-color: map-get($colors, "dark-blue");
+  }
+}
+
+.btn-outline-blue {
+  color: white;
+  border-color: map-get($colors, "blue");
+  &:hover {
+    color: white;
+    background-color: map-get($colors, "dark-blue");
+    border-color: map-get($colors, "dark-blue");
+  }
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background-color: map-get($colors, "white");
+}

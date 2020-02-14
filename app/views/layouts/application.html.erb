@@ -13,8 +13,11 @@
     <%= flash[:notice] %>
     <%= flash[:alert] %>
 
+    <%= render '/shared/navbar' %>
     <%= render '/shared/admin_menu' if current_admin %>
 
-    <%= yield %>
+    <div class="container">
+      <%= yield %>
+    <div>
   </body>
 </html>
