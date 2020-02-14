@@ -19,10 +19,10 @@ class CarrierOption < ApplicationRecord
 
     carrier_options = carrier.carrier_options.all
     ranges = CarrierOptionsToRanges.new(carrier_options)
-    new_range = (min_vol..max_vol).to_a
+    new_range = (min_vol..max_vol)
     puts new_range
     if ranges.each do |range|
-      range = range.to_a
+      range = range
       puts range
       range.include?(new_range)
       errors.add(:base, 'O valor inserido já está incluído em
