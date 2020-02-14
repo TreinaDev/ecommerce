@@ -12,8 +12,9 @@ Rails.application.routes.draw do
   end
 
   resources :carriers, only: %i[index show new create] do
-    resources :carrier_options, only: %i[show new create edit update destroy]
+    resources :carrier_options, only: %i[new create]
   end
+  resources :carrier_options, only: %i[show edit update destroy]
 
   resource :cart, only: %i[show]
 end

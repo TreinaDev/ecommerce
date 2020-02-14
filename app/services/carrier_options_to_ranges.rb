@@ -1,16 +1,13 @@
 class CarrierOptionsToRanges
-  attr_accessor :carrier_options
+  attr_accessor :min_vol, :max_vol
 
-  def initialize(carrier_options)
-    @carrier_options = carrier_options
+  def initialize(min_vol, max_vol)
+    @min_vol = min_vol
+    @max_vol = max_vol
   end
 
-  def self.new(carrier_options)
-    ranges = []
-    carrier_options.each do |c|
-      result = c.min_vol..c.max_vol
-      ranges << result
-    end
-    ranges
+  def self.convert(min_vol, max_vol)
+    result = min_vol..max_vol
+    result
   end
 end

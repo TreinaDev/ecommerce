@@ -142,27 +142,27 @@ feature 'Admin register carrier' do
   scenario 'admin edit carrier_option' do
     admin = create(:admin)
     carrier = create(:carrier, name: 'Teste Transportes')
-    create(:carrier_option, min_vol: 5, max_vol: 10, price_kg: 2.0, carrier: carrier)
+    create(:carrier_option, min_vol: 5, max_vol: 10, carrier: carrier)
     login_as(admin, scope: :admin)
 
     visit root_path
     click_on 'Transportadoras cadastradas'
     click_on carrier.name
     click_on 'Editar'
-    fill_in 'Volume mínimo', with: '4'
+    fill_in 'Volume mínimo', with: '20'
+    fill_in 'Volume máximo', with: '50'
 
     click_on 'Cadastrar opção de frete'
 
     expect(page).to have_content('Opção de frete atualizada com sucesso')
-    expect(page).to have_content('Volume mínimo: 4')
-    expect(page).to have_content('Volume máximo: 10')
-    expect(page).to have_content('Preço por kilo: 2')
+    expect(page).to have_content('Volume mínimo: 20')
+    expect(page).to have_content('Volume máximo: 50')
   end
 
   scenario 'admin delete carrier_option' do
     admin = create(:admin)
     carrier = create(:carrier, name: 'Teste Transportes')
-    create(:carrier_option, min_vol: 5, max_vol: 10, price_kg: 2.0, carrier: carrier)
+    create(:carrier_option, min_vol: 5, max_vol: 10, carrier: carrier)
     login_as(admin, scope: :admin)
 
     visit root_path
@@ -173,6 +173,5 @@ feature 'Admin register carrier' do
     expect(page).to have_content('Opção de frete excluída com sucesso')
     expect(page).not_to have_content('Volume mínimo: 5')
     expect(page).not_to have_content('Volume máximo: 10')
-    expect(page).not_to have_content('Preço por kilo: 2')
   end
 end

@@ -38,8 +38,8 @@
       <dd><%= carrier_option.price_kg %></dd>
       <dt> Ação:<dt>
       <dd>
-          <%= link_to "Editar", edit_carrier_carrier_option_path(carrier_option[:id]) %>
-	        <%= link_to "Deletar", carrier_carrier_option_path(carrier_option[:id]), :method => :delete %>
+          <%= link_to "Editar", edit_carrier_option_path(carrier_option[:id]) %>
+	        <%= link_to "Deletar", carrier_option_path(carrier_option[:id]), :method => :delete %>
       </dd>
     </dl>
   <% end %>
