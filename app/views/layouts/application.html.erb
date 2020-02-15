@@ -12,11 +12,11 @@
   <body>
     <%= flash[:notice] %>
     <%= flash[:alert] %>
-    
+
     <% if current_admin %>
       <%= render '/shared/admin_menu' %>
     <% end %>
-    
-    <%= yield %>    
+
+    <%= yield %>
   </body>
 </html>

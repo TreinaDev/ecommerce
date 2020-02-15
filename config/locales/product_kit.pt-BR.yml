@@ -1,0 +1,13 @@
+pt-BR:
+  activerecord:
+    attributes:
+      product_kit:
+        name: Nome
+        description: Descrição
+        price: Preço
+        weight: Peso
+        width: Largura
+        height: Altura
+        thickness: Espessura
+        warranty: Garantia
+        picture: Imagem
