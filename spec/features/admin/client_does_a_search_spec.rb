@@ -59,8 +59,8 @@ feature 'Clients can search' do
     click_on 'Buscar'
 
     expect(page).to have_content('Resultado da busca Kit A')
-    expect(page).to have_content('Não foi encontrado nenhum resultado para sua ' \
-                                 'pesquisa')
+    expect(page).to have_content('Não foi encontrado nenhum resultado para ' \
+                                 'sua pesquisa')
     expect(page).not_to have_link('Kit A')
   end
 

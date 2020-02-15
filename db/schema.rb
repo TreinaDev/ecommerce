@@ -62,6 +62,11 @@ ActiveRecord::Schema.define(version: 2020_02_11_000155) do
     t.datetime "remember_created_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "name"
+    t.string "address"
+    t.string "zip_code"
+    t.integer "client_type", default: 0
+    t.string "document"
     t.index ["email"], name: "index_clients_on_email", unique: true
     t.index ["reset_password_token"], name: "index_clients_on_reset_password_token", unique: true
   end
@@ -74,6 +79,15 @@ ActiveRecord::Schema.define(version: 2020_02_11_000155) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["product_id"], name: "index_kit_items_on_product_id"
     t.index ["product_kit_id"], name: "index_kit_items_on_product_kit_id"
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.integer "client_id", null: false
+    t.integer "status", default: 0
+    t.decimal "order_value"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["client_id"], name: "index_orders_on_client_id"
   end
 
   create_table "product_kits", force: :cascade do |t|
@@ -110,4 +124,5 @@ ActiveRecord::Schema.define(version: 2020_02_11_000155) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "kit_items", "product_kits"
   add_foreign_key "kit_items", "products"
+  add_foreign_key "orders", "clients"
 end
