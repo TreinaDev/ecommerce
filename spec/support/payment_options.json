@@ -1,0 +1,12 @@
+[
+  {
+    "name" : "Cartão de Crédito",
+    "installments" : "12",
+    "installments_value" : "10"
+  },
+  {
+    "name" : "Boleto Bancário",
+    "installments" : "1",
+    "installments_value" : "90"
+  }
+]
