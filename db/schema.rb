@@ -10,20 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_12_170629) do
+ActiveRecord::Schema.define(version: 2020_02_11_000155) do
 
-  create_table "addresses", force: :cascade do |t|
-    t.string "street"
-    t.string "number"
-    t.string "zip_code"
-    t.string "complement"
-    t.string "city"
-    t.string "state"
-    t.integer "carrier_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "neighborhood"
-    t.index ["carrier_id"], name: "index_addresses_on_carrier_id"
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.integer "record_id", null: false
+    t.integer "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.bigint "byte_size", null: false
+    t.string "checksum", null: false
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
   create_table "admins", force: :cascade do |t|
@@ -36,16 +43,6 @@ ActiveRecord::Schema.define(version: 2020_02_12_170629) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["email"], name: "index_admins_on_email", unique: true
     t.index ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true
-  end
-
-  create_table "carrier_options", force: :cascade do |t|
-    t.integer "min_vol"
-    t.integer "max_vol"
-    t.float "price_kg"
-    t.integer "carrier_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["carrier_id"], name: "index_carrier_options_on_carrier_id"
   end
 
   create_table "carriers", force: :cascade do |t|
@@ -74,6 +71,16 @@ ActiveRecord::Schema.define(version: 2020_02_12_170629) do
     t.index ["reset_password_token"], name: "index_clients_on_reset_password_token", unique: true
   end
 
+  create_table "kit_items", force: :cascade do |t|
+    t.integer "product_id", null: false
+    t.integer "product_kit_id", null: false
+    t.integer "quantity"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["product_id"], name: "index_kit_items_on_product_id"
+    t.index ["product_kit_id"], name: "index_kit_items_on_product_kit_id"
+  end
+
   create_table "orders", force: :cascade do |t|
     t.integer "client_id", null: false
     t.integer "status", default: 0
@@ -87,6 +94,13 @@ ActiveRecord::Schema.define(version: 2020_02_12_170629) do
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "description"
+    t.decimal "price", precision: 8, scale: 2
+    t.decimal "weight", precision: 6, scale: 2
+    t.integer "width"
+    t.integer "height"
+    t.integer "thickness"
+    t.integer "warranty"
   end
 
   create_table "products", force: :cascade do |t|
@@ -107,7 +121,8 @@ ActiveRecord::Schema.define(version: 2020_02_12_170629) do
     t.decimal "max_current", precision: 5, scale: 2
   end
 
-  add_foreign_key "addresses", "carriers"
-  add_foreign_key "carrier_options", "carriers"
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "kit_items", "product_kits"
+  add_foreign_key "kit_items", "products"
   add_foreign_key "orders", "clients"
 end
