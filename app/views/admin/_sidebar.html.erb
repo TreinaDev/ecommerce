@@ -2,6 +2,12 @@
   <ul>
     <li><%= link_to 'Cadastrar produto', admin_products_path, class: 'link-purple' %></li>
       <ul><%= render 'admin/products/links' %></ul>
+
+    <li><%= link_to 'Kit de produtos', admin_product_kits_path, class: 'link-purple' %></li>
+      <ul>
+        <li><%= link_to 'Cadastrar Kit de produtos', new_admin_product_kit_path, class: 'link-purple' %></li>
+      </ul>
+
     <li><%= link_to 'Cadastrar transportadora', new_carrier_path, class: 'link-purple' %></li>
   </ul>
 </div>

@@ -1,36 +1,43 @@
-<h1>Registrar novo kit de produtos</h1>
+<h1>Admin - Todos os Kits de Produtos</h1>
+<div class="row">
+  <div class="col-4 vrr-dark-gray">
+    <%= render 'admin/sidebar' %>
+  </div>
 
-<%= render 'shared/errors', object: @product_kit %>
+  <div class="col-8">
+    <%= render 'shared/errors', object: @product_kit %>
 
-<%= form_for [:admin, @product_kit] do |f| %>
+    <%= form_for [:admin, @product_kit] do |f| %>
 
-  <%= f.label :name %>
-  <%= f.text_field :name %>
+      <%= f.label :name %>
+      <%= f.text_field :name %>
 
-  <%= f.label :description %>
-  <%= f.text_area :description %>
+      <%= f.label :description %>
+      <%= f.text_area :description %>
 
-  <%= f.label :price %>
-  <%= f.number_field :price, step: 0.01 %>
+      <%= f.label :price %>
+      <%= f.number_field :price, step: 0.01 %>
 
-  <%= f.label :weight %>
-  <%= f.number_field :weight, placeholder: ' kg', step: 0.1 %>
+      <%= f.label :weight %>
+      <%= f.number_field :weight, placeholder: ' kg', step: 0.1 %>
 
-  <%= f.label :width %>
-  <%= f.number_field :width, placeholder: ' mm' %>
+      <%= f.label :width %>
+      <%= f.number_field :width, placeholder: ' mm' %>
 
-  <%= f.label :height %>
-  <%= f.number_field :height, placeholder: ' mm' %>
+      <%= f.label :height %>
+      <%= f.number_field :height, placeholder: ' mm' %>
 
-  <%= f.label :thickness %>
-  <%= f.number_field :thickness, placeholder: ' mm' %>
+      <%= f.label :thickness %>
+      <%= f.number_field :thickness, placeholder: ' mm' %>
 
-  <%= f.label :warranty %>
-  <%= f.number_field :warranty, placeholder: ' meses' %>
+      <%= f.label :warranty %>
+      <%= f.number_field :warranty, placeholder: ' meses' %>
 
-  <%= f.label :picture %>
-  <%= f.file_field :picture %>
+      <%= f.label :picture %>
+      <%= f.file_field :picture %>
 
-  <%= f.submit 'Enviar' %>
+      <%= f.submit 'Enviar' %>
 
-<% end %>
+    <% end %>
+  </div>
+</div>
