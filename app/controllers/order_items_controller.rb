@@ -13,6 +13,15 @@ class OrderItemsController < ApplicationController
     redirect_to @order_item.product_kit
   end
 
+  def destroy
+    @order_item = OrderItem.find(params[:id])
+    if @order_item.destroy
+      flash[:notice] = 'Item removido'
+      @order_item.update_total_value
+    end
+    redirect_to cart_path
+  end
+
   private
 
   def retrieve_user_order
