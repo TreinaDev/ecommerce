@@ -32,3 +32,5 @@
   <dd><%= @product_kit.warranty %> meses</dd>
 
 </dl> 
+
+<%= button_to 'Adicionar ao carrinho', order_items_path, params: { product_kit_id: @product_kit } %>
