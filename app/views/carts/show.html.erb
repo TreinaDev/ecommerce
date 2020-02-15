@@ -1,6 +1,26 @@
 <h1>Carrinho</h1>
 
-<% if @payments_options.any? %>
+<% if @order.nil? %>
+  <div>
+    <p>Nenhum produto no seu carrinho</p>
+  </div>
+<% end %>
+
+<ul>
+  <% @order&.product_kits&.each do |kit| %>
+    <li>
+      <%= kit.name %> - 
+      <%= number_to_currency(kit.price) %>
+    </li>
+  <% end %>
+</ul>
+
+<div>
+  <p><%= "Valor total: #{number_to_currency(@order&.order_value)}" %></p>
+</div>
+
+
+<% if @payments_options.present? %>
   <h1>Formas de Pagamento Disponiveis</h1>
   <li>
     <% @payments_options.each do |po| %>
@@ -12,3 +32,7 @@
   <h3>Nenhuma Forma de Pagamento Disponivel no momento</h3>
   <p>Tente novamente mais tarde</p>
 <% end %>
+
+<div>
+  <%= link_to 'Finalizar Compra', '#' %>
+</div>

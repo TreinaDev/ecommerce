@@ -6,6 +6,7 @@ class OrderItemsController < ApplicationController
     @order_item = OrderItem.new(order_item_params)
     if @order_item.save
       flash[:notice] = 'Adicionado ao carrinho'
+      @order_item.update_total_value
     else
       flash[:alert] = 'Tente novamente'
     end
