@@ -6,20 +6,20 @@
 
         <form class="form-inline mx-auto">
           <input class="form-control mr-3" type="search" placeholder="Buscar" aria-label="Buscar">
-          <button class="btn btn-outline-blue" type="submit">Buscar</button>
+          <button class="btn btn-outline-blue text-white" type="submit">Buscar</button>
         </form>
       
       <div class="row mt-1">
         <% if current_admin %>
-          <%= button_to 'Dashboard', admin_dashboard_path, method: :get, class: 'btn btn-outline-purple mr-2' %>
-          <%= button_to 'Sair', destroy_admin_session_path, method: :delete, class: 'btn btn-purple text-white' %>
+          <%= button_to 'Dashboard', admin_dashboard_path, method: :get, class: 'btn btn-outline-purple mr-2 text-white' %>
+          <%= button_to 'Sair', destroy_admin_session_path, method: :delete, class: 'btn btn-purple' %>
         <% elsif current_client %>
-          <%= button_to 'Minha conta', edit_client_registration_path, method: :get, class: 'btn btn-outline-blue mr-2' %>
-          <%= button_to 'Meu Carrinho', cart_path, method: :get, class: 'btn btn-outline-blue mr-2' %>
-          <%= button_to 'Sair', destroy_client_session_path, method: :delete, class: 'btn btn-blue text-white' %>
+          <%= button_to 'Minha conta', edit_client_registration_path, method: :get, class: 'btn btn-outline-blue mr-2 text-white' %>
+          <%= button_to 'Meu Carrinho', cart_path, method: :get, class: 'btn btn-outline-blue mr-2 text-white' %>
+          <%= button_to 'Sair', destroy_client_session_path, method: :delete, class: 'btn btn-blue' %>
         <% else %>
-          <%= button_to 'Entrar', new_client_session_path, method: :get, class: 'btn btn-outline-blue mr-2' %>
-          <%= button_to 'Inscreva-se', new_client_registration_path, method: :get, class: 'btn btn-blue text-white' %>
+          <%= button_to 'Entrar', new_client_session_path, method: :get, class: 'btn btn-outline-blue mr-2 text-white' %>
+          <%= button_to 'Inscreva-se', new_client_registration_path, method: :get, class: 'btn btn-blue' %>
         <% end %>
       </div>
 

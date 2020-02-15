@@ -14,7 +14,8 @@ $colors:(
   "white": #cee4ee,
   "light-gray": #aaa,
   "gray": #666,
-  "dark-gray": #191919
+  "dark-gray": #191919,
+  "black": #000
 );
 
 @each $name, $color in $colors {
@@ -58,7 +59,6 @@ $colors:(
 }
 
 .btn-outline-purple {
-  color: white;
   border-color: map-get($colors, "purple");
   &:hover {
     color: white;
@@ -68,16 +68,17 @@ $colors:(
 }
 
 .btn-blue {
+  color: white;
   background-color: map-get($colors, "blue");
   border-color: map-get($colors, "blue");
   &:hover {
+    color: white;
     background-color: map-get($colors, "dark-blue");
     border-color: map-get($colors, "dark-blue");
   }
 }
 
 .btn-outline-blue {
-  color: white;
   border-color: map-get($colors, "blue");
   &:hover {
     color: white;
