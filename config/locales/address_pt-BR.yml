@@ -1,0 +1,11 @@
+pt-BR:
+  activerecord:
+    attributes:
+      address:
+        street: Logradouro
+        number: Número
+        zip_code: CEP
+        complement: Complemento
+        neighborhood: Bairro
+        city: Cidade
+        state: Estado

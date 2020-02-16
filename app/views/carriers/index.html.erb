@@ -1,0 +1,14 @@
+<h1>Transportadoras cadastradas</h1>
+<% if @carriers.empty? %>
+  <p>Nenhuma transportadora cadastrada no momento.</p>
+<% end %>
+<dl>
+<% @carriers.each do |carrier| %>
+  <dt>Nome:</dt>
+  <dd><%= link_to carrier.name, carrier %></dd>
+  <dt>CNPJ:</dt>
+  <dd><%= carrier.cnpj %></dd>
+<% end %>
+</dl>
+
+<%= link_to 'Voltar', root_path %>

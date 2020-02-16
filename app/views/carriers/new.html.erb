@@ -1,22 +1,2 @@
 <h1>Cadastro de Transportadoras<h1>
-
-<% if @carrier.errors.any?%>
-  <p>Por favor, verifique os erros e tente novamente:</p>
-  <ul>
-    <% @carrier.errors.full_messages.each do |message| %>  
-      <li><%= message %></li>
-    <% end %>
-  </ul>
-<% end %>
-
-<%= form_for @carrier do |f| %>
-  <%= f.label :name %>
-  <%= f.text_field :name %>
-  <%= f.label :cnpj%>
-  <%= f.text_field :cnpj %>
-  <%= f.label :corporate_name %>
-  <%= f.text_field :corporate_name %>
-  <%= f.label :address %>
-  <%= f.text_field :address %>
-  <%= f.submit 'Confirmar registro'%>
-<% end %>
+<%= render partial: 'carrier_form', locals: { carrier: @carrier } %>

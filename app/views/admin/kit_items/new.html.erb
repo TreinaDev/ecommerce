@@ -1,0 +1,11 @@
+<%= render '/shared/errors', object: @kit_item %>
+<%= form_for [:admin, :product_kit, @kit_item] do |f| %>
+
+  <%= f.label :product_id %>
+  <%= f.collection_select(:product_id, @products, :id, :name) %>
+
+  <%= f.label :quantity %>
+  <%= f.number_field :quantity %>
+
+  <%= f.submit 'Enviar' %>
+<% end %>
