@@ -1,5 +1,12 @@
 <h1>Todos os Kits de Produtos</h1>
-<%= link_to 'Adicionar novo Kit de produtos', new_admin_product_kit_path %>
-<% @product_kits&.each do |kit| %>
-  <%= link_to kit.name, admin_product_kit_path(kit) %>
-<% end %>
+<div class="row">
+  <div class="col-4 vrr-dark-gray">
+    <%= render 'admin/sidebar' %>
+  </div>
+
+  <div class="col-8">
+    <% @product_kits&.each do |kit| %>
+      <%= link_to kit.name, admin_product_kit_path(kit) %>
+    <% end %>
+  </div>
+</div>

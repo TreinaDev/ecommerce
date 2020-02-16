@@ -1,0 +1,9 @@
+#logo img {
+  max-height: 50px;
+}
+
+.navbar-nav .nav-item a.nav-link {
+  &:hover {
+    color: map-get($colors, "blue");
+  }
+}

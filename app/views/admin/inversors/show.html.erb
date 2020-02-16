@@ -1,33 +1,40 @@
 <h1>Inversor</h1>
+<div class="row">
+  <div class="col-4 vrr-dark-gray">
+    <%= render 'admin/sidebar' %>
+  </div>
 
-<dl>
-  <dt>Nome:</dt>
-  <dd><%= @inversor.name %></dd>
+  <div class="col-8">
+    <dl>
+      <dt>Nome:</dt>
+      <dd><%= @inversor.name %></dd>
 
-  <dt>Dimensão:</dt>
-  <dd>
-    <%= "#{@inversor.width}mm (L)"  %>
-    <%= "x #{@inversor.height}mm (A)" %>
-    <%= "x #{@inversor.thickness}mm (E)" %>
-  </dd>
+      <dt>Dimensão:</dt>
+      <dd>
+        <%= "#{@inversor.width}mm (L)"  %>
+        <%= "x #{@inversor.height}mm (A)" %>
+        <%= "x #{@inversor.thickness}mm (E)" %>
+      </dd>
 
-  <dt>Peso:</dt>
-  <dd>
-    <%= "#{number_with_precision @inversor.weight, precision: 2} kg" %>
-  </dd>
+      <dt>Peso:</dt>
+      <dd>
+        <%= "#{number_with_precision @inversor.weight, precision: 2} kg" %>
+      </dd>
 
-  <dt>Preço de compra:</dt>
-  <dd><%= number_to_currency @inversor.purchase_price %></dd>
+      <dt>Preço de compra:</dt>
+      <dd><%= number_to_currency @inversor.purchase_price %></dd>
 
-  <dt>SKU:</dt>
-  <dd><%= @inversor.sku %></dd>
+      <dt>SKU:</dt>
+      <dd><%= @inversor.sku %></dd>
 
-  <dt>Potência Máxima:</dt>
-  <dd><%= "#{@inversor.max_wattage} W" %></dd>
-  
-  <dt>Tensão Máxima:</dt>
-  <dd><%= "#{@inversor.max_voltage} V" %></dd>
+      <dt>Potência Máxima:</dt>
+      <dd><%= "#{@inversor.max_wattage} W" %></dd>
+      
+      <dt>Tensão Máxima:</dt>
+      <dd><%= "#{@inversor.max_voltage} V" %></dd>
 
-  <dt>Corrente Máxima:</dt>
-  <dd><%= "#{number_with_precision @inversor.max_current, precision: 1} A" %></dd>
-</dl>
+      <dt>Corrente Máxima:</dt>
+      <dd><%= "#{number_with_precision @inversor.max_current, precision: 1} A" %></dd>
+    </dl>
+  </div>
+</div>

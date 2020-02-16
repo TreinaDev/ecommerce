@@ -14,7 +14,7 @@ feature 'Client see Payments Options' do
     login_as(client, scope: :client)
 
     visit root_path
-    click_on 'Ver Carrinho'
+    click_on 'Meu Carrinho'
 
     expect(page).to have_content('Formas de Pagamento Disponiveis')
     expect(page).to have_content('Cartão de Crédito - 12 vezes de R$ 1.672,00')
@@ -31,7 +31,7 @@ feature 'Client see Payments Options' do
     login_as(client, scope: :client)
 
     visit root_path
-    click_on 'Ver Carrinho'
+    click_on 'Meu Carrinho'
 
     expect(page).to have_content('Nenhuma Forma de Pagamento Disponivel no ' \
                                  'momento')
