@@ -7,10 +7,9 @@ describe PaymentOption do
                                     'spec/support/payment_options.json'
                                   ))
       response = double('response', status: 200, body: payment_options)
+      url = 'https://localhost:4000/api/v1/payment_options?order_value=100'
 
-      allow(Faraday).to receive(:get).with('localhost:4000/api/v1/payment_'\
-                                           'options?order_value=100')
-                                     .and_return(response)
+      allow(Faraday).to receive(:get).with(url).and_return(response)
 
       result = PaymentOption.all(100)
 
@@ -26,7 +25,7 @@ describe PaymentOption do
     it 'should return empty array if API return error' do
       response = double('response', status: 500,
                                     body: '[{"error" : "API indisponivel"}]')
-      url = 'localhost:4000/api/v1/payment_options?order_value=100'
+      url = 'https://localhost:4000/api/v1/payment_options?order_value=100'
 
       allow(Faraday).to receive(:get).with(url).and_return(response)
 

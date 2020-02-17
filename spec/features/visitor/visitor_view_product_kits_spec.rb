@@ -34,11 +34,10 @@ feature 'Visitor view product kits' do
     expect(page).to have_css('h1', text: 'Kit Básico')
     expect(page).to have_content('1 x Placa Solar Daora')
     expect(page).to have_content('1 x Inversor reverso')
-    expect(page).to have_content('Descrição: Kit para residência pequena.')
     expect(page).to have_content('Preço: R$ 10.000,00')
-    expect(page).to have_content('Dimensão: 2000mm (L) x 1500mm (A) x ' \
-                                 '1000mm (E)')
-    expect(page).to have_content('Garantia: 3 meses')
+    expect(page).to have_content('Kit para residência pequena.')
+    expect(page).to have_content('2000mm (L) x 1500mm (A) x 1000mm (E)')
+    expect(page).to have_content('3 meses')
   end
 
   scenario 'but there are no kits available' do
