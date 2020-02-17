@@ -25,13 +25,16 @@
       <ul><%= po.name %> - <%= t(:installments, count: po.installments) %> de <%= number_to_currency(po.installments_value) %></ul>
     <% end %>
   </li>
-<%= "Valor do frete: #{number_to_currency(@carrier_price)}, realizado pela transportadora: #{@carrier_name}" %>
 
 <% else %>
   <h3>Nenhuma Forma de Pagamento Disponivel no momento</h3>
   <p>Tente novamente mais tarde</p>
 <% end %>
-
+<% if @carrier_price.nil? && @carrier_name.nil? %>
+  <p> Nenhunha transportadora disponível para este produto </p>
+<% else %>
+  <%= "Frete: #{number_to_currency(@carrier_price)}, realizado pela transportadora: #{@carrier_name}" %>
+<% end %>
 
 <% if @order&.product_kits.blank? %>
   <p>Nenhum produto no seu carrinho</p>

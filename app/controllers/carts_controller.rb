@@ -14,16 +14,17 @@ class CartsController < ApplicationController
       if avaiable_carrier_options.count == 1
         if avaiable_carrier_options[0] < (@total_weight * c_o.price_kg)
           avaiable_carrier_options[0]
+        else
+          avaiable_carrier_options[0] == (@total_weight * c_o.price_kg)
+          carrier_name << c_o.carrier.name
         end
       else
         avaiable_carrier_options << (@total_weight * c_o.price_kg)
         carrier_name << c_o.carrier.name
       end
     end
-    @carrier_name = carrier_name
-    @carrier_price = avaiable_carrier_options
-    puts @carrier_name
-    puts @carrier_price
+    @carrier_name = carrier_name.join
+    @carrier_price = avaiable_carrier_options.join
   end
 
   private
@@ -31,7 +32,7 @@ class CartsController < ApplicationController
   def total_vol
     volumes = []
     @order.product_kits.all.each do |kit|
-      volumes << GetVol.total(kit.height, kit.width, kit.thickness)
+      volumes << (kit.width/1000) * (kit.height/1000) * (kit.thickness/1000)
     end
     volumes.sum
   end
