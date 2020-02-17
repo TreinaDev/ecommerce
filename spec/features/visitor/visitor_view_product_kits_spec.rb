@@ -46,6 +46,6 @@ feature 'Visitor view product kits' do
 
     click_on 'Produtos'
 
-    expect(page).to have_css('h3', text: 'Não há kits disponíveis no momento!')
+    expect(page).to have_css('p', text: 'Não há kits disponíveis no momento!')
   end
 end

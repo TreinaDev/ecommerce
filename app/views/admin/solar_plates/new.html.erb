@@ -1,34 +1,64 @@
 <h1>Admin - Cadastro de uma nova placa solar</h1>
+<div class="row">
+  <div class="col-4 vrr-dark-gray">
+    <%= render 'admin/sidebar' %>
+  </div>
 
-<%= render 'shared/errors', object: @solar_plate %>
+  <div class="col-8">
+    <%= render 'shared/errors', object: @solar_plate %>
 
-<%= form_for [:admin, @solar_plate] do |f| %>
-  <%= f.label :name %>
-  <%= f.text_field :name %>
+    <%= form_for [:admin, @solar_plate] do |f| %>
+    <div class="row">
 
-  <%= f.label :width %>
-  <%= f.number_field :width, placeholder: ' mm' %>
+      <div class="form-group col-md-12">
+        <%= f.label :name %>
+        <%= f.text_field :name, class: 'form-control' %>
+      </div>
 
-  <%= f.label :height %>
-  <%= f.number_field :height, placeholder: ' mm' %>
+      <div class="form-group col-md-4">
+        <%= f.label :width %>
+        <%= f.number_field :width, placeholder: ' mm', class: 'form-control' %>
+      </div>
+        
+      <div class="form-group col-md-4">
+        <%= f.label :height %>
+        <%= f.number_field :height, placeholder: ' mm', class: 'form-control' %>
+      </div>
+        
+      <div class="form-group col-md-4">
+        <%= f.label :thickness %>
+        <%= f.number_field :thickness, placeholder: ' mm', class: 'form-control' %>
+      </div>
 
-  <%= f.label :thickness %>
-  <%= f.number_field :thickness, placeholder: ' mm' %>
+      <div class="form-group col-md-4">
+        <%= f.label :weight %>
+        <%= f.number_field :weight, placeholder: ' kg', class: 'form-control' %>
+      </div>
 
-  <%= f.label :weight %>
-  <%= f.number_field :weight, placeholder: ' kg' %>
+      <div class="form-group col-md-4">
+        <%= f.label :purchase_price %>
+        <%= f.number_field :purchase_price, step: 0.01, class: 'form-control' %>
+      </div>
 
-  <%= f.label :purchase_price %>
-  <%= f.number_field :purchase_price, step: 0.01 %>
+      <div class="form-group col-md-4">
+        <%= f.label :sku %>
+        <%= f.text_field :sku, class: 'form-control' %>
+      </div>
 
-  <%= f.label :sku %>
-  <%= f.text_field :sku %>
+      <div class="form-group col-md-6">
+        <%= f.label :efficiency %>
+        <%= f.number_field :efficiency, step: 0.01, placeholder: ' %', class: 'form-control' %>
+      </div>
 
-  <%= f.label :efficiency %>
-  <%= f.number_field :efficiency, step: 0.01, placeholder: ' %' %>
+      <div class="form-group col-md-6">
+        <%= f.label :rated_power %>
+        <%= f.number_field :rated_power, placeholder: ' Wp', class: 'form-control' %>
+      </div>
 
-  <%= f.label :rated_power %>
-  <%= f.number_field :rated_power, placeholder: ' Wp' %>
-  
-  <%= f.submit 'Enviar' %>
-<% end %>
+    </div>
+
+    <%= f.submit 'Enviar', class: 'btn btn-purple float-right' %>
+
+    <% end %>
+  </div>
+</div>

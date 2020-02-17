@@ -6,6 +6,7 @@ feature 'Admin register carrier' do
     login_as(admin, scope: :admin)
 
     visit root_path
+    click_on 'Dashboard'
     click_on 'Cadastrar transportadora'
     fill_in 'Nome Fantasia', with: 'Zona oeste courier'
     fill_in 'CNPJ', with: '82.676.748/0001-73'
@@ -28,6 +29,7 @@ feature 'Admin register carrier' do
     login_as(admin, scope: :admin)
 
     visit root_path
+    click_on 'Dashboard'
     click_on 'Cadastrar transportadora'
     fill_in 'Nome Fantasia', with: 'Zona oeste courier'
     fill_in 'CNPJ', with: ''

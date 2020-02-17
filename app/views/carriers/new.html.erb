@@ -1,22 +1,41 @@
-<h1>Cadastro de Transportadoras<h1>
+<h1>Admin - Cadastro de Transportadoras</h1>
+<div class="row">
+  <div class="col-4 vrr-dark-gray">
+    <%= render 'admin/sidebar' %>
+  </div>
 
-<% if @carrier.errors.any?%>
-  <p>Por favor, verifique os erros e tente novamente:</p>
-  <ul>
-    <% @carrier.errors.full_messages.each do |message| %>  
-      <li><%= message %></li>
+  <div class="col-8">
+    <% if @carrier.errors.any?%>
+      <p>Por favor, verifique os erros e tente novamente:</p>
+      <ul>
+        <% @carrier.errors.full_messages.each do |message| %>  
+          <li><%= message %></li>
+        <% end %>
+      </ul>
     <% end %>
-  </ul>
-<% end %>
 
-<%= form_for @carrier do |f| %>
-  <%= f.label :name %>
-  <%= f.text_field :name %>
-  <%= f.label :cnpj%>
-  <%= f.text_field :cnpj %>
-  <%= f.label :corporate_name %>
-  <%= f.text_field :corporate_name %>
-  <%= f.label :address %>
-  <%= f.text_field :address %>
-  <%= f.submit 'Confirmar registro'%>
-<% end %>
+    <%= form_for @carrier do |f| %>
+      <div class="form-group">
+        <%= f.label :name %>
+        <%= f.text_field :name, class:'form-control' %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :cnpj %>
+        <%= f.text_field :cnpj, class:'form-control' %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :corporate_name %>
+        <%= f.text_field :corporate_name, class:'form-control' %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :address %>
+        <%= f.text_field :address, class:'form-control' %>
+      </div>
+
+      <%= f.submit 'Confirmar registro', class: 'btn btn-purple float-right' %>
+    <% end %>
+  </div>
+</div>
