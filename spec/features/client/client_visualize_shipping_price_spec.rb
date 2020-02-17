@@ -4,28 +4,24 @@ feature 'Client visualize shipping price' do
   scenario 'successfully' do
     carrier = create(:carrier, name: 'Cheap trans')
     carrier_option = create(:carrier_option, carrier: carrier, min_vol: 20, max_vol: 40, price_kg: 20)
-    carrier = create(:carrier, name: 'Expensive trans')
-    carrier_option = create(:carrier_option, carrier: carrier, min_vol: 20, max_vol: 40, price_kg: 50)
+    carrier2 = create(:carrier, name: 'Expensive trans')
+    carrier_option2 = create(:carrier_option, carrier: carrier2, min_vol: 20, max_vol: 40, price_kg: 50)
     client = create(:client)
-    product_kit = create(:product_kit, weight: 20, width: 2000, height: 3000,
-                                       thickness: 5000)
-    order = create(:order, client: client, status: :pending,
-                           order_value: 20_000, product_kit: product_kit)
-    po1 = PaymentOption.new('Cartão de Crédito', 12, 1672)
-    po2 = PaymentOption.new('Boleto Bancário', 1, 19_800)
-
-    allow(PaymentOption).to receive(:all).with(order.order_value)
-                                         .and_return([po1, po2])
-
+    kit = create(:product_kit, name: 'Kit familiar', price: 20_000,  weight: 20, width: 2000, height: 3000,
+                               thickness: 5000)
+    order = create(:order, client: client, order_value: 20_000)
+    create(:order_item, order: order, product_kit: kit)
+    allow(PaymentOption).to receive(:all).and_return([])
     login_as(client, scope: :client)
 
     visit root_path
-    click_on 'Ver Carrinho'
+    click_on 'Carrinho'
 
-    expect(page).to have_content('Formas de Pagamento Disponiveis')
-    expect(page).to have_content('Cartão de Crédito - 12 vezes de R$ 1.672,00')
-    expect(page).to have_content('Boleto Bancário - 1 vez de R$ 19.800,00')
-    expect(page).to have_content('Frete: R$ 400,00, realizado pela transportadora: Cheap trans')
-
+    expect(current_path).to have_content(cart_path)
+    expect(page).to have_content('Kit familiar')
+    expect(page).to have_content('R$ 20.000,00')
+    expect(page).to have_link('Finalizar Compra')
+    expect(page).to have_content('Frete: R$ 400,00')
+    expect(page).to have_content('realizado pela transportadora: Cheap trans')
   end
 end

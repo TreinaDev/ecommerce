@@ -1,14 +1,40 @@
 <h1>Carrinho</h1>
 
-<% if @payments_options.any? %>
+<table class="cart">
+  <% @order&.order_items&.each do |order_item| %>
+    <tr>
+      <%= order_item.product_kit.name %> -
+      <%= number_to_currency(order_item.product_kit.price) %> -
+      <%= "Valor do frete: #{number_to_currency(@vol)}, realizado pela transportadora: #{}" %>
+      <%= link_to 'Remover', order_item_path(order_item), method: :delete %>
+    </tr>
+  <% end %>
+</table class="cart">
+
+<% if @order&.order_value.present? %>
+  <div>
+    <p><%= "Valor total: #{number_to_currency(@order&.order_value)}" %></p>
+  </div>
+<% end %>
+
+
+<% if @payments_options.present? %>
   <h1>Formas de Pagamento Disponiveis</h1>
   <li>
     <% @payments_options.each do |po| %>
       <ul><%= po.name %> - <%= t(:installments, count: po.installments) %> de <%= number_to_currency(po.installments_value) %></ul>
     <% end %>
   </li>
-  
+<%= "Valor do frete: #{number_to_currency(@carrier_price)}, realizado pela transportadora: #{@carrier_name}" %>
+
 <% else %>
   <h3>Nenhuma Forma de Pagamento Disponivel no momento</h3>
   <p>Tente novamente mais tarde</p>
+<% end %>
+
+
+<% if @order&.product_kits.blank? %>
+  <p>Nenhum produto no seu carrinho</p>
+<% else %>
+  <%= link_to 'Finalizar Compra', '#' %>
 <% end %>

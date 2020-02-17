@@ -105,6 +105,15 @@ ActiveRecord::Schema.define(version: 2020_02_16_200108) do
     t.index ["product_kit_id"], name: "index_kit_items_on_product_kit_id"
   end
 
+  create_table "order_items", force: :cascade do |t|
+    t.integer "order_id", null: false
+    t.integer "product_kit_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["order_id"], name: "index_order_items_on_order_id"
+    t.index ["product_kit_id"], name: "index_order_items_on_product_kit_id"
+  end
+
   create_table "orders", force: :cascade do |t|
     t.integer "client_id", null: false
     t.integer "status", default: 0
@@ -152,6 +161,8 @@ ActiveRecord::Schema.define(version: 2020_02_16_200108) do
   add_foreign_key "carrier_options", "carriers"
   add_foreign_key "kit_items", "product_kits"
   add_foreign_key "kit_items", "products"
+  add_foreign_key "order_items", "orders"
+  add_foreign_key "order_items", "product_kits"
   add_foreign_key "orders", "clients"
   add_foreign_key "orders", "product_kits"
 end
