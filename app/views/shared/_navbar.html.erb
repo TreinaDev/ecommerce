@@ -1,0 +1,52 @@
+<header class=" bg-dark-gray mb-3">
+  <!-- 1º container -->
+  <div class="container">
+    <div class="row py-3 px-3">
+      <%= link_to image_tag('logo.png'), root_path, id: 'logo', class: 'mr-4' %>
+
+        <form class="form-inline mx-auto">
+          <input class="form-control mr-3" type="search" placeholder="Buscar" aria-label="Buscar">
+          <button class="btn btn-outline-blue text-white" type="submit">Buscar</button>
+        </form>
+      
+      <div class="row mt-1">
+        <% if current_admin %>
+          <%= button_to 'Dashboard', admin_dashboard_path, method: :get, class: 'btn btn-outline-purple mr-2 text-white' %>
+          <%= button_to 'Sair', destroy_admin_session_path, method: :delete, class: 'btn btn-purple' %>
+        <% elsif current_client %>
+          <%= button_to 'Minha conta', edit_client_registration_path, method: :get, class: 'btn btn-outline-blue mr-2 text-white' %>
+          <%= button_to 'Meu Carrinho', cart_path, method: :get, class: 'btn btn-outline-blue mr-2 text-white' %>
+          <%= button_to 'Sair', destroy_client_session_path, method: :delete, class: 'btn btn-blue' %>
+        <% else %>
+          <%= button_to 'Entrar', new_client_session_path, method: :get, class: 'btn btn-outline-blue mr-2 text-white' %>
+          <%= button_to 'Inscreva-se', new_client_registration_path, method: :get, class: 'btn btn-blue' %>
+        <% end %>
+      </div>
+
+    </div>
+  </div>
+  <!-- 1º container -->
+  <hr class="hr-white m-0">
+  <!-- 2º container -->
+  <div class="container">
+    <nav class="navbar navbar-expand-md navbar-dark">
+      <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#collapsibleNavId" aria-controls="collapsibleNavId"
+              aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="collapsibleNavId">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+          <li class="nav-item mx-4"><%= link_to 'Home', root_path, class: 'nav-link' %></li>
+          <li class="nav-item mx-4"><%= link_to 'Produtos', product_kits_path, class: 'nav-link' %></li>
+          <li class="nav-item mx-4"><%= link_to 'Sobre nós', '#', class: 'nav-link' %></li>
+          <li class="nav-item mx-4"><%= link_to 'Financiamento', '#', class: 'nav-link' %></li>
+          <li class="nav-item mx-4"><%= link_to 'Empresas', '#', class: 'nav-link' %></li>
+          <li class="nav-item mx-4"><%= link_to 'Parceiros', '#', class: 'nav-link' %></li>
+        </ul>
+      </div>
+      
+    </nav>
+  </div>
+  <!-- 2º container -->
+</header>

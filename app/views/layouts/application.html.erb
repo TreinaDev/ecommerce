@@ -1,22 +1,19 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>QsdSales</title>
+    <title>Portal Lunar</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body>
-    <%= flash[:notice] %>
-    <%= flash[:alert] %>
-
-    <% if current_admin %>
-      <%= render '/shared/admin_menu' %>
-    <% end %>
-
-    <%= yield %>
+    <%= render '/shared/navbar' %>
+    <div class="container">
+      <%= render 'shared/flashes' %>
+      <%= yield %>
+    <div>
   </body>
 </html>
