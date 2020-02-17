@@ -19,7 +19,7 @@ feature 'Admin register carrier' do
     fill_in 'Estado', with: 'SP'
     click_on 'Confirmar registro'
 
-    expect(page).to have_content('Transportadora cadastrada com sucesso')
+    expect(page).to have_content('Transportadora cadastrado(a) com sucesso.')
     expect(page).to have_content('Transportadora: Zona Oeste courier')
     expect(page).to have_content('CNPJ: 82.676.748/0001-73')
     expect(page).to have_content('Razão Social: Carlos Silva Transportes LTDA')
@@ -51,7 +51,7 @@ feature 'Admin register carrier' do
     fill_in 'Estado', with: 'SP'
     click_on 'Confirmar registro'
 
-    expect(page).not_to have_content('Transportadora cadastrada com sucesso')
+    expect(page).not_to have_content('Transportadora cadastrado(a) com sucesso')
     expect(page).to have_content('CNPJ não pode ficar em branco')
     expect(page).to have_content('Razão Social não pode ficar em branco')
   end
@@ -71,7 +71,7 @@ feature 'Admin register carrier' do
 
     click_on 'Cadastrar opção de frete'
 
-    expect(page).to have_content('Opção de frete cadastrada com sucesso')
+    expect(page).to have_content('Opção de frete cadastrado(a) com sucesso')
     expect(page).to have_content('Volume mínimo: 1')
     expect(page).to have_content('Volume máximo: 10')
     expect(page).to have_content('Preço por kilo: 35')
@@ -92,7 +92,7 @@ feature 'Admin register carrier' do
 
     click_on 'Cadastrar opção de frete'
 
-    expect(page).not_to have_content('Opção de frete cadastrada com sucesso')
+    expect(page).not_to have_content('Opção de frete cadastrado(a) com sucesso')
     expect(page).to have_content('Volume mínimo não pode ficar em branco')
     expect(page).to have_content('Volume máximo não pode ficar em branco')
     expect(page).to have_content('Preço por Kilo não pode ficar em branco')
@@ -113,7 +113,7 @@ feature 'Admin register carrier' do
 
     click_on 'Cadastrar opção de frete'
 
-    expect(page).not_to have_content('Opção de frete cadastrada com sucesso')
+    expect(page).not_to have_content('Opção de frete cadastrado(a) com sucesso')
     expect(page).to have_content("O valor de volume máximo deve ser\
  maior que o volume mínimo")
   end
@@ -134,7 +134,7 @@ feature 'Admin register carrier' do
 
     click_on 'Cadastrar opção de frete'
 
-    expect(page).not_to have_content('Opção de frete cadastrada com sucesso')
+    expect(page).not_to have_content('Opção de frete cadastrado(a) com sucesso')
     expect(page).to have_content("O valor inserido já está incluído em outra\
  opção de frete")
   end
@@ -154,7 +154,7 @@ feature 'Admin register carrier' do
 
     click_on 'Cadastrar opção de frete'
 
-    expect(page).to have_content('Opção de frete atualizada com sucesso')
+    expect(page).to have_content('Opção de frete atualizado(a) com sucesso')
     expect(page).to have_content('Volume mínimo: 20')
     expect(page).to have_content('Volume máximo: 50')
   end
@@ -170,7 +170,7 @@ feature 'Admin register carrier' do
     click_on carrier.name
     click_on 'Deletar'
 
-    expect(page).to have_content('Opção de frete excluída com sucesso')
+    expect(page).to have_content('Opção de frete excluído(a) com sucesso')
     expect(page).not_to have_content('Volume mínimo: 5')
     expect(page).not_to have_content('Volume máximo: 10')
   end

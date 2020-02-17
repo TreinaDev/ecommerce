@@ -11,7 +11,7 @@ class CarriersController < ApplicationController
   def create
     @carrier = Carrier.new(carrier_params)
     if @carrier.save
-      redirect_to @carrier, notice: 'Transportadora cadastrada com sucesso'
+      redirect_to @carrier, notice: t('flash.success', model: 'Transportadora')
     else
       render :new
     end

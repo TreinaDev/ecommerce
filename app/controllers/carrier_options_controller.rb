@@ -9,10 +9,10 @@ class CarrierOptionsController < ApplicationController
   end
 
   def update
-    @carrier = Carrier.find(params[:id])
     @carrier_option = CarrierOption.find(params[:id])
+    @carrier = @carrier_option.carrier
     if @carrier_option.update(carrier_option_params)
-      redirect_to @carrier, notice: 'Opção de frete atualizada com sucesso'
+      redirect_to @carrier, notice: t('flash.update', model: 'Opção de frete')
     else
       render :edit
     end
@@ -23,17 +23,17 @@ class CarrierOptionsController < ApplicationController
     @carrier_option = CarrierOption.new(carrier_option_params)
     @carrier_option.carrier = @carrier
     if @carrier_option.save
-      redirect_to @carrier, notice: 'Opção de frete cadastrada com sucesso'
+      redirect_to @carrier, notice: t('flash.success', model: 'Opção de frete')
     else
       render :new
     end
   end
 
   def destroy
-    @carrier = Carrier.find(params[:id])
     @carrier_option = CarrierOption.find(params[:id])
+    @carrier = @carrier_option.carrier
     @carrier_option.destroy
-    redirect_to @carrier, notice: 'Opção de frete excluída com sucesso'
+    redirect_to @carrier, notice: t('flash.destroy', model: 'Opção de frete')
   end
 
   private
