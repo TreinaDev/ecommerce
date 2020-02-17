@@ -1,0 +1,23 @@
+<div class="row col-md-6 col-lg-4 mb-5 hrb-black">
+  <div class="col-4 col-md-12">
+    <%= link_to product_kit_path(product_kit) do %>
+      <% if product_kit.picture.present? %>
+        <%= image_tag product_kit.picture, class:'img-fluid' %>
+      <% else %>
+        <%= image_tag 'placeholder.png', class:'img-fluid' %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="col-8 col-md-12">
+    <%= link_to product_kit.name, product_kit_path(product_kit) %>
+
+    <ul>
+      <% product_kit.kit_items&.each do |kit| %>
+        <li class="text-muted"><%= "#{kit.quantity} x #{kit.product.name}" %></li>
+      <% end %>
+    </ul>
+
+    <h4><%= number_to_currency(product_kit.price)%></h4>
+  </div>
+</div>

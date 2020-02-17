@@ -19,9 +19,13 @@ inversor = Inversor
 
 20.times do |n|
   kit_produtos = ProductKit
-                 .create!(name: "Kit Residencial - #{n}", thickness: 4000,
-                          description: 'Para pequenas residencias', weight: 60,
-                          width: 5000, price: 10_000, height: 5000, warranty: 6)
+                 .new(name: "Kit Residencial - #{n}", thickness: 4000,
+                      description: 'Para pequenas residencias', weight: 60,
+                      width: 5000, price: 10_000, height: 5000, warranty: 6)
+  kit_produtos.picture.attach(io: File.open('spec/support/kit.png'),
+                              filename: 'kit.png', content_type: 'image/png')
+
+  kit_produtos.save!
 
   KitItem.create!(product_kit: kit_produtos, product: placa_solar, quantity: 20)
   KitItem.create!(product_kit: kit_produtos, product: inversor, quantity: 2)

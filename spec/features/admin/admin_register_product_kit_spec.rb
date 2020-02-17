@@ -17,12 +17,12 @@ feature 'Admin register product kit' do
     fill_in 'Altura', with: 1000
     fill_in 'Espessura', with: 3000
     fill_in 'Garantia', with: 24
-    attach_file('Imagem', Rails.root.join('spec/support/kit.jpg'))
+    attach_file('Imagem', Rails.root.join('spec/support/kit.png'))
     click_on 'Enviar'
 
     expect(page).to have_content('Kit de produtos cadastrado(a) com sucesso')
     expect(page).to have_css('h1', text: 'Kit residêncial')
-    expect(page).to have_css("img[src*='kit.jpg']")
+    expect(page).to have_css("img[src*='kit.png']")
     expect(page).to have_content('Descrição: Officia magna ea enim laborum.')
     expect(page).to have_content('Preço: R$ 10.000,00')
     expect(page).to have_content('Dimensão: 2000mm (L) x 1000mm (A) x ' \
