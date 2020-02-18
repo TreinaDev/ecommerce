@@ -36,5 +36,5 @@
 <% if @order&.product_kits.blank? %>
   <p>Nenhum produto no seu carrinho</p>
 <% else %>
-  <%= link_to 'Finalizar Compra', checkout_path, class: 'btn btn-purple float-right' %>
+  <%= link_to 'Finalizar Compra', order_confirm_path, method: :post, class: 'btn btn-purple float-right' %>
 <% end %>

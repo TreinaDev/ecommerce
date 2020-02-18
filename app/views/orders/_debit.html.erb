@@ -1,2 +1,20 @@
 <div class="debit">
+<%= form_tag('https://localhost:4000/api/pagamentos') do %>
+
+    <%= label_tag 'owner_name', 'Nome do titular' %>
+    <%= text_field_tag 'cc_name' %>
+
+    <%= label_tag 'bank_name', 'Banco' %>
+    <%= text_field_tag 'cc_name' %>
+
+    <%= label_tag 'bank_branch', 'Agência' %>
+    <%= text_field_tag 'cc_exp_date' %>
+
+    <%= label_tag 'account_number', 'Número da Conta' %>
+    <%= text_field_tag 'account_number' %>
+
+    <%= "Valor total: #{number_to_currency(payment.installments_value)}" %>
+
+    <%= button_tag 'Pagar via débito em conta' %>
+  <% end %>
 </div>

@@ -32,8 +32,7 @@ class PaymentOption
   def self.create_payments_options(json)
     json.map do |j|
       PaymentOption.new(j[:name], j[:installments].to_i,
-                        j[:installments_value].to_d,
-                        j[:single_payment_value].to_d)
+                        j[:installments_value].to_d)
     end
   end
 end

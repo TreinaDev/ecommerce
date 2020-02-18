@@ -28,6 +28,7 @@ feature 'Client views cart' do
     click_on 'Carrinho'
 
     expect(page).to have_content('Nenhum produto no seu carrinho')
+    expect(page).not_to have_link('Finalizar Compra')
   end
 
   scenario 'and has many kits' do

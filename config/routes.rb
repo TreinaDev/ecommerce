@@ -19,4 +19,5 @@ Rails.application.routes.draw do
   resource :cart, only: %i[show]
   resources :order_items, only: %i[create destroy]
   get '/checkout', to: 'orders#checkout'
+  post '/order_confirm', to: 'orders#confirm'
 end

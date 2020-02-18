@@ -4,9 +4,18 @@
 <% end %>
 <%= "Preço total: #{number_to_currency(@order.order_value)}" %>
 <% @payment_options.each do |payment| %>
-  <% case payment.name %>
-    <% when 'Cartão de crédito' then render 'orders/credit_card'%>
-    <% when 'Débito em conta' then render 'debit'%>
-    <% when 'Boleto' then render 'boleto'%>
+
+  <% if payment.name == 'Cartão de crédito' %>
+    <%= render 'credit_card', payment: payment %>
+  <% elsif payment.name == 'Débito em conta' %>
+    <%= render 'debit', payment: payment%>
+  <% elsif payment.name == 'Boleto' %>
+    <%= render 'boleto', payment: payment %>
   <% end %>
+
+<% end %>
+
+<% if @payment_options.blank? %>
+  <h3>Serviço de pagamentos fora do ar</h3>
+  <p>Tente novamente em alguns instantes</p>
 <% end %>

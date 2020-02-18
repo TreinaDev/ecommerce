@@ -1,3 +1,24 @@
 <div class="credit_card">
-  
+  <%= form_tag('https://localhost:4000/api/pagamentos') do %>
+
+    <%= label_tag 'cc_number', 'Número do cartão' %>
+    <%= text_field_tag 'cc_number' %>
+    
+    <%= label_tag 'cc_name', 'Nome impresso no cartão' %>
+    <%= text_field_tag 'cc_name' %>
+
+    <%= label_tag 'cc_exp_date', 'Validade' %>
+    <%= text_field_tag 'cc_exp_date' %>
+
+    <%= label_tag 'cc_cvv', 'CVV' %>
+    <%= text_field_tag 'cc_cvv' %>
+
+    <%= label_tag 'cc_installments', 'Parcelas' %>
+    <%= select_tag 'cc_installments', options_for_select((1..12).to_a) %>
+
+    <%= "Valor total: #{number_to_currency(payment.installments * payment.installments_value)}" %>
+    <%= "Em até: #{payment.installments} x #{number_to_currency(payment.installments_value)}" %>
+
+    <%= button_tag 'Pagar com cartão de crédito' %>
+  <% end %>
 </div>
