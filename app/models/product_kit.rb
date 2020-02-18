@@ -7,4 +7,11 @@ class ProductKit < ApplicationRecord
 
   validates :name, :weight, :width, :height, :thickness, :price, :warranty,
             presence: true
+  validates :name, case_sensitive: false, uniqueness: true
+
+  scope :search, lambda { |text|
+    left_joins(:products)
+      .where('lower(product_kits.name) = :q OR lower(products.name) = :q',
+             q: text.downcase)
+  }
 end
