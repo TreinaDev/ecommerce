@@ -34,8 +34,9 @@ feature 'Client self register' do
   end
 
   scenario 'and receive a confirmation email on registrarion' do
-    mailer_spy = class_spy(ClientMailer)
-    stub_const('ClientMailer', mailer_spy)
+    email = double('ClientMailer')
+    allow(ClientMailer).to receive(:welcome_email).and_return(email)
+    allow(email).to receive(:deliver_now)
 
     visit root_path
     click_on 'Entrar'

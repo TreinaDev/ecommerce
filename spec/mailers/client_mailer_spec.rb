@@ -3,28 +3,28 @@ RSpec.describe ClientMailer do
   describe '#welcome_email' do
     it 'should send a welcome email to client email on registration' do
       client = create(:client, email: 'cliente@teste.com')
-      email = ClientMailer.welcome_email(client.id)
+      email = ClientMailer.welcome_email(client)
 
       expect(email.to).to include(client.email)
     end
 
     it 'should send from correct email' do
       client = create(:client, email: 'cliente@teste.com')
-      email = ClientMailer.welcome_email(client.id)
+      email = ClientMailer.welcome_email(client)
 
       expect(email.from).to include('cadastro@portallunar.com.br')
     end
 
     it 'should have the correct subject' do
       client = create(:client, name: 'José Santos', email: 'cliente@teste.com')
-      email = ClientMailer.welcome_email(client.id)
+      email = ClientMailer.welcome_email(client)
 
       expect(email.subject).to eq('Olá José Santos, bem vindo ao Portal Lunar.')
     end
 
     it 'should have the correct message' do
       client = create(:client, name: 'José Santos', email: 'cliente@teste.com')
-      email = ClientMailer.welcome_email(client.id)
+      email = ClientMailer.welcome_email(client)
 
       expect(email.body).to have_css('h1', text: 'Caro(a) José Santos, '\
                                                   'bem vindo ao Portal Solar!')
