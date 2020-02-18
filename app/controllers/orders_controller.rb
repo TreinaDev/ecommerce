@@ -11,4 +11,6 @@ class OrdersController < ApplicationController
     order.waiting_payment!
     redirect_to checkout_path
   end
+
+  def payment; end
 end
