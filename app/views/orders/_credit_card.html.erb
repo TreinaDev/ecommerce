@@ -1,5 +1,5 @@
 <div class="credit_card">
-  <%= form_tag('/order_payment') do %>
+  <%= form_tag(order_payment_path) do %>
 
     <%= label_tag 'cc_number', 'Número do cartão' %>
     <%= text_field_tag 'cc_number' %>
