@@ -30,10 +30,13 @@
 <% end %>
 
 
-<% if @carrier_attributes.nil? %>     
+<% if @shipping.nil? %>
   <p> Nenhunha transportadora disponível para este produto </p>
 <% else %>
-   <%= "Frete: #{number_to_currency(@carrier_attributes[:price])}, realizado pela transportadora: #{@carrier_attributes[:name]}" %>
+  <ul>
+  <li><%= "Frete: #{number_to_currency(@shipping[:price])}" %></li>
+  <li><%= "Realizado pela transportadora: #{@shipping[:name]}" %></li>
+  </ul>
 <% end %>
 
 <% if @order&.product_kits.blank? %>
