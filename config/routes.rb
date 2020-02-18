@@ -19,4 +19,10 @@ Rails.application.routes.draw do
   resources :carriers, only: %i[index show new create]
   resources :product_kits, only: %i[show]
   resource :cart, only: %i[show]
+  resources :order_items, only: %i[create destroy]
+  controller :orders do
+    get '/checkout' => :checkout
+    post '/order_confirm' => :confirm
+    post '/order_payment' => :payment
+  end
 end

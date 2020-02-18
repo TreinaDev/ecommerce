@@ -1,0 +1,21 @@
+<% @order.product_kits.each do |item| %>
+  <%= item.name %>
+  <%= "Preço: #{number_to_currency(item.price)}" %>
+<% end %>
+<%= "Preço total: #{number_to_currency(@order.order_value)}" %>
+<% @payment_options.each do |payment| %>
+
+  <% if payment.name == 'Cartão de crédito' %>
+    <%= render 'credit_card', payment: payment %>
+  <% elsif payment.name == 'Débito em conta' %>
+    <%= render 'debit', payment: payment%>
+  <% elsif payment.name == 'Boleto' %>
+    <%= render 'boleto', payment: payment %>
+  <% end %>
+
+<% end %>
+
+<% if @payment_options.blank? %>
+  <h3>Serviço de pagamentos fora do ar</h3>
+  <p>Tente novamente em alguns instantes</p>
+<% end %>

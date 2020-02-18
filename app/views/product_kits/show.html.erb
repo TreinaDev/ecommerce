@@ -1,34 +1,47 @@
-<h1><%= @product_kit.name %></h1>
+<div class="row hrb-black py-3 mb-4">
+    <div class="col-md-8">
+    <%= content_tag(:h1, @product_kit.name) %>
 
-<% @kit_items&.each do |kit| %>
-  <%= "#{kit.quantity} x #{kit.product.name}" %>
-<% end %>
+    <p>Componentes: </p>
+    <ul>
+      <% @product_kit.kit_items&.each do |kit| %>
+        <li class="text-muted"><%= "#{kit.quantity} x #{kit.product.name}" %></li>
+      <% end %>
+    </ul>
 
-<%= image_tag @product_kit.picture if @product_kit.picture.present? %>
+    <h4><%= "Preço: #{number_to_currency(@product_kit.price)}"%></h4>
 
-<dl>
+    <br>
+    
+    <%= button_to 'Adicionar ao carrinho', order_items_path, params: { product_kit_id: @product_kit }, 
+                  class: 'btn btn-purple float-right' %>
+  </div>
 
+  <div class="col-md-4">
+    <% if @product_kit.picture.present? %>
+      <%= image_tag @product_kit.picture, class:'img-fluid' %>
+    <% else %>
+      <%= image_tag 'placeholder.png', class:'img-fluid' %>
+    <% end %>
+  </div>
+</div>
+
+<div class="info">
   <% if @product_kit.description.present? %>
-    <dt>Descrição:</dt>
-    <dd><%= @product_kit.description %></dd>
+    <h3>Descrição:</h3>
+    <p><%= @product_kit.description %></p>
   <% end %>
 
-  <dt>Dimensão:</dt>
-  <dd>
+  <h3>Dimensão:</h3>
+  <p>
     <%= "#{@product_kit.width}mm (L)"  %>
     <%= "x #{@product_kit.height}mm (A)" %>
     <%= "x #{@product_kit.thickness}mm (E)" %>
-  </dd>
+  </p>
 
-  <dt>Peso:</dt>
-  <dd>
-    <%= "#{number_with_precision @product_kit.weight, precision: 2} kg" %>
-  </dd>
+  <h3>Peso:</h3>
+  <p><%= "#{number_with_precision @product_kit.weight, precision: 2} kg" %></p>
 
-  <dt>Preço:</dt>
-  <dd><%= number_to_currency @product_kit.price %></dd>
-
-  <dt>Garantia:</dt>
-  <dd><%= @product_kit.warranty %> meses</dd>
-
-</dl> 
+  <h3>Garantia:</h3>
+  <p><%= @product_kit.warranty %> meses</p>
+</div>

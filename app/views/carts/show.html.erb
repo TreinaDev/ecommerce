@@ -1,6 +1,25 @@
 <h1>Carrinho</h1>
 
-<% if @payments_options.any? %>
+<table class="cart table table-striped">
+
+  <tbody>
+    <% @order&.order_items&.each do |order_item| %>
+      <tr>
+        <td><%= order_item.product_kit.name %></td> 
+        <td><%= number_to_currency(order_item.product_kit.price) %></td>
+        <td><%= link_to 'Remover', order_item_path(order_item), method: :delete, class: 'btn btn-outline-danger float-right' %></td>
+      </tr>
+    <% end %>
+  </tbody>
+
+</table>
+
+<% if @order&.order_value.present? %>
+  <h4 class="text-right"><%= "Valor total: #{number_to_currency(@order&.order_value)}" %></h4>
+<% end %>
+
+
+<% if @payments_options.present? %>
   <h1>Formas de Pagamento Disponiveis</h1>
   <li>
     <% @payments_options.each do |po| %>
@@ -11,4 +30,11 @@
 <% else %>
   <h3>Nenhuma Forma de Pagamento Disponivel no momento</h3>
   <p>Tente novamente mais tarde</p>
+<% end %>
+
+
+<% if @order&.product_kits.blank? %>
+  <p>Nenhum produto no seu carrinho</p>
+<% else %>
+  <%= link_to 'Finalizar Compra', order_confirm_path, method: :post, class: 'btn btn-purple float-right' %>
 <% end %>
