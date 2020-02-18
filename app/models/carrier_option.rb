@@ -4,6 +4,10 @@ class CarrierOption < ApplicationRecord
   validate :max_vol_must_be_higher_than_min_vol
   validate :price_range_must_be_unique
 
+  def self.deliver_volume(volume)
+    where('min_vol <= :volume AND max_vol >= :volume', volume: volume)
+  end
+
   private
 
   def max_vol_must_be_higher_than_min_vol
