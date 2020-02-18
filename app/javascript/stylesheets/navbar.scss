@@ -7,3 +7,7 @@
     color: map-get($colors, "blue");
   }
 }
+
+label.hidden {
+  display: none;
+}

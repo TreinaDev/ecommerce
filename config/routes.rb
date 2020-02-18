@@ -1,8 +1,9 @@
 Rails.application.routes.draw do
+  root to: 'home#index'
+  get 'search', to: 'home#search_kits'
   devise_for :clients, controllers: { registrations: 'custom_registrations' }
   devise_for :admins
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
-  root to: 'home#index'
 
   namespace :admin do
     get '/dashboard', to: 'home#dashboard'
@@ -16,5 +17,6 @@ Rails.application.routes.draw do
 
   resources :product_kits, only: %i[index show]
   resources :carriers, only: %i[index show new create]
+  resources :product_kits, only: %i[show]
   resource :cart, only: %i[show]
 end
