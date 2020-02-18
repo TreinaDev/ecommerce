@@ -1,36 +1,45 @@
-<h1><%= @product_kit.name %></h1>
+<h1>Admin - Kit de Produtos</h1>
+<div class="row">
+  <div class="col-4 vrr-dark-gray">
+    <%= render 'admin/sidebar' %>
+  </div>
 
-<%= link_to 'Adicionar produto', new_admin_product_kit_kit_item_path(@product_kit) %>
+  <div class="col-8">
+    <h1><%= @product_kit.name %></h1>
 
-<% @kit_items&.each do |kit| %>
-  <%= "#{kit.quantity} x #{kit.product.name}" %>
-<% end %>
+    <%= link_to 'Adicionar produto', new_admin_product_kit_kit_item_path(@product_kit) %>
 
-<%= image_tag @product_kit.picture if @product_kit.picture.present? %>
+    <% @kit_items&.each do |kit| %>
+      <p><%= "#{kit.quantity} x #{kit.product.name}" %></p>
+    <% end %>
 
-<dl>
+    <%= image_tag @product_kit.picture if @product_kit.picture.present? %>
 
-  <% if @product_kit.description.present? %>
-    <dt>Descrição:</dt>
-    <dd><%= @product_kit.description %></dd>
-  <% end %>
+    <dl>
 
-  <dt>Dimensão:</dt>
-  <dd>
-    <%= "#{@product_kit.width}mm (L)"  %>
-    <%= "x #{@product_kit.height}mm (A)" %>
-    <%= "x #{@product_kit.thickness}mm (E)" %>
-  </dd>
+      <% if @product_kit.description.present? %>
+        <dt>Descrição:</dt>
+        <dd><%= @product_kit.description %></dd>
+      <% end %>
 
-  <dt>Peso:</dt>
-  <dd>
-    <%= "#{number_with_precision @product_kit.weight, precision: 2} kg" %>
-  </dd>
+      <dt>Dimensão:</dt>
+      <dd>
+        <%= "#{@product_kit.width}mm (L)"  %>
+        <%= "x #{@product_kit.height}mm (A)" %>
+        <%= "x #{@product_kit.thickness}mm (E)" %>
+      </dd>
 
-  <dt>Preço:</dt>
-  <dd><%= number_to_currency @product_kit.price %></dd>
+      <dt>Peso:</dt>
+      <dd>
+        <%= "#{number_with_precision @product_kit.weight, precision: 2} kg" %>
+      </dd>
 
-  <dt>Garantia:</dt>
-  <dd><%= @product_kit.warranty %> meses</dd>
+      <dt>Preço:</dt>
+      <dd><%= number_to_currency @product_kit.price %></dd>
 
-</dl>
+      <dt>Garantia:</dt>
+      <dd><%= @product_kit.warranty %> meses</dd>
+
+    </dl>
+  </div>
+</div>

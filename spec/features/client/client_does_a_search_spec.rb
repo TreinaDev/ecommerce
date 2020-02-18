@@ -100,7 +100,7 @@ feature 'Clients can search' do
     click_on 'Buscar'
     click_on 'Kit industrial'
 
-    #expect(page).to have_content('Kit industrial')
+    # expect(page).to have_content('Kit industrial')
     expect(page).to have_content(kit.description)
     expect(page).to have_content('R$ 50.000,00')
     expect(page).to have_content('placa grande')

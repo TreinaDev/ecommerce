@@ -8,7 +8,7 @@ feature 'Admin register product kit' do
     visit root_path
     click_on 'Dashboard'
     click_on 'Kit de produtos'
-    click_on 'Adicionar novo Kit de produtos'
+    click_on 'Cadastrar Kit de produtos'
     fill_in 'Nome', with: 'Kit residêncial'
     fill_in 'Descrição', with: 'Officia magna ea enim laborum.'
     fill_in 'Preço', with: 10_000.00
