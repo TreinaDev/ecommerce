@@ -3,12 +3,13 @@
   <div class="container">
     <div class="row py-3 px-3">
       <%= link_to image_tag('logo.png'), root_path, id: 'logo', class: 'mr-4' %>
-
-        <form class="form-inline mx-auto">
-          <input class="form-control mr-3" type="search" placeholder="Buscar" aria-label="Buscar">
-          <button class="btn btn-outline-blue text-white" type="submit">Buscar</button>
-        </form>
       
+        <%= form_with(url: search_path, html: {class: 'form-inline mx-auto'}, local: true, method: :get) do %>
+          <%= label_tag :q, "Fazer busca", class: 'hidden' %>
+          <%= text_field_tag :q, '',placeholder: 'Buscar', class: 'form-control mr-3' %>
+          <%= submit_tag "Buscar", class:"btn btn-outline-blue text-white" %>
+        <% end %>
+
       <div class="row mt-1">
         <% if current_admin %>
           <%= button_to 'Dashboard', admin_dashboard_path, method: :get, class: 'btn btn-outline-purple mr-2 text-white' %>
