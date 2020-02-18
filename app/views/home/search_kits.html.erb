@@ -2,11 +2,9 @@
 
 <% if @product_kits.blank? %>
   <h4>Não foi encontrado nenhum resultado para sua pesquisa</h4>
-<% else %>
-  <% @product_kits&.each do |product_kit| %>
-    <% product_kit.each do |kit| %>
-      <%= link_to kit.name, product_kit_path(kit) %>
-    <% end %>
+<% else %> 
+  <% @product_kits.each do |kit| %>
+    <%= link_to kit.name, kit %>
   <% end %>
 <% end %>
 
