@@ -22,7 +22,7 @@ class CarrierPriceCalculator
 
   def calculate(total_vol, total_weight)
     avaiable_carrier_options = CarrierOption.deliver_volume(total_vol)
-    carrier = avaiable_carrier_options.min_by { |price_kg| price_kg }
+    carrier = avaiable_carrier_options.order(price_kg: :asc).first
     return if carrier.blank?
 
     { name: carrier.carrier.name, price: carrier.price_kg * total_weight }
