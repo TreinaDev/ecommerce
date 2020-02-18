@@ -11,7 +11,8 @@ class Admin::CarriersController < ApplicationController
   def create
     @carrier = Carrier.new(carrier_params)
     if @carrier.save
-      redirect_to([:admin, @carrier], notice: 'Transportadora cadastrada com sucesso')
+      redirect_to([:admin, @carrier],
+                  notice: 'Transportadora cadastrada com sucesso')
     else
       render :new
     end

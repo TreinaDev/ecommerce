@@ -19,7 +19,6 @@ Rails.application.routes.draw do
     resources :carrier_options, only: %i[show edit update destroy]
   end
 
-  
   resources :product_kits, only: %i[index show]
   resource :cart, only: %i[show]
   resources :order_items, only: %i[create destroy]
