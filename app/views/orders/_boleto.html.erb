@@ -1,0 +1,8 @@
+<div class="boleto">
+    <%= form_tag(order_payment_path) do %>
+
+      <%= "Valor total: #{number_to_currency(payment.installments_value)}" %>
+
+    <%= button_tag 'Gerar boleto' %>
+  <% end %>
+</div>

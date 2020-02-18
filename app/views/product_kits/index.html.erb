@@ -1,9 +1,9 @@
 <h1>Kits de produtos:</h1>
 
   <% if @product_kits.empty? %>
-    <p><h3>Não há kits disponíveis no momento!</p></h3>
+    <p>Não há kits disponíveis no momento!</p>
   <% end %>
 
-  <%= @product_kits.each do |kit| %>
-     <p><%= link_to kit.name, product_kit_path(kit) %></p>
-  <% end %>
+  <div class="row">
+    <%= render @product_kits %>
+  </div>

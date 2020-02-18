@@ -1,5 +1,5 @@
 <h1>Editando opção de frete</h1>
-<%= form_for @carrier_option do |f| %>
+<%= form_for([:admin, @carrier_option]) do |f| %>
   <%= f.label :min_vol %>
   <%= f.text_field :min_vol %>
   <%= f.label :max_vol%>

@@ -1,4 +1,4 @@
-class CarrierOptionsController < ApplicationController
+class Admin::CarrierOptionsController < ApplicationController
   def new
     @carrier_option = CarrierOption.new
     @carrier = Carrier.find(params[:carrier_id])
@@ -12,7 +12,7 @@ class CarrierOptionsController < ApplicationController
     @carrier = Carrier.find(params[:id])
     @carrier_option = CarrierOption.find(params[:id])
     if @carrier_option.update(carrier_option_params)
-      redirect_to @carrier, notice: 'Opção de frete atualizada com sucesso'
+      redirect_to([:admin, @carrier], notice: 'Opção de frete atualizada com sucesso')
     else
       render :edit
     end
@@ -23,7 +23,7 @@ class CarrierOptionsController < ApplicationController
     @carrier_option = CarrierOption.new(carrier_option_params)
     @carrier_option.carrier = @carrier
     if @carrier_option.save
-      redirect_to @carrier, notice: 'Opção de frete cadastrada com sucesso'
+      redirect_to([:admin, @carrier], notice: 'Opção de frete cadastrada com sucesso')
     else
       render :new
     end
@@ -33,7 +33,7 @@ class CarrierOptionsController < ApplicationController
     @carrier = Carrier.find(params[:id])
     @carrier_option = CarrierOption.find(params[:id])
     @carrier_option.destroy
-    redirect_to @carrier, notice: 'Opção de frete excluída com sucesso'
+    redirect_to([:admin, @carrier], notice: 'Opção de frete excluída com sucesso')
   end
 
   private

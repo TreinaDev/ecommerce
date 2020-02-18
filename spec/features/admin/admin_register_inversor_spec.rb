@@ -7,7 +7,7 @@ feature 'Admin register inversor' do
 
     visit root_path
     click_on 'Dashboard'
-    click_on 'Cadastrar novo Produto'
+    click_on 'Cadastrar produto'
     click_on 'Adicionar novo Inversor'
     fill_in 'Nome', with: 'Inversor X'
     fill_in 'Largura', with: 375

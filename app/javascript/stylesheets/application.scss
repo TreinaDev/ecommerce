@@ -1,0 +1,9 @@
+@import "~bootstrap/scss/bootstrap";
+@import "color_palette";
+@import "navbar";
+@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background-color: map-get($colors, "white");
+}

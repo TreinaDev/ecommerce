@@ -1,0 +1,10 @@
+<h3><%= "Resultado da busca #{params[:q]}:" %></h3>
+
+<% if @product_kits.blank? %>
+  <h4>Não foi encontrado nenhum resultado para sua pesquisa</h4>
+<% else %> 
+  <% @product_kits.each do |kit| %>
+    <%= link_to kit.name, kit %>
+  <% end %>
+<% end %>
+

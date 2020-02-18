@@ -1,24 +1,42 @@
-# README
+# Portal Lunar
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Portal Lunar é um e-commerce desenvolvido como projeto final do curso TreinaDev. No site vendemos kits que contém equipamentos utilizados na captação e distribuição de energia solar. 
 
-Things you may want to cover:
+Para nos ajudar com os pagamentos, nosso colegas desenvolveram um Gateway de pagamentos: https://github.com/TreinaDev/pagamento
 
-* Ruby version
+Utilizamos o site do patrocinador `Portal Solar` como base no desenvolvimento do projeto: https://www.portalsolar.com.br/
 
-* System dependencies
+## Configurações: 
 
-* Configuration
+* Ruby version: 2.6.5
 
-* Database creation
+* Rails version: 6.0.2
 
-* Database initialization
+* System dependencies: macOS
 
-* How to run the test suite
+## Como iniciar o projeto
 
-* Services (job queues, cache servers, search engines, etc.)
+* Seu computador deve ter preferencialmente macOS ou O.S Linux;
 
-* Deployment instructions
+* Você pode utilizar o comdando `bin/setup` para configurar o que for necessário ou pode seguir os passos abaixo
+{
+  * Instale as dependências necessárias  definidas no    arquivo  `GemFile`, rodando o comando `bundle install`. 
 
-* ...
+  * SQLite3 é utilizado nesse projeto e para criar os bancos de dados basta rodar o comando `rails db:migrate`.
+}
+
+* Como estamos utilizando o `rails 6`, é preferivel utilizar o comando `yarn install --check-files` para a instalação de algumas dependências.
+
+* Você já pode utilizar o comando `rails s` para ver a aplicação funcionando no endereço `localhost:3000` mas caso queira algum kit já cadastrado utilize o comando `rake db:seed`.
+
+## Testes
+
+  Nesse projeto foi utilizado `rspec` junto com `capybara`. Caso queira executar os testes, tendo seguido os passos acima, basta executar em seu terminal o comando `rspec` ou `bundle exec rspec`.
+
+## Algumas Gems
+
+* Para fazer a autenticação foi utilizada a gem `Devise`.
+
+* Utilizamos a gem `Faraday` para acessar os end-points do gateway.
+
+* *Para ajudar com a estilização do site utilizamos o framework `Bootstrap`.

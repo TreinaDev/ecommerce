@@ -6,6 +6,7 @@ feature 'Admin register carrier' do
     login_as(admin, scope: :admin)
 
     visit root_path
+    click_on 'Dashboard'
     click_on 'Cadastrar transportadora'
     fill_in 'Nome Fantasia', with: 'Zona Oeste courier'
     fill_in 'CNPJ', with: '82.676.748/0001-73'
@@ -38,6 +39,7 @@ feature 'Admin register carrier' do
     login_as(admin, scope: :admin)
 
     visit root_path
+    click_on 'Dashboard'
     click_on 'Cadastrar transportadora'
     fill_in 'Nome Fantasia', with: 'Zona oeste courier'
     fill_in 'CNPJ', with: ''
@@ -62,7 +64,8 @@ feature 'Admin register carrier' do
     login_as(admin, scope: :admin)
 
     visit root_path
-    click_on 'Transportadoras cadastradas'
+    click_on 'Dashboard'
+    click_on 'Transportadoras'
     click_on carrier.name
     click_on 'Cadastrar opção de frete'
     fill_in 'Volume mínimo', with: '1'
@@ -83,7 +86,8 @@ feature 'Admin register carrier' do
     login_as(admin, scope: :admin)
 
     visit root_path
-    click_on 'Transportadoras cadastradas'
+    click_on 'Dashboard'
+    click_on 'Transportadoras'
     click_on carrier.name
     click_on 'Cadastrar opção de frete'
     fill_in 'Volume mínimo', with: ''
@@ -104,7 +108,8 @@ feature 'Admin register carrier' do
     login_as(admin, scope: :admin)
 
     visit root_path
-    click_on 'Transportadoras cadastradas'
+    click_on 'Dashboard'
+    click_on 'Transportadoras'
     click_on carrier.name
     click_on 'Cadastrar opção de frete'
     fill_in 'Volume mínimo', with: '10'
@@ -125,7 +130,8 @@ feature 'Admin register carrier' do
     login_as(admin, scope: :admin)
 
     visit root_path
-    click_on 'Transportadoras cadastradas'
+    click_on 'Dashboard'
+    click_on 'Transportadoras'
     click_on carrier.name
     click_on 'Cadastrar opção de frete'
     fill_in 'Volume mínimo', with: '7'
@@ -146,7 +152,8 @@ feature 'Admin register carrier' do
     login_as(admin, scope: :admin)
 
     visit root_path
-    click_on 'Transportadoras cadastradas'
+    click_on 'Dashboard'
+    click_on 'Transportadoras'
     click_on carrier.name
     click_on 'Editar'
     fill_in 'Volume mínimo', with: '20'
@@ -166,7 +173,8 @@ feature 'Admin register carrier' do
     login_as(admin, scope: :admin)
 
     visit root_path
-    click_on 'Transportadoras cadastradas'
+    click_on 'Dashboard'
+    click_on 'Transportadoras'
     click_on carrier.name
     click_on 'Deletar'
 

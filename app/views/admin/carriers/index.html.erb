@@ -5,7 +5,7 @@
 <dl>
 <% @carriers.each do |carrier| %>
   <dt>Nome:</dt>
-  <dd><%= link_to carrier.name, carrier %></dd>
+  <dd><%= link_to(carrier.name, [:admin, carrier]) %></dd>
   <dt>CNPJ:</dt>
   <dd><%= carrier.cnpj %></dd>
 <% end %>

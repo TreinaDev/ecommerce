@@ -6,8 +6,6 @@ feature 'Client remove item from cart' do
     kit = create(:product_kit, name: 'Kit familiar', price: 20_000)
     order = create(:order, client: client, order_value: 20_000)
     create(:order_item, order: order, product_kit: kit)
-    # Teste do PaymentOptions feito em outra spec, necessário no cart controller
-    allow(PaymentOption).to receive(:all).and_return([])
     login_as(client, scope: :client)
 
     visit root_path
@@ -24,8 +22,6 @@ feature 'Client remove item from cart' do
 
   scenario 'and not have any kit' do
     client = create(:client)
-    # Teste do PaymentOptions feito em outra spec, necessário no cart controller
-    allow(PaymentOption).to receive(:all).and_return([])
     login_as(client, scope: :client)
 
     visit root_path
@@ -43,8 +39,6 @@ feature 'Client remove item from cart' do
     create(:product_kit, name: 'Kit individual', price: 30_215)
     order = create(:order, client: client)
     create(:order_item, order: order, product_kit: kit)
-    # Teste do PaymentOptions feito em outra spec, necessário no cart controller
-    allow(PaymentOption).to receive(:all).and_return([])
     login_as(client, scope: :client)
 
     visit root_path

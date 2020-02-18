@@ -4,8 +4,6 @@ feature 'Client views cart' do
   scenario 'successfully' do
     client = create(:client)
     create(:product_kit, name: 'Kit familiar', price: 20_000)
-    # Teste do PaymentOptions feito em outra spec, necessário no cart controller
-    allow(PaymentOption).to receive(:all).and_return([])
     login_as(client, scope: :client)
 
     visit root_path
@@ -23,8 +21,6 @@ feature 'Client views cart' do
 
   scenario 'and dont have any orders' do
     client = create(:client)
-    # Teste do PaymentOptions feito em outra spec, necessário no cart controller
-    allow(PaymentOption).to receive(:all).and_return(nil)
     login_as(client, scope: :client)
 
     visit root_path
@@ -32,6 +28,7 @@ feature 'Client views cart' do
     click_on 'Carrinho'
 
     expect(page).to have_content('Nenhum produto no seu carrinho')
+    expect(page).not_to have_link('Finalizar Compra')
   end
 
   scenario 'and has many kits' do
@@ -40,8 +37,6 @@ feature 'Client views cart' do
     create(:product_kit, name: 'Kit individual', price: 30_215)
     order = create(:order, client: client)
     create(:order_item, order: order, product_kit: kit)
-    # Teste do PaymentOptions feito em outra spec, necessário no cart controller
-    allow(PaymentOption).to receive(:all).and_return([])
     login_as(client, scope: :client)
 
     visit root_path
