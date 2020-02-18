@@ -6,6 +6,9 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 Admin.create!(email: 'admin@test.com', password: '12345678')
+Client.create!(email: 'client@test.com', password: '12345678', name: 'Teste',
+               address: 'Rua Invisível', client_type: 'personal',
+               zip_code: '00000-000', document: '123.123.212-32')
 
 placa_solar = SolarPlate
               .create!(name: 'Placa Lunar', width: 1234, height: 123,

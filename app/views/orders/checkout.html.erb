@@ -1,0 +1,12 @@
+<% @order.product_kits.each do |item| %>
+  <%= item.name %>
+  <%= "Preço: #{number_to_currency(item.price)}" %>
+<% end %>
+<%= "Preço total: #{number_to_currency(@order.order_value)}" %>
+<% @payment_options.each do |payment| %>
+  <% case payment.name %>
+    <% when 'Cartão de crédito' then render 'orders/credit_card'%>
+    <% when 'Débito em conta' then render 'debit'%>
+    <% when 'Boleto' then render 'boleto'%>
+  <% end %>
+<% end %>

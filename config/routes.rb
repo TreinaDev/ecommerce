@@ -18,4 +18,5 @@ Rails.application.routes.draw do
   resources :carriers, only: %i[index show new create]
   resource :cart, only: %i[show]
   resources :order_items, only: %i[create destroy]
+  get '/checkout', to: 'orders#checkout'
 end
