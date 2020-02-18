@@ -1,5 +1,5 @@
 <div class="boleto">
-    <%= form_tag('https://localhost:4000/api/pagamentos') do %>
+    <%= form_tag(@api) do %>
 
       <%= "Valor total: #{number_to_currency(payment.installments_value)}" %>
 

@@ -3,6 +3,7 @@ class OrdersController < ApplicationController
     @order = current_client.orders.waiting_payment.last
     @payment_options = PaymentOption.all(@order.order_value)
     @order.waiting_payment!
+    @api = 'https://localhost:4000/api/pagamentos'
   end
 
   def confirm
