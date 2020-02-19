@@ -1,12 +1,26 @@
 [
   {
     "name" : "Cartão de Crédito",
-    "installments" : "12",
-    "installments_value" : "10"
+    "value" : "2000.0",
+    "installments" : 6,
+    "one_shot" : "1900.0",
+    "total_value" : "2400.0",
+    "installment_value" : "335.0"
   },
   {
-    "name" : "Boleto Bancário",
-    "installments" : "1",
-    "installments_value" : "90"
+    "name" : "Boleto",
+    "value" : "2000.0",
+    "installments" : 1,
+    "one_shot" : "1800.0",
+    "total_value" : "0",
+    "installment_value" : "0"
+  },
+  {
+    "name" : "Debito",
+    "value" : "2000.0",
+    "installments" : 1,
+    "one_shot" : "1500.0",
+    "total_value" : "0",
+    "installment_value" : "0"
   }
 ]

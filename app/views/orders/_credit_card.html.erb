@@ -16,8 +16,8 @@
     <%= label_tag 'cc_installments', 'Parcelas' %>
     <%= select_tag 'cc_installments', options_for_select((1..12).to_a) %>
 
-    <%= "Valor total: #{number_to_currency(payment.installments * payment.installments_value)}" %>
-    <%= "Em até: #{payment.installments} x #{number_to_currency(payment.installments_value)}" %>
+    <%= "Valor total: #{number_to_currency(payment.installments.to_i * payment.installment_value.to_i)}" %>
+    <%= "Em até: #{payment.installments} x #{number_to_currency(payment.installment_value)}" %>
 
     <%= button_tag 'Pagar com cartão de crédito' %>
   <% end %>

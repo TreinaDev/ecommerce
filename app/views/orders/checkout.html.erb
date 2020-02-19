@@ -5,9 +5,9 @@
 <%= "Preço total: #{number_to_currency(@order.order_value)}" %>
 <% @payment_options.each do |payment| %>
 
-  <% if payment.name == 'Cartão de crédito' %>
+  <% if payment.name == 'Cartão de Crédito' %>
     <%= render 'credit_card', payment: payment %>
-  <% elsif payment.name == 'Débito em conta' %>
+  <% elsif payment.name == 'Debito' %>
     <%= render 'debit', payment: payment%>
   <% elsif payment.name == 'Boleto' %>
     <%= render 'boleto', payment: payment %>
