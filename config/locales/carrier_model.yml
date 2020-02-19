@@ -6,4 +6,5 @@ pt-BR:
         cnpj: CNPJ
         corporate_name: Razão Social
         address: Endereço
+        carrier_tax: Taxa (%)
         
