@@ -1,1 +1,25 @@
-<h1>Bem vindo ao Ecommerce</h1>
+<style>
+  #yield {
+      max-width: 100%;
+      width: 100%;
+      padding: 0px;
+      margin: 0px;
+      padding-left: 0px;
+      margin-right: auto;
+      margin-left: auto;
+  }
+</style>
+<div class="main">
+  <div class="main-box">
+    <div class="main-text">
+      Portal Lunar
+    </div>
+    <div class="sub-text">
+      A plataforma online de energia sustentável
+    </div>
+  </div>
+</div>
+<h1 class="text-center">Principais modelos</h1>
+<div class="product_grid row">
+  <%= render @product_kits %>
+</div>
