@@ -23,7 +23,14 @@
   <h1>Formas de Pagamento Disponiveis</h1>
   <li>
     <% @payments_options.each do |po| %>
-      <ul><%= po.name %> - <%= t(:installments, count: po.installments) %> de <%= number_to_currency(po.installments_value) %></ul>
+      <% if po.name == 'Boleto' %>
+        <ul><%= po.name %> - <%= t(:installments, count: po.installments) %> de 
+            <%= number_to_currency(po.one_shot) %></ul>
+      <% else %>
+        <ul><%= po.name %> - <%= t(:installments, count: po.installments) %> de 
+            <%= number_to_currency(po.installment_value) %> ou
+            <%= number_to_currency(po.one_shot) %> a vista</ul>
+      <% end %>
     <% end %>
   </li>
 
