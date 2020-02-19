@@ -23,7 +23,7 @@
   <h1>Formas de Pagamento Disponiveis</h1>
   <li>
     <% @payments_options.each do |po| %>
-      <ul><%= po.name %> - <%= t(:installments, count: po.installments) %> de <%= number_to_currency(po.installments_value) %></ul>
+      <ul><%= po.name %> - <%= t(:installments, count: po.installments) %> de <%= number_to_currency(po.installment_value) %></ul>
     <% end %>
   </li>
   

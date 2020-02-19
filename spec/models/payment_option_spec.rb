@@ -16,10 +16,10 @@ describe PaymentOption do
       expect(result.length).to eq(2)
       expect(result[0].name).to eq('Cartão de Crédito')
       expect(result[0].installments).to eq(12)
-      expect(result[0].installments_value).to eq(10)
+      expect(result[0].installment_value).to eq(10)
       expect(result[1].name).to eq('Boleto Bancário')
       expect(result[1].installments).to eq(1)
-      expect(result[1].installments_value).to eq(90)
+      expect(result[1].installment_value).to eq(90)
     end
 
     it 'should return empty array if API return error' do

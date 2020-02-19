@@ -1,8 +1,9 @@
 <div class="boleto">
     <%= form_tag(order_payment_path) do %>
 
-      <%= "Valor total: #{number_to_currency(payment.installments_value)}" %>
+      <%= "Valor total: #{number_to_currency(payment.installment_value)}" %>
 
-    <%= button_tag 'Gerar boleto' %>
+    <%= button_to 'Gerar boleto', order_payment_path, params: { selected_option: 'Boleto' } %>
+
   <% end %>
 </div>

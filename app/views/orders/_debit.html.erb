@@ -13,7 +13,7 @@
     <%= label_tag 'account_number', 'Número da Conta' %>
     <%= text_field_tag 'account_number' %>
 
-    <%= "Valor total: #{number_to_currency(payment.installments_value)}" %>
+    <%= "Valor total: #{number_to_currency(payment.installment_value)}" %>
 
     <%= button_tag 'Pagar via débito em conta' %>
   <% end %>
