@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_15_194312) do
+ActiveRecord::Schema.define(version: 2020_02_16_200108) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -33,6 +33,20 @@ ActiveRecord::Schema.define(version: 2020_02_15_194312) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
+  create_table "addresses", force: :cascade do |t|
+    t.string "street"
+    t.string "number"
+    t.string "zip_code"
+    t.string "complement"
+    t.string "city"
+    t.string "state"
+    t.integer "carrier_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "neighborhood"
+    t.index ["carrier_id"], name: "index_addresses_on_carrier_id"
+  end
+
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -43,6 +57,16 @@ ActiveRecord::Schema.define(version: 2020_02_15_194312) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["email"], name: "index_admins_on_email", unique: true
     t.index ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true
+  end
+
+  create_table "carrier_options", force: :cascade do |t|
+    t.integer "min_vol"
+    t.integer "max_vol"
+    t.float "price_kg"
+    t.integer "carrier_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["carrier_id"], name: "index_carrier_options_on_carrier_id"
   end
 
   create_table "carriers", force: :cascade do |t|
@@ -96,7 +120,9 @@ ActiveRecord::Schema.define(version: 2020_02_15_194312) do
     t.decimal "order_value"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "product_kit_id"
     t.index ["client_id"], name: "index_orders_on_client_id"
+    t.index ["product_kit_id"], name: "index_orders_on_product_kit_id"
   end
 
   create_table "product_kits", force: :cascade do |t|
@@ -131,9 +157,12 @@ ActiveRecord::Schema.define(version: 2020_02_15_194312) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "addresses", "carriers"
+  add_foreign_key "carrier_options", "carriers"
   add_foreign_key "kit_items", "product_kits"
   add_foreign_key "kit_items", "products"
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "product_kits"
   add_foreign_key "orders", "clients"
+  add_foreign_key "orders", "product_kits"
 end

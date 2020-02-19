@@ -1,0 +1,36 @@
+<% if @carrier.errors.any?%>
+  <p>Por favor, verifique os erros e tente novamente:</p>
+  <ul>
+    <% @carrier.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<%= form_for([:admin, @carrier]) do |f| %>
+  <%= f.label :name %>
+  <%= f.text_field :name %>
+  <%= f.label :cnpj%>
+  <%= f.text_field :cnpj %>
+  <%= f.label :corporate_name %>
+  <%= f.text_field :corporate_name %>
+  <h4>Endereço:</h4>
+    <%= f.fields_for :address do |address_form| %>
+      <%= address_form.label :street, 'Logradouro' %>
+      <%= address_form.text_field :street %>
+      <%= address_form.label :number %>
+      <%= address_form.text_field :number %>
+      <%= address_form.label :zip_code %>
+      <%= address_form.text_field :zip_code %>
+      <%= address_form.label :complement %>
+      <%= address_form.text_field :complement %>
+      <%= address_form.label :neighborhood %>
+      <%= address_form.text_field :neighborhood %>
+      <%= address_form.label :city %>
+      <%= address_form.text_field :city %>
+      <%= address_form.label :state %>
+      <%= address_form.text_field :state %>
+
+    <% end %>
+  <%= f.submit 'Confirmar registro'%>
+<% end %>

@@ -1,0 +1,19 @@
+
+<% if @carrier_option.errors.any? %>
+  <p>Você deve corrigir os seguintes erros:</p>
+  <ul>
+  <% @carrier_option.errors.full_messages.each do |message| %>
+    <li> <%= message %> </li>
+  <% end %>
+  </ul>
+<% end %>
+
+<%= form_for([:admin, @carrier, @carrier_option]) do |f| %>
+  <%= f.label :min_vol %>
+  <%= f.text_field :min_vol %>
+  <%= f.label :max_vol%>
+  <%= f.text_field :max_vol %>
+  <%= f.label :price_kg %>
+  <%= f.text_field :price_kg %>
+  <%= f.submit 'Cadastrar opção de frete' %>
+<% end %>

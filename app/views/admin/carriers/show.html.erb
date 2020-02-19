@@ -1,0 +1,60 @@
+<h1>Admin - Transportadoras</h1>
+<div class="row">
+  <div class="col-4 vrr-dark-gray">
+    <%= render 'admin/sidebar' %>
+  </div>
+  <div class="col-8">
+
+<dl>
+<dt>Transportadora:</dt>
+  <dd><%= @carrier.name %></dd>
+  <dt>CNPJ:</dt>
+  <dd><%= @carrier.cnpj %></dd>
+  <dt>Razão Social:</dt>
+  <dd><%= @carrier.corporate_name %></dd>
+  <h4>Endereço:</h4><br>
+  <dt>Logradouro:</dt>
+  <dd><%= @carrier.address.street %></dd>
+  <dt>Número:</dt>
+  <dd><%= @carrier.address.number %></dd>
+  <% if @carrier.address.complement%>
+    <dt>Complemento:</dt>
+    <dd><%= @carrier.address.complement %></dd>
+  <% end %>
+  <dt>CEP:</dt>
+  <dd><%= @carrier.address.zip_code %></dd>
+  <dt>Bairro:</dt>
+  <dd><%= @carrier.address.neighborhood %></dd>
+  <dt>Cidade:</dt>
+  <dd><%= @carrier.address.city %></dd>
+  <dt>Estado:</dt>
+  <dd><%= @carrier.address.state %></dd>
+</dl>
+
+<% if @carrier.carrier_options.nil?%>
+  <p>Não existem opções de frete cadastradas </p>
+<% else %>
+  <% @carrier.carrier_options.each do |carrier_option|%>
+    <dl>
+      <h3>Opção de frete:</h3>
+      <dt>Volume mínimo:</dt>
+      <dd><%= carrier_option.min_vol %></dd>
+      <dt>Volume máximo:</dt>
+      <dd><%= carrier_option.max_vol %></dd>
+      <dt>Preço por kilo:</dt>
+      <dd><%= carrier_option.price_kg %></dd>
+      <dt> Ação:<dt>
+      <dd>
+          <%= link_to "Editar", edit_admin_carrier_option_path(carrier_option[:id]) %>
+	        <%= link_to "Deletar", admin_carrier_option_path(carrier_option[:id]), :method => :delete %>
+      </dd>
+    </dl>
+  <% end %>
+<% end %>
+
+<%= link_to 'Cadastrar opção de frete', new_admin_carrier_carrier_option_path(@carrier) %>
+
+<%= link_to 'Voltar', root_path, class: 'btn btn-purple' %>
+
+  </div>
+</div>

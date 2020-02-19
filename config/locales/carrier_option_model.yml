@@ -1,0 +1,7 @@
+pt-BR:
+  activerecord:
+    attributes:
+      carrier_option:
+        min_vol: Volume mínimo
+        max_vol: Volume máximo
+        price_kg: Preço por Kilo

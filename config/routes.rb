@@ -13,11 +13,13 @@ Rails.application.routes.draw do
     resources :product_kits, only: %i[index new create show] do
       resources :kit_items, only: %i[new create]
     end
+    resources :carriers, only: %i[index show new create] do
+      resources :carrier_options, only: %i[new create]
+    end
+    resources :carrier_options, only: %i[show edit update destroy]
   end
 
   resources :product_kits, only: %i[index show]
-  resources :carriers, only: %i[index show new create]
-  resources :product_kits, only: %i[show]
   resource :cart, only: %i[show]
   resources :order_items, only: %i[create destroy]
   controller :orders do

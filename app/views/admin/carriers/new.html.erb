@@ -1,0 +1,19 @@
+<h1>Admin - Cadastro de Transportadoras</h1>
+<div class="row">
+  <div class="col-4 vrr-dark-gray">
+    <%= render 'admin/sidebar' %>
+  </div>
+
+  <div class="col-8">
+    <% if @carrier.errors.any?%>
+      <p>Por favor, verifique os erros e tente novamente:</p>
+      <ul>
+        <% @carrier.errors.full_messages.each do |message| %>  
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    <% end %>
+
+    <%= render partial: 'carrier_form', locals: { carrier: @carrier } %>
+  </div>
+</div>
