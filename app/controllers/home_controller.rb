@@ -1,5 +1,7 @@
 class HomeController < ApplicationController
-  def index; end
+  def index
+    @product_kits = ProductKit.all
+  end
 
   def search_kits
     @product_kits = ProductKit.search(params[:q]).uniq

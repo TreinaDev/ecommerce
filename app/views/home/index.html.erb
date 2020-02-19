@@ -1,1 +1,71 @@
-<h1>Bem vindo ao Ecommerce</h1>
+<style>
+  body #yield{
+  margin-top: 0 !important;
+  margin: 0; 
+  padding: 0;
+  max-width: none;
+}
+</style>
+<div class="main">
+  <div class="main-box">
+    <div class="main-text">
+      Portal Lunar
+    </div>
+    <div class="sub-text">
+      A plataforma online de energia sustentável
+    </div>
+  </div>
+</div>
+<h1 class="text-center">Principais modelos</h1>
+<div class="product_grid container">
+  <div class="row">
+    <%= render @product_kits %>
+  </div>
+</div>
+
+<footer class="py-5">
+  <div class="container">
+  <div class="row">
+    <div class="col-6 col-md">
+      <h5>Loja Online</h5>
+      <ul class="list-unstyled text-small">
+        <li><a class="text-muted" href="#">Placas Solares</a></li>
+        <li><a class="text-muted" href="#">Geradores</a></li>
+        <li><a class="text-muted" href="#">Inversores</a></li>
+        <li><a class="text-muted" href="#">Cabos</a></li>
+      </ul>
+    </div>
+    <div class="col-6 col-md">
+      <h5>Instalação</h5>
+      <ul class="list-unstyled text-small">
+        <li><a class="text-muted" href="#">Orçamento</a></li>
+        <li><a class="text-muted" href="#">Procure por endereço</a></li>
+        <li><a class="text-muted" href="#">Melhores Avaliados</a></li>
+        <li><a class="text-muted" href="#">Maior disponibilidade</a></li>
+      </ul>
+    </div>
+    <div class="col-6 col-md">
+      <h5>Área do cliente</h5>
+      <ul class="list-unstyled text-small">
+        <li><a class="text-muted" href="#">Cadastre-se</a></li>
+        <li><a class="text-muted" href="#">Financiamento</a></li>
+        <li><a class="text-muted" href="#">Meus Pedidos</a></li>
+        <li><a class="text-muted" href="#">Meu carrinho</a></li>
+      </ul>
+    </div>
+    <div class="col-6 col-md">
+      <h5>Sobre</h5>
+      <ul class="list-unstyled text-small">
+        <li><a class="text-muted" href="#">Sobre nós</a></li>
+        <li><a class="text-muted" href="#">Nosso Objetivo</a></li>
+        <li><a class="text-muted" href="#">Privacidade</a></li>
+        <li><a class="text-muted" href="#">Termos</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-12 col-md text-center">
+    <hr>
+    <small class="d-block mb-3 text-muted"><%= link_to 'TreinaDev Ecommerce', 'https://github.com/TreinaDev/ecommerce/' %> © 2020 </small>
+  </div>
+  </div>
+</footer>
